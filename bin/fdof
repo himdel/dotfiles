@@ -1,0 +1,10 @@
+#!/usr/bin/env perl
+use v5.14;
+
+my @pid = (shift);
+@pid = map { chomp; $_ } split /\s+/, `pidof '$pid[0]'` if $pid[0] !~ /^\s*\d+\s*$/;
+for (@pid) {
+	say "$_:";
+	system("sudo ls -l /proc/'$_'/fd/");
+	print "\n";
+}

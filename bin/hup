@@ -1,0 +1,10 @@
+#!/bin/bash
+if [ `hostname` = yavanna -a `id -un` = git ]; then
+	cd /srv/"$1"
+	pwd
+	git pull
+	composer.phar update
+else
+	ssh himdel.mine.nu \
+		sudo su - git -c \'/home/himdel/bin/hup \"$1\"\'
+fi

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec mono ~/mwf-designer/build/mwf-designer.exe "$@"

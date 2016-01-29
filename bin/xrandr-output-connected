@@ -1,0 +1,5 @@
+#!/bin/sh
+OUTPUT=$1
+
+xrandr | grep -q "$OUTPUT connected"
+exit $?

@@ -1,0 +1,2 @@
+#!/bin/sh
+rsync -aPv --chmod D0755,F0644,Dg+s --log-file=.cron-rsync himdel@git.himdel.eu:/git/ /git/

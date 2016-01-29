@@ -1,0 +1,40 @@
+#!/bin/bash
+DRIVE=$1
+if [ -z "$1" ]; then
+	echo no drive 1>&2
+	exit 1
+fi
+
+function _mount {
+	sudo mkdir -p /media/wd2t_ntfs
+	sudo mount "$DRIVE"1 /media/wd2t_ntfs -o allow_other
+
+	sudo mkdir -p /media/wd2t
+	sudo cryptsetup luksOpen "$DRIVE"2 wd2t
+	sleep 0.5
+	sudo vgchange -ay wd2t
+	sleep 0.5
+	sudo mount /dev/wd2t/data /media/wd2t
+}
+
+function _umount {
+	sudo umount /media/wd2t
+	sudo vgchange -an wd2t
+	sudo cryptsetup luksClose wd2t
+	sudo rmdir /media/wd2t
+
+	sudo umount /media/wd2t_ntfs
+	sudo rmdir /media/wd2t_ntfs
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+else
+	if ! [ -e $DRIVE ]; then
+		echo no drive $DRIVE 1>&2
+		exit 1
+	fi
+fi
+
+$FNC

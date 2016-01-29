@@ -1,0 +1,9 @@
+#!/bin/sh
+exec i3lock -c 551111
+
+#TEMP=`tempfile -s .png`
+#xwd -root | convert - -gaussian-blur 8x8 -fill '#cc292b' -tint 64 -gamma 0.5 "$TEMP"
+#
+#trap "rm \"$TEMP\"" EXIT SIGINT SIGTERM
+#
+#i3lock -i "$TEMP"

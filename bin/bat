@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# load battery level
+BAT=`/usr/lib/xbattbar/xbattbar-check-acpi`
+
+# online?
+echo "$BAT" | grep -q ^ac_line=on$ && BATAC=" online" || BATAC=""
+
+# level + output
+echo "$BAT" | grep ^battery= | sed -e "s/^battery=//" -e "s/\$/$BATAC/"

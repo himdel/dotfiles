@@ -1,0 +1,50 @@
+=== modified file 'client/client_priv.h'
+--- client/client_priv.h	2012-07-05 06:55:20 +0000
++++ client/client_priv.h	2012-12-27 19:19:16 +0000
+@@ -51,7 +51,8 @@
+   OPT_COMPATIBLE, OPT_RECONNECT, OPT_DELIMITER, OPT_SECURE_AUTH,
+   OPT_OPEN_FILES_LIMIT, OPT_SET_CHARSET, OPT_SERVER_ARG,
+   OPT_STOP_POSITION, OPT_START_DATETIME, OPT_STOP_DATETIME,
+-  OPT_SIGINT_IGNORE, OPT_HEXBLOB, OPT_ORDER_BY_PRIMARY, OPT_COUNT,
++  OPT_SIGINT_IGNORE, OPT_HEXBLOB, OPT_BLOB_GEOM, OPT_ORDER_BY_PRIMARY,
++  OPT_COUNT,
+   OPT_TRIGGERS,
+   OPT_MYSQL_ONLY_PRINT,
+   OPT_MYSQL_LOCK_DIRECTORY,
+
+=== modified file 'client/mysqldump.c'
+--- client/mysqldump.c	2012-08-07 13:37:13 +0000
++++ client/mysqldump.c	2012-12-27 19:19:03 +0000
+@@ -109,8 +109,8 @@
+                 opt_autocommit=0,opt_disable_keys=1,opt_xml=0,
+                 opt_delete_master_logs=0, tty_password=0,
+                 opt_single_transaction=0, opt_comments= 0, opt_compact= 0,
+-                opt_hex_blob=0, opt_order_by_primary=0, opt_ignore=0,
+-                opt_complete_insert= 0, opt_drop_database= 0,
++                opt_hex_blob= 0, opt_blob_geom= 0, opt_order_by_primary=0,
++                opt_ignore=0, opt_complete_insert= 0, opt_drop_database= 0,
+                 opt_replace_into= 0,
+                 opt_dump_triggers= 0, opt_routines=0, opt_tz_utc=1,
+                 opt_slave_apply= 0, 
+@@ -348,6 +348,9 @@
+   {"hex-blob", OPT_HEXBLOB, "Dump binary strings (BINARY, "
+     "VARBINARY, BLOB) in hexadecimal format.",
+    &opt_hex_blob, &opt_hex_blob, 0, GET_BOOL, NO_ARG, 0, 0, 0, 0, 0, 0},
++  {"blob-geom", OPT_BLOB_GEOM, "Consider GEOMETRY fields (POINT, ..."
++    ") a blob (works with --hex-blob).",
++   &opt_blob_geom, &opt_blob_geom, 0, GET_BOOL, NO_ARG, 0, 0, 0, 0, 0, 0},
+   {"host", 'h', "Connect to host.", &current_host,
+    &current_host, 0, GET_STR_ALLOC, REQUIRED_ARG, 0, 0, 0, 0, 0, 0},
+   {"ignore-table", OPT_IGNORE_TABLE,
+@@ -3598,7 +3601,9 @@
+                    field->type == MYSQL_TYPE_BLOB ||
+                    field->type == MYSQL_TYPE_LONG_BLOB ||
+                    field->type == MYSQL_TYPE_MEDIUM_BLOB ||
+-                   field->type == MYSQL_TYPE_TINY_BLOB)) ? 1 : 0;
++                   field->type == MYSQL_TYPE_TINY_BLOB ||
++                   (opt_blob_geom && field->type == MYSQL_TYPE_GEOMETRY))) ? 1 : 0;
++
+         if (extended_insert && !opt_xml)
+         {
+           if (i == 0)
+

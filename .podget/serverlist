@@ -1,0 +1,35 @@
+# Default Server List for podget
+# 
+# FORMAT:    <url> <category> <name>
+# 
+# NOTES:
+#    1. URL Rules:
+#      A. Any spaces in the URL needs to be converted to %20 
+#    2. Category Rules:
+#      A.  Must be one word without spaces. 
+#      B.  You may use underscores and dashes.
+#      C.  You can insert date substitions.
+#          %YY%  ==  Year
+#          %MM%  ==  Month
+#          %DD%  ==  Day
+#    3. Name Rules:
+#      A.  If you are creating ASX playlists, make sure the feed name does not
+#          have any spaces in it and the filename cannot be blank.
+#      B.  You can leave the feed name blank, and files will be saved in the 
+#          category directory.
+#    4. Disable the downloading of any feed by commenting it out with a #.
+# 
+# Find more servers at: http://www.ipodder.org/directory/4/podcasts
+#
+# Examples: 
+# http://www.lugradio.org/episodes.rss Linux LUG Radio
+#
+# Example with date substitution in the category and a blank feed name:
+# http://downloads.bbc.co.uk/rmhttp/downloadtrial/worldservice/summary/rss.xml News-%YY%-%MM%-%DD%
+#
+
+http://downloads.bbc.co.uk/podcasts/radio4/fricomedy/rss.xml	bbccomedy
+http://downloads.bbc.co.uk/podcasts/radio4extra/newsjack/rss.xml	bbccomedy
+http://downloads.bbc.co.uk/podcasts/scotland/sfb/rss.xml	bbccomedy
+http://downloads.bbc.co.uk/podcasts/northernireland/blame/rss.xml	bbccomedy
+http://downloads.bbc.co.uk/podcasts/radio4/comedy/rss.xml	bbccomedy

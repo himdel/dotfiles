@@ -1,0 +1,2 @@
+---
+BUNDLE_BUILD__PG: "--with-cflags=-O2 -pipe -march=native -w"

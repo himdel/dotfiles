@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+files = []
+ARGV.each do |arg|
+	files << arg if File.file? arg
+	files += Dir[ arg + "/*" ] if File.directory? arg
+end
+
+files.reject! { |fn| File.directory? fn }
+files.sort!
+files.uniq!
+
+srand
+puts files[ rand files.length ]

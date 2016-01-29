@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /media/data/StarCraft
+wine "StarCraft.exe"

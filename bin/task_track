@@ -1,0 +1,66 @@
+#!/usr/bin/perl
+$0 = "task_track";
+
+use v5.14;
+use Gtk2::TrayIcon;
+use Data::Dumper;
+use IO::File;
+use POSIX;
+
+Gtk2->init();
+
+my $host = `hostname`;
+chomp $host;
+
+my $out = IO::File->new(glob("~/.task_track.$host.log"), "a") or die $!;
+$out->autoflush(1);
+
+my %icons = map {
+	my $ico = Gtk2::TrayIcon->new("task-track");
+	my $btn = Gtk2::Button->new();
+
+	$btn->set_label($_);
+	$btn->signal_connect(clicked => \&turn);
+
+	$ico->add($btn);
+	$ico->show_all();
+
+	($_, {
+		key => $_,
+		ico => $ico,
+		btn => $btn,
+		state => 0,
+	});
+} qw( 1st lob ost cjf );
+
+sub turn {
+	my $self = shift;
+	my $me = $icons{ $self->get_label() };
+	my $oldstate = $me->{state};
+
+	foreach my $k (keys %icons) {
+		next unless $icons{ $k }->{state};
+
+		my $len = time() - $icons{ $k }->{state};
+		my $olen = $len;
+		my $slen = $len % 60 . "s";
+		$len = int($len / 60);
+		$slen = $len % 60 . "m " . $slen if $len;
+		$len = int($len / 60);
+		$slen = int($len) . "h " . $slen if $len;
+
+		$out->printf("stop %s %d ( %s )\n", $icons{ $k }->{key}, time(), POSIX::strftime("%Y-%m-%d %H:%M", localtime));
+		$out->printf("%s: %s (= %d )\n", $icons{ $k }->{key}, $slen, $olen);
+
+		$icons{ $k }->{state} = 0;
+		$icons{ $k }->{btn}->modify_bg('normal', undef);
+	}
+
+	if ($oldstate == 0) {
+		$me->{state} = time();
+		$me->{btn}->modify_bg('normal', Gtk2::Gdk::Color->parse("green"));
+		$out->printf("start %s %d ( %s )\n", $me->{key}, time(), POSIX::strftime("%Y-%m-%d %H:%M", localtime));
+	}
+};
+
+Gtk2->main();

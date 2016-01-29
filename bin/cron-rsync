@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+# -*- encoding: utf-8 -*-
+
+$verbose = ARGV.select { |opt| opt =~ /^-v$/ }.count > 0
+DIRS = %w( .bash_logout .bash_profile .bashrc .environment .ncmpc/config .gitconfig .ssh/config .vimrc .ackrc  userjs patches .irbrc .xbindkeysrc .inputrc .vim .menu .journal .jrnl_config .podget .xsession .filezilla/recentservers.xml .fvwm/userconfig docker wallpapers faktura fun )
+# bin
+HOSTS = %w( 192.168.1.132 )
+LOGFILE = '.cron-rsync'
+RSYNC_OPT = %W( -aPvu  )
+
+
+def log(str)
+	puts str if $verbose
+	File.open(LOGFILE, 'a') do |file|
+		file.puts "#{Time.now.to_s} [#$$]: #{str}"
+	end
+end
+
+Dir.chdir #( Dir.home )
+
+#require 'ping'
+#hosts = HOSTS.select do |host|
+#	log "testing #{host}"
+#	ok = Ping.pingecho( host, 4, 22 )
+#	log " = #{ok.inspect}"
+#	ok
+#end
+hosts = HOSTS
+
+log 'start'
+hosts.each do |host|
+	hosterrors = 0
+
+	DIRS.each do |dir|
+		dir += '/' if Dir.exists? dir
+
+		log "from #{host}:#{dir}"
+		hosterrors += 1 unless system('rsync', *RSYNC_OPT, "#{host}:#{dir}", dir)
+
+		log "to #{host}:#{dir}"
+#		hosterrors += 1 unless system('rsync', *RSYNC_OPT, dir, "#{host}:#{dir}")
+
+		if hosterrors > 3
+			log "hosterrors for #{host}: #{hosterrors}"
+			break
+		end
+	end
+end
+log 'end'

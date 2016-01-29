@@ -1,0 +1,17 @@
+#!/bin/sh
+echo 'TODO size'
+echo 'TODO metadata'
+# b:a 32k is too little
+# b:v 384 yields 134M, okish
+
+if [ $# -ne 2 ]; then
+	echo syntax error: "$0" INPUT OUTPUT
+	exit 1
+fi
+
+INPUT=$1
+OUTPUT=$2
+OPTS="-y -f mp4 -c:v libx264 -c:a aac -strict experimental -sn -b:v 320k -b:a 48k"
+
+avconv -i "$INPUT" -pass 1 $OPTS "$OUTPUT"
+avconv -i "$INPUT" -pass 2 $OPTS "$OUTPUT"

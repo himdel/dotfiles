@@ -1,0 +1,144 @@
+--- a/main.c	2011-05-13 13:11:24.000000000 +0000
++++ b/main.c	2011-05-31 15:17:37.000000000 +0000
+@@ -108,9 +108,6 @@
+ //  screen_y=MIN(screen_y, preferred_screen->height);
+ #endif
+ 
+-
+-  max_rand_num = images;
+-
+   if (filter) /* Filter graphic images */
+     filter_images(&images,image_names);
+ 
+
+--- a/main.h	2011-05-13 13:11:24.000000000 +0000
++++ b/main.h	2011-05-31 15:17:37.000000000 +0000
+@@ -35,7 +35,6 @@
+ gint	delay = SLIDE_DELAY; /* delay in slideshow mode in seconds */
+ int	readonly = 0; /* TRUE if (un)deletion of images should be impossible */
+ int	random_order; /* TRUE if random delay in slideshow */
+-int	random_replace = 1; /* random with replacement by default */
+ int	fullscreen; /* TRUE if fullscreen mode */
+ int	maxpect; /* TRUE if autozoom (fit-to-screen) mode */
+ int	statusbar_fullscreen = 1; /* TRUE if statusbar in fullscreen is turned on (default) */
+@@ -49,7 +48,6 @@
+ int	transparency; /* transparency on/off */
+ int	do_grab; /* grab keboard/pointer (default off) */
+ int disable_grab; /* disable keyboard/mouse grabbing in fullscreen mode */
+-int	max_rand_num; /* the largest random number range we will ask for */
+ int	fixed_window_size = 0; /* window width fixed size/off */
+ int	fixed_zoom_factor = 0; /* window fixed zoom factor (percentage)/off */
+ int zoom_factor = 0; /* zoom factor/off */
+
+--- a/qiv.h	2011-05-13 13:11:24.000000000 +0000
++++ b/qiv.h	2011-05-31 15:17:37.000000000 +0000
+@@ -123,7 +123,6 @@
+ extern gint    delay;
+ extern int     readonly;
+ extern int     random_order;
+-extern int     random_replace;
+ extern int     fullscreen;
+ extern int     maxpect;
+ extern int     statusbar_fullscreen;
+@@ -137,7 +136,6 @@
+ extern int     transparency;
+ extern int     do_grab;
+ extern int     disable_grab;
+-extern int     max_rand_num;
+ extern int     fixed_window_size;
+ extern int     fixed_zoom_factor;
+ extern int     zoom_factor;
+@@ -210,7 +208,7 @@
+ extern int checked_atoi(const char *);
+ extern void usage(char *, int);
+ extern void show_help(char *, int);
+-extern int get_random(int, int, int);
++extern int get_random(int);
+ extern gboolean color_alloc(const char *, GdkColor *);
+ extern void swap(int *, int *);
+ #define myround qiv_round
+
+--- a/utils.c	2011-05-13 13:11:24.000000000 +0000
++++ b/utils.c	2011-05-31 15:17:37.000000000 +0000
+@@ -424,7 +424,7 @@
+   else
+     last_modif = direction;
+   if (random_order)
+-    image_idx = get_random(random_replace, images, direction);
++    image_idx = get_random(direction);
+   else {
+     image_idx = (image_idx + direction) % images;
+     if (image_idx < 0)
+@@ -533,42 +533,41 @@
+     gdk_exit(exit_status);
+ }
+ 
+-/* returns a random number from the integers 0..num-1, either with
+-   replacement (replace=1) or without replacement (replace=0) */
+-int get_random(int replace, int num, int direction)
++/* returns a random image number */
++int get_random(int direction)
+ {
+-  static int index = -1;
+-  static int *rindices = NULL;  /* the array of random intgers */
+-  static int rsize;
+-
+-  int n,m,p,q;
+-
+-  if (!rindices)
+-    rindices = (int *) xmalloc((unsigned) max_rand_num*sizeof(int));
+-  if (rsize != num) {
+-    rsize = num;
+-    index = -1;
+-  }
+-
+-  if (index < 0)         /* no more indices left in this cycle. Build a new */
+-    {		         /* array of random numbers, by not sorting on random keys */
+-      index = num-1;
+-
+-      for (m=0;m<num;m++)
+-	{
+-	  rindices[m] = m; /* Make an array of growing numbers */
++	static int index = -1;
++	static int *rindices = NULL;  /* the array of random intgers */
++	static int rsize = 0;
++
++	if (!rindices || (rsize != images)) {
++		if (rindices)
++			free(rindices);
++		rindices = (int *) xmalloc((unsigned) (rsize = images) * sizeof(int));
++		index = -1;
+ 	}
+ 
+-      for (n=0;n<num;n++)   /* simple insertion sort, fine for num small */
+-	{
+-	  p=(int)(((float)rand()/RAND_MAX) * (num-n)) + n ; /* n <= p < num */
+-	  q=rindices[n];
+-	  rindices[n]=rindices[p]; /* Switch the two numbers to make random order */
+-	  rindices[p]=q;
++	if (index < 0) {	/* no more indices left in this cycle. Build a new array of random numbers, by not sorting on random keys */
++		index = rsize - 1;
++
++		int m, n;
++		for (m = 0 ; m < images ; m++)
++			rindices[m] = m;	/* Make an array of growing imagesbers */
++
++		/* simple insertion sort, fine for small rsize */
++		for (n = 0; n < images ; n++) {
++			int p = (int) (((float) rand() / RAND_MAX) * (images - n)) + n;	/* n <= p < num */
++			int q = rindices[n];
++			rindices[n] = rindices[p];	/* Switch the two imagesbers to make random order */
++			rindices[p] = q;
++		}
+ 	}
+-    }
+ 
+-  return rindices[index--];
++	/* TODO proper direction handling */
++	if ((direction == -1) && (index < images - 2))
++		index += 2;
++
++	return rindices[index--];
+ }
+ 
+ /* Recursively gets all files from a directory if <recursive> is true,

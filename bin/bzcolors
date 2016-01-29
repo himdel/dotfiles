@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+
+require 'colorize'
+
+class Colorizer
+
+  def initialize
+    @rules = [
+      [/^([^\s]*)/,       :yellow],
+      [/(CVE|EMBARGOED)/, :red],
+      [/(high)/,          :red],
+      [/(medium)/,        :yellow],
+    ]
+  end
+
+  def colorize_line(line)
+    @rules.each do |regexp, color|
+      match = line.match(regexp)
+      if match
+        line = match.pre_match +
+               match[1].colorize(color) +
+               match.post_match
+      end
+    end
+    line
+  end
+end
+
+
+c = Colorizer.new
+STDIN.readlines.each do |line|
+  puts c.colorize_line(line)
+end

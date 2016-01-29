@@ -1,0 +1,2 @@
+--type-add=php=.inc,.po,.pot,.tpl
+--ignore-dir=templates_compile

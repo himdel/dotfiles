@@ -1,0 +1,16 @@
+#!/bin/bash
+# TODO add to yavanna's crontab
+GITS='odpracovano wrk'
+TARGETS='varda.local'
+LOGFILE=~/.`basename "$0"`
+
+cd ~
+for tgt in $TARGETS; do
+	for git in $GITS; do
+		# skip if uncomitted changes .. or try to rebase?
+		cd "$git"
+		#TODO test
+		git pull "$tgt"
+		cd -
+	done
+done

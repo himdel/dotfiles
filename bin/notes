@@ -1,0 +1,6 @@
+#!/bin/bash
+echo Notes:
+for f in ~/.notes.d/*; do
+	echo -ne '\t'`basename "$f"`': '
+	[ -s "$f" ] && head -n1 "$f" || echo
+done

@@ -1,0 +1,8 @@
+#!/bin/bash
+D=~/.notes.d/
+mkdir -p "$D"
+F=$(tempfile -d "$D")
+[ $? -eq 0 ] || exit
+cat > "$F"
+echo
+echo "$F"

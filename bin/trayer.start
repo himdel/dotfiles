@@ -1,0 +1,28 @@
+#!/bin/bash
+# --edge <left right top bottom none>
+# --align <left center right>
+# --margin <size>
+# --widthtype request pixel percent
+# --width <size>
+# --heighttype <request pixel percent>
+# --height <size>
+# --SetDockType <bool>
+# --transparent <bool>
+# --alpha <value> (0= non transparent, 256=full transparency)
+# --tint <color>
+# --distance <length>
+# --expand <bool>
+# --padding <size>
+
+trayer \
+--SetDockType false \
+--widthtype request \
+--heighttype pixel \
+--height 24 \
+--edge top \
+--align right \
+--transparent true \
+--alpha 192 \
+--tint darkblue \
+--margin 217 \
+--distance 3 &

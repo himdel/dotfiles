@@ -1,0 +1,13 @@
+#!/usr/bin/php
+<?php
+if (count($argv) < 2) {
+	echo "syntax: $argv[0] <password...>\n";
+	exit(1);
+}
+
+foreach ($argv as $i => $pw) {
+	if ($i == 0)
+		continue;
+
+	echo $pw . ": " . password_hash($pw, PASSWORD_BCRYPT) . "\n";
+}

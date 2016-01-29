@@ -1,0 +1,17 @@
+diff -Naur antigrav-0.0.3/src/game.cpp antigrav-0.0.3.patch/src/game.cpp
+--- antigrav-0.0.3/src/game.cpp	2006-08-04 19:38:31.000000000 +0000
++++ antigrav-0.0.3.patch/src/game.cpp	2014-05-20 22:07:19.075689751 +0000
+@@ -698,6 +698,13 @@
+ 		float alpha = (stateTimer - 1.0);
+ 		if(alpha > 1.0) alpha = 1.0;
+ 		drawRadar(width, height, alpha);
++
++		glPushMatrix();
++		glTranslatef(0.0, height / 2.0, 0.0);
++
++		drawRadar(width, height, alpha);
++
++		glPopMatrix();
+ 	}
+ 	
+ 	// draw fps counter

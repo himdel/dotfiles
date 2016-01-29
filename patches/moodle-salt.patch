@@ -1,0 +1,98 @@
+diff --git a/auth/db/auth.php b/auth/db/auth.php
+index 4c95249..c437400 100644
+--- a/auth/db/auth.php
++++ b/auth/db/auth.php
+@@ -46,6 +46,11 @@ class auth_plugin_db extends auth_plugin_base {
+         $extusername = textlib::convert($username, 'utf-8', $this->config->extencoding);
+         $extpassword = textlib::convert($password, 'utf-8', $this->config->extencoding);
+ 
++        if ($this->config->salt_pre)
++            $extpassword = $this->config->salt_pre . $extpassword;
++        if ($this->config->salt_post)
++            $extpassword = $extpassword . $this->config->salt_post;
++
+         if ($this->is_internal()) {
+             // lookup username externally, but resolve
+             // password locally -- to support backend that
+@@ -63,7 +68,9 @@ class auth_plugin_db extends auth_plugin_base {
+             $authdb = $this->db_init();
+ 
+             $rs = $authdb->Execute("SELECT * FROM {$this->config->table}
+-                                     WHERE {$this->config->fielduser} = '".$this->ext_addslashes($extusername)."' ");
++                                     WHERE {$this->config->fielduser} = '".$this->ext_addslashes($extusername)."'
++                                 ".( $this->config->extracond ? ' AND '.$this->config->extracond : '' )
++            );
+             if (!$rs) {
+                 $authdb->Close();
+                 debugging(get_string('auth_dbcantconnect','auth_db'));
+@@ -98,7 +105,9 @@ class auth_plugin_db extends auth_plugin_base {
+ 
+             $rs = $authdb->Execute("SELECT * FROM {$this->config->table}
+                                 WHERE {$this->config->fielduser} = '".$this->ext_addslashes($extusername)."'
+-                                  AND {$this->config->fieldpass} = '".$this->ext_addslashes($extpassword)."' ");
++                                  AND {$this->config->fieldpass} = '".$this->ext_addslashes($extpassword)."'
++                                 ".( $this->config->extracond ? ' AND '.$this->config->extracond : '' )
++            );
+             if (!$rs) {
+                 $authdb->Close();
+                 debugging(get_string('auth_dbcantconnect','auth_db'));
+@@ -754,6 +763,12 @@ class auth_plugin_db extends auth_plugin_base {
+         if (!isset($config->changepasswordurl)) {
+             $config->changepasswordurl = '';
+         }
++        if (!isset($config->salt_pre))
++            $config->salt_pre = '';
++        if (!isset($config->salt_post))
++            $config->salt_post = '';
++        if (!isset($config->extracond))
++            $config->extracond = '';
+ 
+         // save settings
+         set_config('host',          $config->host,          'auth/db');
+@@ -771,6 +786,9 @@ class auth_plugin_db extends auth_plugin_base {
+         set_config('debugauthdb',   $config->debugauthdb,   'auth/db');
+         set_config('removeuser',    $config->removeuser,    'auth/db');
+         set_config('changepasswordurl', trim($config->changepasswordurl), 'auth/db');
++        set_config('salt_pre',      $config->salt_pre,      'auth/db');
++        set_config('salt_post',     $config->salt_post,     'auth/db');
++        set_config('extracond',     $config->extracond,     'auth/db');
+ 
+         return true;
+     }
+diff --git a/auth/db/config.html b/auth/db/config.html
+index 94d981b..66b6414 100644
+--- a/auth/db/config.html
++++ b/auth/db/config.html
+@@ -46,6 +46,12 @@
+     if (!isset($config->removeuser)) {
+         $config->removeuser = AUTH_REMOVEUSER_KEEP;
+     }
++    if (!isset($config->salt_pre))
++        $config->salt_pre = '';
++    if (!isset($config->salt_post))
++        $config->salt_post = '';
++    if (!isset($config->extracond))
++        $config->extracond = '';
+ 
+     $yesno = array( get_string('no'), get_string('yes') );
+ 
+@@ -267,6 +273,19 @@
+     </td>
+ </tr>
+ 
++<tr valign="top" class="required">
++    <td align="right"><label for="salt_pre">Salt - pre</label></td>
++    <td><input id="salt_pre" name="salt_pre" type="text" size="30" value="<?= $config->salt_pre ?>" /></td>
++</tr>
++<tr valign="top" class="required">
++    <td align="right"><label for="salt_post">Salt - post</label></td>
++    <td><input id="salt_post" name="salt_post" type="text" size="30" value="<?= $config->salt_post ?>" /></td>
++</tr>
++<tr valign="top" class="required">
++    <td align="right"><label for="extracond">Extra conditions (SQL)</label></td>
++    <td><input id="extracond" name="extracond" type="text" size="30" value="<?= $config->extracond ?>" /></td>
++</tr>
++
+ <?php
+ 
+ print_auth_lock_options($this->authtype, $user_fields, get_string('auth_dbextrafields', 'auth_db'), true, true);

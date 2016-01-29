@@ -1,0 +1,19 @@
+#!/bin/sh
+
+CAT=cat
+
+if `echo "$1" | grep gz$ > /dev/null 2> /dev/null`; then
+	CAT=zcat
+fi
+
+if `echo "$1" | grep bz2$ > /dev/null 2> /dev/null`; then
+	CAT=bzcat
+fi
+
+FN=$1
+shift
+
+$CAT "$FN" |
+  tar tv $@ |
+    awk '{ print $3 }' |
+      perl -e '$a = 0; while (<>) { $a += $_; }; print $a . "\n"'

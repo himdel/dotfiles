@@ -1,0 +1,18 @@
+#!/usr/bin/env perl
+use v5.14;
+
+for my $file (@ARGV) {
+	open(my $fh, "<", $file) or die "lint: can't open $file: $!";
+
+	while (<$fh>) {
+		my %rx = (
+			qr#//\S# => "no space after //",
+			qr#[ \t]+$# => "trailing space",
+			qr#//$# => "empty comment",
+			qr#[^\t]//# => "non-tab before comment",
+		);
+		for my $rx (keys %rx) {
+			say "$file:$.:".$rx{$rx} if /$rx/;
+		}
+	}
+}

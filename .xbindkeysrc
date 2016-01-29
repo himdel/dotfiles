@@ -1,0 +1,17 @@
+# Ctrl + MouseWheel does nothing (for chrome)
+""
+   control + b:4 (mouse)
+
+""
+   control + b:5 (mouse)
+
+# Shift + Ctrl + MouseWheel = volume
+"mpc volume +2"
+   shift + control + b:4 (mouse)
+
+"mpc volume -2"
+   shift + control + b:5 (mouse)
+
+# lock
+"slock"
+   Mod4 + l

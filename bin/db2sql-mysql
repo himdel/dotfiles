@@ -1,0 +1,124 @@
+#!/usr/bin/env perl
+use v5.14;
+use Data::Dumper;
+
+my $table = 0;
+my %tables = ();
+
+while (<>) {
+	chomp;
+	s/#.*$//;
+	next if /^\s*$/;
+
+	if (/^\w/) {
+		tbl2sql($table) if $table;
+		$tables{$_} = $table = {
+			name => $_,
+			fields => [],
+			pk => [],
+			idx => [],
+			foreign => [],
+			cmds => [],
+		};
+		next;
+	}
+
+	if (/^\t/) {
+		my ($nothing, $name, $type, $attr) = split /\t/;
+		if (!$type) {
+			if ($name =~ /^@(.*)$/) {
+				my @cmd = split /\s+/, $1;
+				push $table->{cmds}, [ @cmd ];
+				next;
+			}
+
+			$type = 'id' if $name eq 'id';
+		}
+
+		die "invalid input $_ on line $." if !$name or !$type;
+
+		push $table->{fields}, [ $name, $type ];
+
+		my @attr = split /,/, $attr;
+		# id -> pk handled in type2sql
+		push $table->{pk}, $name if grep { $_ eq 'pk' } @attr;
+		# fid&!pk -> idx
+		push $table->{idx}, $name if ($type eq 'fid' and not grep { $_ eq 'pk' } @attr) or grep { $_ eq 'idx' } @attr;
+		push $table->{foreign}, [$name, $name =~ s/^(id_)?(.*?)(_id)?$/$2/r] if $type eq 'fid';
+
+		next;
+	}
+
+	die "invalid input $_ on line $.";
+}
+tbl2sql($table) if $table;
+
+
+sub tbl2sql {
+	my $table = shift;
+	my %type2sql = (
+		fid => 'INT',
+		id => 'INT AUTO_INCREMENT PRIMARY KEY',
+		image => 'VARCHAR(256)',
+		int => 'INT',
+		uint => 'INT UNSIGNED',
+		money => 'DECIMAL(10,2)',
+		point => 'POINT',
+		richtext => 'TEXT',
+		text => 'TEXT',
+		timestamp => 'TIMESTAMP',
+		varchar => 'VARCHAR(256)',
+		password => 'VARCHAR(64)',
+		bool => 'BOOL',
+		datetime => 'DATETIME',
+		float => 'FLOAT',
+	);
+
+	my @tables = ( $table );
+	my @fields_append = ();
+	for my $cmd (@{ $table->{cmds} }) {
+		#print STDERR Dumper($cmd);
+		if ($cmd->[0] eq 'include') {
+			unshift @tables, $tables{ $cmd->[1] };
+		} elsif ($cmd->[0] eq 'sql') {
+			my @arr = @{ $cmd };
+			shift @arr;
+			push @fields_append, "\t".join(" ", @arr);
+		} else {
+			print STDERR "unknown command @".join(" ", @{ $cmd })."\n";
+		}
+	}
+
+	my @fields = ();
+	my @comments = ();
+	for my $tbl (@tables) {
+		for my $f (@{ $tbl->{fields} }) {
+			push @fields, "\t`".$f->[0]."` ".($type2sql{ $f->[1] } // handletype($f->[1]));
+		}
+		if (@{ $tbl->{pk} }) {
+			push @fields, "\tPRIMARY KEY (".join(", ", map { "`$_`" } @{ $tbl->{pk} }).")";
+		}
+		for my $i (@{ $tbl->{idx} }) {
+			push @fields, "\tINDEX (`$i`)";
+		}
+		for my $fk (@{ $tbl->{foreign} }) {
+			push @comments, "\t-- FOREIGN KEY (`".$fk->[0]."`) REFERENCES `".$fk->[1]."` (`id`)";
+		}
+	};
+
+	my $sql = "CREATE TABLE `" . $table->{name} . "` (\n";
+	$sql .= join(",\n", ( @fields, @fields_append ));
+	$sql .= "\n" if @comments;
+	$sql .= join("\n", @comments);
+	$sql .= "\n);\n";
+	say $sql;
+}
+
+sub handletype {
+	my $_ = shift;
+	return $1 if /^@(.*)/;
+	return "CHAR($1) COLLATE 'ascii_bin'" if /^\s*char\((\d+)\)\s*$/;
+	return "VARCHAR($1)" if /^varchar\((\d+)\)$/;
+
+	die "bad type $_";
+}

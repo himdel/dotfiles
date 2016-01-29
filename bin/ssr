@@ -1,0 +1,3 @@
+#!/bin/bash
+mkdir -p ~/.ss
+xwd -root | convert - ~/.ss/$(date +%Y%m%d%H%M%S%Z).png

@@ -1,0 +1,23 @@
+#!/bin/bash
+DRIVE=/media/data/.crypto_p
+DIR=/home/himdel/P
+DM=crypto_p
+
+function _mount {
+	mkdir -p "$DIR"
+	sudo cryptsetup luksOpen "$DRIVE" "$DM"
+	sudo mount /dev/mapper/"$DM" "$DIR"
+}
+
+function _umount {
+	sudo umount "$DIR"
+	sudo cryptsetup luksClose "$DM"
+	rmdir "$DIR"
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+fi
+
+$FNC

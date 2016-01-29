@@ -1,0 +1,5 @@
+web	chromium google.com
+vol	alsamixer
+jez	terms ~/wrk/dostihy	terms -2 ~/wrk/dostihy
+nas	terms ~/wrk/nastenka	terms -2 ~/wrk/nastenka
+cc	colorcode

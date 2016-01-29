@@ -1,0 +1,20 @@
+#!/bin/bash
+
+case $1 in
+	wall)
+		if [ `xrandr | grep ' connected' | wc -l` = 3 ]; then
+			hsetroot -fill `randomfile ~/wallpapers`
+		else
+			/usr/bin/hsetroot -fill `randomfile ~/wallpapers`
+		fi
+	;;
+
+	jasmine)
+		be bin/rake environment jasmine
+	;;
+
+	*)
+		echo "unknown command $@" 1>&2
+		exit 1
+	;;
+esac

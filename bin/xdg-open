@@ -1,0 +1,20 @@
+#!/bin/sh
+# should be symlinked from /usr/local/bin/xdg-open
+
+echo `date +%F` "$0" "$@" >> /tmp/xdg-open
+
+if echo "$@" | grep -q ^magnet: ; then
+	exec magnet "$@"
+else
+	case "$@" in
+	*docx|*doc|*xlsx|*xls|*pptx|*ppt)
+		exec /home/himdel/bin/gdocs.sh "$@"
+		;;
+	*jpg|*gif|*jpeg|*png|*JPG)
+		exec qiv "$@"
+		;;
+	*)
+		exec /usr/bin/xdg-open "$@"
+		;;
+	esac
+fi

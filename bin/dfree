@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#TODO replace with sort -h when have coreutils-8
+if [ $# -eq 1 -a "$1" = "-h" ]; then
+	df -P | sed 1d | awk '{ print $4" "$6 }' | sort -n | perl -ne '($s, @n) = split / /; $u = 0; while ($s > 1024) { $s /= 1024; $u++; } $u = ("k", "M", "G", "T")[$u]; $s = int($s * 10); $s =~ s/(.)$/.$1/; print "$s$u\t@n";'
+else
+	df -P | sed 1d | awk '{ print $4" "$6 }' | sort -n
+fi
+

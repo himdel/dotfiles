@@ -1,0 +1,6 @@
+#!/bin/bash
+sudo ntfs-3g -o allow_other /dev/sda1 /mnt/xp
+sudo mount -o loop /mnt/xp/GAMES/BroodWar.iso /media/cdrom0
+wine "/mnt/xp/Program Files/Starcraft/StarCraft.exe"
+sudo umount /media/cdrom0
+sudo umount /mnt/xp

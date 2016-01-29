@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+set -x
+
+n=0
+
+wget "$1" -O- | perl -ne 'chomp; while (/href=(["'\''])([^"'\'']*\/image\/[^"'\'']*)\1/g) { print "$2\n"; }' | while read url; do
+	URL=`wget "$url" -O- | perl -ne 'chomp; while (/href=(["'\''])([^"'\'']*\/dl.php[^"'\'']*)\1/g) { print "$2\n"; }'`
+	wget "$URL" -O img`printf %03d $n`.jpg
+	n=`expr $n + 1`
+done

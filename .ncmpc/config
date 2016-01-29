@@ -1,0 +1,8 @@
+auto-center = yes
+find-wrap = yes
+bell-on-wrap = yes
+audible-bell = no
+visible-bell = yes
+crossfade-time = 4
+set-xterm-title = yes
+xterm-title-format = "[[%artist% - ]%title%]|[%shortfile%]"

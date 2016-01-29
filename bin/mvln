@@ -1,0 +1,8 @@
+#!/bin/sh
+if [ "$#" -ne 2 ]; then
+	echo $0 old new 1>&2
+	exit 1
+fi
+
+mv -v "$1" "$2"
+ln -sv "$2" "$1"

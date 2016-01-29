@@ -1,0 +1,7 @@
+#!/bin/sh
+
+while true; do
+	feh -czZF -W 1280 -H 800 -E 500 -y 300 -a 96 -O /tmp/wall.jpg $( ls "$@" | random 5 )
+	hsetroot -fill /tmp/wall.jpg
+	sleep 2m
+done

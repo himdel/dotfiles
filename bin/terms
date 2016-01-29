@@ -1,0 +1,105 @@
+#!/bin/sh
+RES="1024x768"
+if [ -e ~/.res ]; then
+	RES=`cat ~/.res`
+else
+	RES=`xrandr -q | grep \* | awk '{ print $1 }' | sort -nu | head -n1`
+fi
+T="$TERM"
+[ -z "$T" ] && T=rxvt-unicode
+
+two=false
+four=false
+thrIII=false
+
+while [ $# -gt 0 ]; do
+	case $1 in
+		'-2')
+			two=true
+		;;
+		'-III')
+			thrIII=true
+		;;
+		'-4')
+			four=true
+		;;
+		*)
+			cd "$1" || exit
+		;;
+	esac
+	shift
+done
+
+if [ `hostname` = yavanna -a "$RES" != "1280x1024" ]; then
+	# yavanna version 8I (or OI)
+	echo terms: using bad display version
+	$two && $T -geometry 103x52+3+30 &
+	$two || $T -geometry 103x25+3+30 &
+	$two || $T -geometry 103x25+3-30 &
+	$T -geometry 63x52-3+30 &
+	exit
+fi
+if [ "$RES" = "1024x768" ]; then
+	echo terms: "$RES"
+	# orig version I8 (or I0)
+	$T -geometry 84x52+3+30 &
+	$two || $T -geometry 83x25-3+30 &
+	$two || $T -geometry 83x25-3-30 &
+	$two && $T -geometry 83x52-3+30 &
+	exit
+fi
+if [ "$RES" = "1280x1024" ]; then
+	echo terms: "$RES"
+	# I8 (or I0)
+	$T -geometry 106x72+3+30 &
+	$two || $T -geometry 104x35-3+30 &
+	$two || $T -geometry 104x35-3-30 &
+	$two && $T -geometry 104x72-3+30 &
+	exit
+fi
+if [ "$RES" = "1440x900" ]; then
+	echo terms: "$RES"
+	echo TODO
+fi
+if [ "$RES" = "1280x800" ]; then
+	echo terms: "$RES"
+	# I8 (or I0)
+	$four || $T -geometry 105x55+3+30 &
+	$four && $T -geometry 105x27+3+30 &
+	$four && $T -geometry 105x26+3-30 &
+	$two || $T -geometry 105x27-3+30 &
+	$two || $T -geometry 105x26-3-30 &
+	$two && $T -geometry 105x55-3+30 &
+	sleep 1
+	exit
+fi
+if [ "$RES" = "1366x768" ]; then
+	echo terms: "$RES"
+	$T -geometry 113x52+3+29 &
+	$two || $T -geometry 112x25-3+29 &
+	$two || $T -geometry 112x25-3-29 &
+	$two && $T -geometry 112x52-3+29 &
+fi
+
+$thrIII || if [ "$RES" = "1920x1080" ]; then
+	echo terms: "$RES"
+	# I8 (or I0)
+	$four || $T -geometry 136x71+3+30 &
+	$four && $T -geometry 136x34+3+30 &
+	$four && $T -geometry 136x35+3-30 &
+	$two || $T -geometry 135x34-3+30 &
+	$two || $T -geometry 135x35-3-30 &
+	$two && $T -geometry 135x71-3+30 &
+	sleep 1
+	exit
+fi
+$thrIII && if [ "$RES" = "1920x1080" ]; then
+	echo terms: "$RES" III
+	$T -geometry 90x71+3+30 &
+	$T -geometry 90x71+642+30 &
+	$T -geometry 90x71-3+30 &
+	sleep 1
+	exit
+fi
+
+echo unknown resolution "$RES"

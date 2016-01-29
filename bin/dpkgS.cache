@@ -1,0 +1,11 @@
+#!/bin/sh
+D=~/.dpkgS
+F=cache
+T=`date +%s`.tmp
+
+set -e
+
+mkdir -p "$D"
+cd /var/lib/dpkg/info/
+grep ^. *.list | sed 's/\.list:/\t/' | awk '{ print $2"\t"$1 }' | sort > "$D"/"$T"
+mv "$D"/"$T" "$D"/"$F"

@@ -1,0 +1,10 @@
+--- a/src/plugins/analysis.plug	2011-12-29 14:17:50.000000000 +0000
++++ b/src/plugins/analysis.plug	2011-12-29 14:17:50.000000000 +0000
+@@ -763,6 +763,7 @@
+   set end [expr {$start+int([$s cget -rate]/[$w cget -pixelspersecond])}]
+   if {$start >= [$s length]} return
+   if {$end >= [$s length]} return
++  if {$start < 0} { set start 0 }
+   set maxamp [$s max -start $start -end $end -channel $v(channel)]
+   set minamp [$s min -start $start -end $end -channel $v(channel)]
+   $w messageProc [format "Waveform - %s \[%s %s\]" $timestr $maxamp $minamp] \

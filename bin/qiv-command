@@ -1,0 +1,29 @@
+#!/bin/bash
+fullpath=$(cd "$(dirname "$2")" ; pwd)/$(basename "$2")
+md5ext=$(md5sum "$2" | awk '{print $1}').$(basename "$2" | sed 's/^.*\.//')
+
+case $1 in
+	0)
+		~/wallpapers/.set.sh "$2"
+		[ -x ~/wallpapers/.like.sh ] && ~/wallpapers/.like.sh
+		;;
+	1)
+		[ -d /tmp/xox ] || mkdir /tmp/xox
+		cp "$2" /tmp/xox/"$md5ext"
+		;;
+	2)
+		(nohup gimp "$2" >/dev/null 2>/dev/null & exit)
+		;;
+	3)
+		($BROWSER "$2" & exit)
+		;;
+	4)
+		[ -d ~/P/.INp_cool ] && ln "$fullpath" ~/P/.INp_cool/"$md5ext"
+		[ -d ~/.INp_cool ] && ln "$fullpath" ~/.INp_cool/"$md5ext"
+		[ -d ~/.INp/cool ] && ln -s "$fullpath" ~/.INp/cool/"$md5ext"
+		;;
+	*)
+		echo 'gah!'
+esac
+
+exit 0

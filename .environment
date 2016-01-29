@@ -1,0 +1,14 @@
+export LANG=en_US.UTF-8
+export LC_COLLATE=C
+
+export NAME="Martin Hradil"
+export EMAIL="himdel@gmail.com"
+export TZ=GMT
+
+export BROWSER=chromium
+export EDITOR=vim
+export MAILER=claws-mail
+
+export ALSA_CARD=PCH
+export GOPATH=/home/himdel/.gopath
+export TERMINAL=rxvt-unicode

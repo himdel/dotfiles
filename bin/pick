@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+$verbose = false
+ARGV.reject! do |s|
+	is_opt = s == '-v'
+	$verbose |= is_opt
+	is_opt
+end
+
+pick = ARGV.shuffle.first
+puts pick
+$stderr.puts pick if $verbose

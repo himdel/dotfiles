@@ -1,0 +1,25 @@
+#!/usr/bin/perl
+use v5.20;
+use Data::Dumper;
+
+my %dates = ();
+while (<>) {
+	my ($d, $t) = split /\s+/;
+	my $h = ($t =~ s/(\d+):\d+:\d+/$1/r);
+
+	$dates{$d} //= {};
+	$dates{$d}->{$h} //= [];
+	push @{ $dates{$d}->{$h} }, $t;
+}
+
+say Dumper({%dates});
+say '---';
+
+my $sum = 0;
+for my $d (sort keys %dates) {
+	my $c = keys %{ $dates{$d} };
+	printf("%s: %d\n", $d, $c);
+
+	$sum += $c;
+}
+say "= $sum";

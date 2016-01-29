@@ -1,0 +1,19 @@
+#!/bin/bash
+# TODO should also include big mp4s
+
+ls *.{mkv,avi,mpg,mpeg,wmv,mov,ogm} 2>/dev/null |
+while read orig; do
+	new=$( sed -e 's/\.[a-zA-Z0-9]\+$/.mp4/' <<< "$orig" )
+
+	echo
+	echo
+	echo "$orig -> $new"
+	echo
+
+	ionice -c3 \
+	nice -n 19 \
+	avconv-mp4 "$orig" "$new" &&
+	rm -v "$orig" av2pass*
+
+	[ -e .av_stop ] && break
+done

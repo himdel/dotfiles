@@ -1,0 +1,29 @@
+#!/usr/bin/perl -i
+use v5.14;
+
+if ($ARGV[0] eq '-h') {
+	say "$0: [-h] [-d] [files...]";
+	exit 0;
+}
+
+my $mode = 'e';
+if ($ARGV[0] eq '-d') {
+	$mode = 'd';
+	shift;
+}
+
+sub foo {
+	my $ret = "'".shift."(";
+	my @args = map { s/[\s=].*// if /=/; "$_ = '.print_r($_, true).'" } grep { /\S/ } split /\s*,\s*/, shift;
+	$ret .= join(", ", @args);
+	$ret .= ") on line '.__LINE__";
+	return $ret;
+}
+
+while (<>) {
+	do {
+		s/^function (.*?)\s*\((.*)\)\s*{\s*$/"$&\terror_log(".foo($1, $2).");\t#DBG\n"/e
+	} if $mode eq 'e' and m/^function/;
+	next if $mode eq 'd' and m/#DBG$/;
+	print;
+}

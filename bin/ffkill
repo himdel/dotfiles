@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+$0 = "ffkill";
+
+use warnings;
+use strict;
+use 5.010;
+
+use Gtk2::TrayIcon;
+Gtk2->init();
+
+my $icon = Gtk2::TrayIcon->new("ffkill");
+my $zlo = Gtk2::Button->new("ON");
+my $state = 0;
+
+$icon->add($zlo);
+
+my $turn = sub {
+	my ($lbl, $sig, $color, $newstate);
+
+	($lbl, $sig, $color, $newstate) = ( 'ON', 'CONT', '#00ff00', 1 ) if $state == 0;
+	($lbl, $sig, $color, $newstate) = ( 'OFF', 'STOP', '#ff0000', 0 ) if $state == 1;
+
+	system("killall -$sig firefox firefox-bin");
+	system("killall plugin-container") if $sig eq 'STOP';
+
+	$state = $newstate;
+	$zlo->set_label($lbl);
+	$zlo->modify_bg('normal', Gtk2::Gdk::Color->parse($color));
+};
+$turn->();
+
+$zlo->signal_connect(clicked => $turn);
+
+$icon->show_all();
+Gtk2->main();

@@ -1,0 +1,2 @@
+#!/bin/sh
+exec vncviewer 192.168.1.110 -bgr233 -compresslevel 9 -quality 0

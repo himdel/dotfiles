@@ -1,0 +1,117 @@
+#!/bin/bash
+PRG=`which s2ram`
+[ -z "$PRG" ] && PRG=/usr/sbin/s2ram
+[ -e ~/.susp-force-disk ] && PRG=/usr/sbin/s2disk
+export PRG
+
+DO_SUSP=true
+DO_LOCK=true
+
+for opt in `getopt hln "$@"`; do
+	case $opt in
+		-h)
+			echo "usage: $0 [-h] [-l] [-n]"
+			echo "	-h	this help"
+			echo "	-l	lock screen after suspend"
+			echo "	-n	do not suspend"
+			exit 0
+			;;
+		-l)
+			DO_LOCK=true
+			;;
+		-n)
+			DO_SUSP=false
+			;;
+		--)
+			break;
+			;;
+		*)
+			echo unkown opt $opt
+			;;
+	esac
+done
+
+if [ -e ~/.nosusp -a "$DO_SUSP" = true ]; then
+	echo .nosusp found, not actually suspending
+	DO_SUSP=false
+	rm -vf ~/.nosusp
+fi
+
+echo Suspend in 4 sec... "($PRG)"
+echo susp = $DO_SUSP, lock = $DO_LOCK
+
+#STATUS=`purple-send PurpleSavedstatusGetCurrent | sed -e 1d -e 's/ \+//' -e 's/ /:/'`
+#purple-remote 'setstatus?status=offline'
+#killall sonata
+#sleep 1
+#killall -9 sonata
+#sudo umount /media/tmp
+#sleep 2
+#mpc pause
+
+( echo -n 'susp ' ; date '+%FT%TZ' ) >> ~/.susp.log
+
+sudo echo	# prompt for pass if necessary
+sudo killall vpnc || true
+sleep 0.5
+[ "$DO_LOCK" = true ] && slock
+sync
+
+# actual suspend
+[ "$DO_SUSP" = true ] && sudo "$PRG"
+
+#nohup sonata >/dev/null 2>/dev/null &
+sleep 2	# musi aby nohup stihl se znohupovat
+xset dpms force on
+#xscreensaver-command -deactivate
+#purple-remote "setstatus?status=$STATUS"
+#purple-send-async PurpleSavedstatusActivate "$STATUS"
+[ -x "$(which xbacklight)" ] && xbacklight =100
+
+( echo -n 'wake ' ; date '+%FT%TZ' ) >> ~/.susp.log
+
+udevadm settle
+
+# ETH0_IN = yes | no
+ETH0_IN=`sudo ethtool eth0 | grep 'Link detected' | sed 's/^.*:\s*//'`
+
+# ETH0_ON = 1 | 0
+ETH0_ON=`sudo ifconfig | grep ^eth0 | wc -l`
+
+# WLAN_ON = 1 | 0
+WLAN_ON=`ps -A | grep wpa_supplicant | wc -l`
+
+# link detected fails but monitor connected might not
+[ "$ETH0_IN" = no ] && xrandr-output-connected 'DP2-2' && ETH0_IN=yes
+
+[ "$ETH0_IN" = yes -a "$WLAN_ON" = 1 ] && sudo ifdown wlan0
+[ "$ETH0_IN" = yes -a "$ETH0_ON" = 0 ] && sudo ifup eth0
+
+[ "$ETH0_IN" = no -a "$ETH0_ON" = 1 ] && sudo ifdown eth0
+[ "$ETH0_IN" = no -a "$WLAN_ON" = 0 ] && sudo ifup wlan0
+
+xrandr --auto
+
+if xrandr-output-connected 'DP2-2'; then
+	# ugly hack to revive screen after suspend, see https://bugzilla.redhat.com/show_bug.cgi?id=1179924
+	xrandr --output 'DP2-2' --mode 1024x768 && xrandr --output 'DP2-2' --auto
+
+	xrandr --output 'DP2-2' --primary
+	xrandr --output 'VGA1' --left-of 'DP2-2'
+	xrandr --output 'eDP1' --left-of 'VGA1'
+else if xrandr-output-connected 'HDMI1'; then
+	xrandr --output 'HDMI1' --primary
+	xrandr --output 'eDP1' --left-of 'HDMI1'
+else
+	xrandr --output 'eDP1' --primary
+fi; fi
+
+if [ "$ETH0_IN" = yes ]; then
+	~/bin/ddns-himdel-usersys
+else
+	sudo vpnc &&
+		~/bin/ddns-himdel-usersys ||
+		stty echo
+fi
+
+~/wallpapers/.random.sh

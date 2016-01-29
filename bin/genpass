@@ -1,0 +1,39 @@
+#!/usr/bin/env perl
+use v5.14;
+
+=item GenPasswd($len)
+vygeneruje rozumnej retezec dlouhej $len znaku pouzitelnej napr. jako heslo
+=cut
+sub GenPasswd($) {
+	my $len = shift;
+
+	# nepouziji se ambivalentni znaky "1lyzO0"
+	my $vowels = "aeiu";
+	my $consos = "bcdfghjkmnprstvwx";
+
+	my $vowels_len = length($vowels);
+	my $consos_len = length($consos);
+
+	my $str = '';
+
+	for (my $i = 0; $i < $len; $i++) {
+		if ($i % 2 == 0) {
+			$str .= substr($vowels, rand($vowels_len), 1);
+		} else {
+			$str .= substr($consos, rand($consos_len), 1);
+		}
+	}
+
+	my $l = length($str);
+	my $n = int(rand($l));
+	my $x = int(rand(8))+2;
+	$str = substr($str, 1, $n) . $x . substr($str, $n + 1, $l - $n);
+
+	return $str;
+}
+
+my $len = shift(@ARGV) // (7 + rand(3));
+say GenPasswd($len);
+
+##!/bin/bash
+# /usr/share/doc/expect/examples/mkpasswd -- -l 8 -C 0 -s 0

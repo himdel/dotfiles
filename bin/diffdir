@@ -1,0 +1,32 @@
+#!/bin/bash
+pushd "$1" >/dev/null
+A=`/bin/pwd`
+popd >/dev/null
+pushd "$2" >/dev/null
+B=`/bin/pwd`
+popd >/dev/null
+
+# TODO if only 1 param (diffdir trunk), look for trunk/{,../}.diffdir then $OLDPWD and die if not found
+
+(cd "$A" ; find -type f; cd "$B"; find -type f) | sed 's/^\.\///' | sort -u | while read f; do
+	echo "$f" | grep -q '^.svn/' && continue
+	echo "$f" | grep -q '/.svn/' && continue
+	echo "$f" | grep -q '.svnbase$' && continue
+	echo "$f" | grep -q '^.git/' && continue
+	echo "$f" | grep -q '/.git/' && continue
+
+	if [ -f "$A"/"$f" -a ! -f "$B"/"$f" ]; then
+		echo "$B"/"$f" doesn\'t exist, "$A"/"$f" does
+		continue
+	fi
+	if [ -f "$B"/"$f" -a ! -f "$A"/"$f" ]; then
+		echo "$A"/"$f" doesn\'t exist, "$B"/"$f" does
+		continue
+	fi
+	cmp -s "$A"/"$f" "$B"/"$f" && continue
+	diff "$A"/"$f" "$B"/"$f" | head -n1 | grep ^Binary && continue
+
+	diff -qw "$A"/"$f" "$B"/"$f" && continue
+
+	vimdiff "$A"/"$f" "$B"/"$f" < /dev/tty > /dev/tty
+done

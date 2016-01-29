@@ -1,0 +1,367 @@
+--- a/Makefile
++++ b/Makefile
+@@ -0,0 +1,11 @@
++SDL_OBJS     = $(addprefix src/, SDLkey.o SDL.o)
++SDL_LIBS     = -lSDL
++
++src/SDL.o: src/SDL.c
++	$(CC) $(ALL_CFLAGS) -c -o $(addprefix $(dir $<), $(notdir $@)) $< -std=c99
++
++src/SDLkey.o: src/SDLkey.c
++	$(CC) $(ALL_CFLAGS) -c -o $(addprefix $(dir $<), $(notdir $@)) $< -std=c99
++
++sdlthrust: $(OBJS) $(SDL_OBJS)
++	$(CC) $(LDFLAGS) -o sdlthrust $(OBJS) $(SDL_OBJS) $(SDL_LIBS) $(LIBS)
+
+--- /dev/null
++++ b/src/SDL.c
+@@ -0,0 +1,184 @@
++// SDL output for Thrust
++// (adapted from tank [ https://github.com/himdel/tank/ ])
++// input in SDLkey.c
++
++#include <stdlib.h>
++#include <stdlib.h>
++#include <assert.h>
++#define __USE_BSD
++#include <unistd.h>
++#include <sys/time.h>
++
++#include <SDL/SDL.h>
++#include "thrust.h"
++#include "gr_drv.h"
++
++static const int X = 320;
++static const int Y = 200;
++
++static SDL_Surface *scr = NULL;
++
++
++// used for output-specific options
++char *
++graphicsname()
++{
++	static char name[] = "SDL";
++	return name;
++}
++
++// run before init, empty
++void
++graphics_preinit()
++{
++	;
++}
++
++// parse options, init graphics
++int
++graphicsinit(int argc, char **argv)
++{
++	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
++		fprintf(stderr, "SDL_Init: %s\n", SDL_GetError());
++		return -1;
++	}
++
++	SDL_WM_SetCaption("thrust", "thrust");
++	// SDL_WM_SetIcon(SDL_LoadBMP("img/icon.bmp"), NULL);
++
++	assert((scr = SDL_SetVideoMode(X, Y, 8, SDL_SWSURFACE)));
++
++	return 0;
++}
++
++// close graphics
++int
++graphicsclose()
++{
++	SDL_Quit();
++	scr = NULL;
++
++	return 0;
++}
++
++// clear screen
++void
++clearscr()
++{
++	if (SDL_MUSTLOCK(scr))
++		SDL_LockSurface(scr);
++
++	for (int x = 0; x < X; x++)
++		for (int y = 0; y < Y; y++)
++			putpixel(x, y, 0);
++
++	if (SDL_MUSTLOCK(scr))
++		SDL_UnlockSurface(scr);
++
++	// displayscreen does the actual repaint
++	displayscreen();
++}
++
++// flip buffer
++void
++displayscreen()
++{
++	SDL_UpdateRect(scr, 0, 0, 0, 0);
++}
++
++// displayscreen and wait
++void
++syncscreen()
++{
++	struct timeval tmp;
++	static int old = -1;
++
++	if (old == -1) {
++		gettimeofday(&tmp, NULL);
++		old = tmp.tv_usec;
++	}
++
++	displayscreen();
++
++	gettimeofday(&tmp, NULL);
++	int new = tmp.tv_usec;
++	int diff = (old - new + 1000000) % 1000000;
++
++	if (diff > 20000)
++		usleep(diff % 20000);
++
++	gettimeofday(&tmp, NULL);
++	old = tmp.tv_usec;
++}
++
++// paint a pixel
++void
++putpixel(int x, int y, byte color)
++{
++	if (SDL_MUSTLOCK(scr))
++		SDL_LockSurface(scr);
++
++	*((Uint8 *) scr->pixels + (scr->pitch * y) + x) = color;
++
++	if (SDL_MUSTLOCK(scr))
++		SDL_UnlockSurface(scr);
++}
++
++// copy an area
++void
++putarea(byte *source, int x, int y, int width, int height, int bytesperline, int destx, int desty)
++{
++	if (SDL_MUSTLOCK(scr))
++		SDL_LockSurface(scr);
++
++	for (int j = 0; j < height; j++)
++		for (int i = 0; i < width; i++)
++			*((Uint8 *) scr->pixels + (scr->pitch * (desty + j)) + (destx + i)) = source[bytesperline * (y + j) + x + i];
++
++	if (SDL_MUSTLOCK(scr))
++		SDL_UnlockSurface(scr);
++}
++
++// set/fade pallete
++// fade ignored for now
++void
++fadepalette(int first, int last, byte *RGBtable, int fade, int flag)
++{
++	int n = last - first + 1;
++	SDL_Color *col = calloc(n, sizeof(SDL_Color));
++
++	for (int foo = 0; foo < n; foo++) {
++		col[foo].r = RGBtable[3 * foo + 0];
++		col[foo].g = RGBtable[3 * foo + 1];
++		col[foo].b = RGBtable[3 * foo + 2];
++	}
++
++	SDL_SetColors(scr, col, first, n);
++	free(col);
++
++	if (flag)
++		displayscreen();
++}
++
++// fade in gradually
++void
++fade_in()
++{
++	fadepalette(0, 255, bin_colors, -1, 1);
++//	for (int i = 1; i <= 64; i++)
++//		fadepalette(0, 255, bin_colors, i, 1);
++
++	displayscreen();
++}
++
++// fade out gradually
++void
++fade_out()
++{
++	fadepalette(0, 255, bin_colors, -1, 1);
++//	for (int i = 64; i; i--)
++//		fadepalette(0, 255, bin_colors, i, 1);
++
++	clearscr();
++	usleep(500000L);
++}
+
+--- /dev/null
++++ b/src/SDLkey.c
+@@ -0,0 +1,161 @@
++// SDL input for Thrust
++// (adapted from tank [ https://github.com/himdel/tank/ ])
++// output in SDL.c
++
++#include <SDL/SDL.h>
++#include <SDL/SDL_keysym.h>
++#include "thrust.h"
++#include "keyboard.h"
++
++// left, right, thrust, fire, pick (, quit, pause, continue)
++int scancode[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
++static int keyz[SDLK_LAST];
++
++
++// key driver name
++char *
++keyname()
++{
++	static char name[] = "SDL";
++	return name;
++}
++
++// init key system
++int
++keyinit()
++{
++	flushkeyboard();
++	return 0;
++}
++
++// close, empty
++int
++keyclose()
++{
++	return 0;
++}
++
++// stub, non-default keys not implemented
++char *
++keystring(int key)
++{
++	switch (key) {
++		case SDLK_UP:
++			return "Up";
++		case SDLK_DOWN:
++			return "Down";
++		case SDLK_RETURN:
++			return "Enter";
++		case SDLK_ESCAPE:
++			return "Escape";
++		default:
++			return "unknown";
++	}
++}
++
++// stub, non-default keys not implemented
++int
++keycode(char *keyname)
++{
++	return 0;
++}
++
++// read keypress and update array
++static int
++update_keys(int retdown)
++{
++	SDL_Event ev;
++	int n = 0;
++	while (SDL_PollEvent(&ev)) {
++		switch (ev.type) {
++			case SDL_KEYDOWN:
++				n++;
++				keyz[ev.key.keysym.sym] = 1;
++				if (retdown)
++					return ev.key.keysym.sym;
++				break;
++			case SDL_QUIT:
++				keyz[SDLK_ESCAPE] = 1;
++				if (retdown)
++					return SDLK_ESCAPE;
++				break;
++			case SDL_KEYUP:
++				keyz[ev.key.keysym.sym] = 0;
++				break;
++		}
++	}
++	return 0;
++}
++
++// read one keypress
++int
++getkey()
++{
++	return update_keys(1);
++}
++
++// return key status in a byte
++byte
++getkeys()
++{
++	byte keybits = 0;
++
++	update_keys(0);
++
++	if (keyz[SDLK_p])
++		keybits |= pause_bit;
++	if (keyz[SDLK_q] || keyz[SDLK_ESCAPE])
++		keybits |= escape_bit;
++
++	if (keyz[SDLK_a])
++		keybits |= left_bit;
++	if (keyz[SDLK_s])
++		keybits |= right_bit;
++	if (keyz[SDLK_LCTRL] || keyz[SDLK_RCTRL])
++		keybits |= thrust_bit;
++	if (keyz[SDLK_RETURN])
++		keybits |= fire_bit;
++	if (keyz[SDLK_SPACE])
++		keybits |= pickup_bit;
++
++	return keybits;
++}
++
++// set singlekey mode, stub
++void
++singlekey()
++{
++}
++
++// set multikey mode, stub
++void
++multiplekeys()
++{
++}
++
++// get one key
++int
++getonemultiplekey()
++{
++	return getkey();
++}
++
++// flush keyboard
++void
++flushkeyboard()
++{
++	update_keys(0);
++	for (int foo = 0; foo < SDLK_LAST; foo++)
++		keyz[foo] = 0;
++}
++
++// is a key waiting
++int
++keywaiting()
++{
++	update_keys(0);
++	for (int foo = 0; foo < SDLK_LAST; foo++)
++		if (keyz[foo])
++			return 1;
++	return 0;
++}

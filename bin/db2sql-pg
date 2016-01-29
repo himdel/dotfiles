@@ -1,0 +1,142 @@
+#!/usr/bin/env perl
+use v5.14;
+use Data::Dumper;
+
+my $table = 0;
+my %tables = ();
+
+while (<>) {
+	chomp;
+	s/#.*$//;
+	next if /^\s*$/;
+
+	if (/^\w/) {
+		tbl2sql($table) if $table;
+		$tables{$_} = $table = {
+			name => $_,
+			fields => [],
+			pk => [],
+			idx => [],
+			foreign => [],
+			cmds => [],
+		};
+		next;
+	}
+
+	if (/^\t/) {
+		my ($nothing, $name, $type, $attr) = split /\t/;
+		if (!$type) {
+			if ($name =~ /^@(.*)$/) {
+				my @cmd = split /\s+/, $1;
+				push $table->{cmds}, [ @cmd ];
+				next;
+			}
+
+			$type = 'id' if $name eq 'id';
+		}
+
+		die "invalid input $_ on line $." if !$name or !$type;
+
+		push $table->{fields}, [ $name, $type ];
+
+		my @attr = split /,/, $attr;
+		# id -> pk handled in type2sql
+		push $table->{pk}, $name if grep { $_ eq 'pk' } @attr;
+		# fid&!pk -> idx
+		#push $table->{idx}, $name if $type eq 'fid' and not grep { $_ eq 'pk' } @attr;
+		push $table->{idx}, $name if grep { $_ eq 'idx' } @attr;
+		push $table->{foreign}, [$name, $name =~ s/_id$//r] if $type eq 'fid';
+
+		next;
+	}
+
+	if (/^@(.*)$/) {
+		say $1;
+		next;
+	}
+
+	die "invalid input $_ on line $.";
+}
+tbl2sql($table) if $table;
+
+
+sub tbl2sql {
+	my $table = shift;
+
+	my @tables = ( $table );
+	my @fields_append = ();
+	for my $cmd (@{ $table->{cmds} }) {
+		#print STDERR Dumper($cmd);
+		if ($cmd->[0] eq 'include') {
+			unshift @tables, $tables{ $cmd->[1] };
+		} elsif ($cmd->[0] eq 'sql') {
+			my @arr = @{ $cmd };
+			shift @arr;
+			push @fields_append, "\t".join(" ", @arr);
+		} else {
+			print STDERR "unknown command @".join(" ", @{ $cmd })."\n";
+		}
+	}
+
+	my @fields = ();
+	my @indices = ();
+	my @comments = ();
+	for my $tbl (@tables) {
+		for my $f (@{ $tbl->{fields} }) {
+			push @fields, "\t\"" . $f->[0] . "\" " . handletype($f->[1], $f->[0]);
+		}
+		if (@{ $tbl->{pk} }) {
+			push @fields, "\tPRIMARY KEY (".join(", ", map { "\"$_\"" } @{ $tbl->{pk} }).")";
+		}
+		for my $i (@{ $tbl->{idx} }) {
+			push @indices, $i;
+		}
+		for my $fk (@{ $tbl->{foreign} }) {
+			push @comments, "\t-- FOREIGN KEY (\"".$fk->[0]."\") REFERENCES \"".$fk->[1]."\" (\"id\")";
+		}
+	};
+
+	my $sql = "CREATE TABLE \"" . $table->{name} . "\" (\n";
+	$sql .= join(",\n", ( @fields, @fields_append ));
+	$sql .= "\n" if @comments;
+	$sql .= join("\n", @comments);
+	$sql .= "\n);\n";
+	$sql .= "CREATE INDEX ON " . $table->{name} . " (\"$_\");\n" for @indices;
+
+	say $sql;
+}
+
+sub handletype {
+	my ($_, $fld) = @_;
+
+	my %type2sql = (
+		fid => 'INT',
+		id => 'SERIAL PRIMARY KEY',
+		image => 'VARCHAR(256)',
+		int => 'INT',
+		# uint below
+		money => 'NUMERIC(10,2)',
+		point => 'POINT',
+		richtext => 'TEXT',
+		text => 'TEXT',
+		timestamp => 'TIMESTAMP',
+		varchar => 'VARCHAR(256)',
+		password => 'VARCHAR(64)',
+		bool => 'BOOL',
+		datetime => 'TIMESTAMP WITH TIME ZONE',
+		float => 'FLOAT',
+		url => 'VARCHAR(512)',
+		email => 'VARCHAR(128)',
+		phone => 'VARCHAR(32)',
+		json => 'JSON',
+	);
+
+	return $1 if /^@(.*)/;
+	return handletype($1, $fld)." NOT NULL" if /^(.*)!$/;
+	return $type2sql{$_} if $type2sql{$_};
+	return "CHAR($1) COLLATE 'ascii_bin'" if /^\s*char\((\d+)\)\s*$/;
+	return "VARCHAR($1)" if /^varchar\((\d+)\)$/;
+	return "INT CHECK(\"$fld\" >= 0)" if /^uint$/;
+
+	die "bad type $_";
+}

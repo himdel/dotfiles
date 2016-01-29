@@ -1,0 +1,40 @@
+#!/usr/bin/perl
+$0 = "i3-traycmds";
+
+use v5.14;
+use Gtk2::TrayIcon;
+use Data::Dumper;
+
+Gtk2->init();
+
+my %pairs = (
+	T => 'urxvt',
+	'@' => 'chromium',
+);
+
+for my $k (keys %pairs) {
+	my $cmd = $pairs{$k};
+
+	my $ico = Gtk2::TrayIcon->new($0);
+	my $btn = Gtk2::Button->new();
+
+	$btn->set_label($k);
+	$btn->signal_connect(clicked => runner($cmd));
+
+	$ico->add($btn);
+	$ico->show_all();
+}
+
+$SIG{CHLD} = "IGNORE";
+
+Gtk2->main();
+
+sub runner {
+	my $cmd = shift;
+	return sub {
+		my $pid = fork;
+		die "fork fail: $!" unless defined $pid;
+		return if $pid > 0;
+		exec $cmd;
+	};
+}

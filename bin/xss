@@ -1,0 +1,8 @@
+#!/bin/bash
+N=9
+for x in `seq 1 $N`; do
+	sleep=$((2 ** $x))
+	echo $x of $N: ${sleep}s
+	sleep $sleep
+	xset dpms force off
+done
