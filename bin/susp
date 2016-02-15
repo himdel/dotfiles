@@ -94,11 +94,15 @@ xrandr --auto
 
 if xrandr-output-connected 'DP2-2'; then
 	# ugly hack to revive screen after suspend, see https://bugzilla.redhat.com/show_bug.cgi?id=1179924
-	xrandr --output 'DP2-2' --mode 1024x768 && xrandr --output 'DP2-2' --auto
+	xrandr --output 'DP2-1' --mode 1024x768 &&
+	xrandr --output 'DP2-2' --mode 1024x768 &&
+	xrandr --output 'DP2-1' --auto &&
+	xrandr --output 'DP2-2' --auto &&
+	true
 
 	xrandr --output 'DP2-2' --primary
-	xrandr --output 'VGA1' --left-of 'DP2-2'
-	xrandr --output 'eDP1' --left-of 'VGA1'
+	xrandr --output 'DP2-1' --left-of 'DP2-2'
+	xrandr --output 'eDP1' --left-of 'DP2-1'
 else if xrandr-output-connected 'HDMI1'; then
 	xrandr --output 'HDMI1' --primary
 	xrandr --output 'eDP1' --left-of 'HDMI1'
