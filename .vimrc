@@ -151,6 +151,10 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 
 execute pathogen#infect()
 "map <C-T> :CommandT<CR>
+map <C-T> :Files<CR>
+map <C-C> :Commits<CR>
+map <C-G> :Tags<CR>
+map <C-A> :Ag 
 nnoremap <F8> :GundoToggle<CR>
 
 map <F2> :NERDTreeToggle<CR>
@@ -211,3 +215,9 @@ au BufNewFile,BufReadPost *.rb,*.erb,*.haml,*.js set expandtab tabstop=2 shiftwi
 "let g:syntastic_check_on_open = 1
 "let g:syntastic_check_on_wq = 0
 " }}}
+
+" :PlugInstall to install plugins
+call plug#begin('~/.vim/plugged')
+	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+	Plug 'junegunn/fzf.vim'
+call plug#end()

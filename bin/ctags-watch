@@ -1,0 +1,13 @@
+#!/bin/bash
+if [ $# -ne 2 ]; then
+	echo "syntax: $0 [watch_dir] [tagfile_path]" 1>&2
+	exit 1
+fi
+
+cd "$1"
+while true; do
+	if inotifywait -e move,create,delete,modify --exclude=".*sw[pox]|.git/**|log/*|tmp/**" -r . ; then
+		sleep .5
+		ctags -f $2 -R
+	fi
+done
