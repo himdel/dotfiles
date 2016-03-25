@@ -17,11 +17,6 @@ case $1 in
 	3)
 		($BROWSER "$2" & exit)
 		;;
-	4)
-		[ -d ~/P/.INp_cool ] && ln "$fullpath" ~/P/.INp_cool/"$md5ext"
-		[ -d ~/.INp_cool ] && ln "$fullpath" ~/.INp_cool/"$md5ext"
-		[ -d ~/.INp/cool ] && ln -s "$fullpath" ~/.INp/cool/"$md5ext"
-		;;
 	*)
 		echo 'gah!'
 esac
