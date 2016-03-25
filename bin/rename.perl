@@ -28,6 +28,8 @@
 # Revision 1.1  1997/02/27  15:48:51  rmb1
 # Initial revision
 #
+#
+## added $. support - himdel, 2016
 
 use strict;
 
@@ -53,7 +55,9 @@ if (!@ARGV) {
 
 for (@ARGV) {
     my $was = $_;
+	$. ||= 1;
     eval $op;
+	$.++;
     die $@ if $@;
     next if $was eq $_; # ignore quietly
     if (-e $_ and !$force)

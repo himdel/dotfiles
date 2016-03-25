@@ -1,7 +1,22 @@
-#!/bin/sh
+#!/bin/bash
+## apt install feh hsetroot bsdgames
+
+[ $# -eq 0 ] && exit 1
+
+INTERVAL="32s"
+LIMIT=32
+
+# mainly to prevent dups when using {,,,} (since sort -R hashes them the same)
+DENOMINATOR=32
 
 while true; do
-	feh -czZF -W 1280 -H 800 -E 500 -y 300 -a 96 -O /tmp/wall.jpg $( ls "$@" | random 5 )
+	files=$( find "$@" -type f | sort -R | random $DENOMINATOR | head -n $LIMIT )
+	echo -n "$files" | oneline
+	echo -n ' ... '
+
+	feh -czZF -W 1920 -H 1080 -E 800 -y 600 -a 96 -O /tmp/wall.jpg $files
+	echo 'OK'
+
 	hsetroot -fill /tmp/wall.jpg
-	sleep 2m
+	sleep $INTERVAL
 done
