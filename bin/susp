@@ -100,9 +100,7 @@ if xrandr-output-connected 'DP2-2'; then
 	xrandr --output 'DP2-2' --auto &&
 	true
 
-	xrandr --output 'DP2-2' --primary
-	xrandr --output 'DP2-1' --left-of 'DP2-2'
-	xrandr --output 'eDP1' --left-of 'DP2-1'
+	~/.screenlayout/rh.sh
 else if xrandr-output-connected 'HDMI1'; then
 	xrandr --output 'HDMI1' --primary
 	xrandr --output 'eDP1' --left-of 'HDMI1'
@@ -110,12 +108,6 @@ else
 	xrandr --output 'eDP1' --primary
 fi; fi
 
-if [ "$ETH0_IN" = yes ]; then
-	~/bin/ddns-himdel-usersys
-else
-	sudo vpnc &&
-		~/bin/ddns-himdel-usersys ||
-		stty echo
-fi
+[ "$ETH0_IN" = yes ] && ~/bin/ddns-himdel-usersys
 
 ~/wallpapers/.random.sh
