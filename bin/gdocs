@@ -1,13 +1,52 @@
-#!/bin/sh
-for f in "$@"; do
-	out=`google docs upload "$f" 2>&1`
-	echo "$out"
-	if [ $? -ne 0 ]; then
-		echo upload fail 1>&2
-		continue
-	fi
-	url=`echo "$out" | grep 'Direct link:' | sed 's/^.*Direct link://'`
+#!/usr/bin/env ruby
 
-	echo "$url"
-	$BROWSER "$url"
-done
+require 'yaml'
+
+#gem 'google-api-client', '~> 0.9.4'
+require 'google/apis/drive_v2'
+
+def docs_upload(filename)
+	drive = Google::Apis::DriveV2::DriveService.new
+	drive.authorization = authorization
+
+	# Upload a file
+	metadata = Google::Apis::DriveV2::File.new(:title => filename)
+	metadata = drive.insert_file(metadata, :upload_source => filename)
+
+	metadata.alternate_link
+end
+
+#gem 'googleauth', '~> 0.5.1'
+OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
+require 'googleauth'
+require 'googleauth/stores/file_token_store'
+
+def authorization
+	scope = 'https://www.googleapis.com/auth/drive'
+	client_id = Google::Auth::ClientId.from_file(File.expand_path '~/.gdocs.secrets.json')
+	token_store = Google::Auth::Stores::FileTokenStore.new(:file => File.expand_path('~/.gdocs.tokens.yaml'))
+	authorizer = Google::Auth::UserAuthorizer.new(client_id, scope, token_store)
+
+	user_id = 'gdocs'
+	credentials = authorizer.get_credentials(user_id)
+	if credentials.nil?
+		url = authorizer.get_authorization_url(:base_url => OOB_URI)
+		puts "Open #{url} in your browser and enter the resulting code:"
+		code = $stdin.gets
+		credentials = authorizer.get_and_store_credentials_from_code(:user_id => user_id, :code => code, :base_url => OOB_URI)
+	end
+
+	credentials
+end
+
+
+ARGV.each do |f|
+	url = docs_upload f
+	unless url
+		$stderr.puts "upload fail - #{f}"
+		next
+	end
+
+	puts url
+	system(ENV['BROWSER'], url)
+end

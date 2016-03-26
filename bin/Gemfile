@@ -1,0 +1,5 @@
+source 'https://rubygems.org'
+
+# gdocs
+gem 'google-api-client', '~> 0.9.4'
+gem 'googleauth', '~> 0.5.1'
