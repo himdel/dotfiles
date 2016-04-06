@@ -2,9 +2,12 @@
 BRANCH=`git branch-name`
 [ -z "$BRANCH" ] && exit 1
 
+UPSTREAM=upstream
+git remote -v | cut -f1 | grep -q \^"$UPSTREAM"\$ || UPSTREAM=origin
+
 if [ "$BRANCH" = master ]; then
-  git fetch upstream
-  git merge --ff-only upstream/master
+  git fetch "$UPSTREAM"
+  git merge --ff-only "$UPSTREAM"/master
 else if [ "$BRANCH" = 5.5.z ]; then
   git fetch downstream
   git merge --ff-only downstream/5.5.z
@@ -15,10 +18,10 @@ else if [ "$BRANCH" = 5.3.z ]; then
   git fetch downstream
   git merge --ff-only downstream/5.3.z
 else
-  git fetch upstream master
+  git fetch "$UPSTREAM" master
   while ! [ -d .git ]; do
     cd ..
   done
-  diff -Naur .git/refs/heads/master .git/refs/remotes/upstream/master
-  cp .git/refs/remotes/upstream/master .git/refs/heads/master
+  diff -Naur .git/refs/heads/master .git/refs/remotes/"$UPSTREAM"/master
+  cp .git/refs/remotes/"$UPSTREAM"/master .git/refs/heads/master
 fi;fi;fi;fi
