@@ -77,4 +77,6 @@ xmodmap -e 'pointer = 1 2 3 4 5 0 0 0 0 0 0 0 0'
 # druhy memcached kvuli cfme
 memcached -p 11212 -l 127.0.0.1 -d
 
+[ -x /usr/bin/qasmixer ] && qasmixer --tray &
+
 exec "$WM"
