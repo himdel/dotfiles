@@ -24,6 +24,8 @@
 	prqgh = "! git fetch git://github.com/$1.git $2 && git checkout FETCH_HEAD && git checkout -b $2 -- && echo"
 	br = "branch -av"
 	praise = "blame"
+	pmerge = merge -X patience
+	pdiff = diff --patience
 [core]
 	whitespace = trailing-space,space-before-tab,indent-with-non-tab,cr-at-eol
 	excludesfile = /home/himdel/.gitignore
