@@ -9,11 +9,11 @@
 #	log = log --date=iso
 	journal = log --since=yesterday --author=himdel --format=oneline
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
-	svn-pull = ! git svn fetch && git svn rebase
+	svn-pull = "! git svn fetch && git svn rebase"
 	svn-push = svn dcommit
 	fap = fetch --all -p
-	fixup = "!HASH=$([ $1 ] && echo $1 || echo `git rev-parse HEAD`) && git commit --fixup=$HASH && EDITOR=: git rebase -i --autosquash $HASH~1 && echo"
-	cm = !git add -A && git commit -m
+	fixup = "! HASH=$([ $1 ] && echo $1 || echo `git rev-parse HEAD`) && git commit --fixup=$HASH && EDITOR=: git rebase -i --autosquash $HASH~1 && echo"
+	cm = "! git add -A && git commit -m"
 	branch-name = "symbolic-ref -q --short HEAD"
 	current-remote = "!git config branch.$(git branch-name).remote"
 	url = "! f() { git config remote.${1:-$(git current-remote)}.url ; }; f"
@@ -26,6 +26,15 @@
 	praise = "blame"
 	pmerge = merge -X patience
 	pdiff = diff --patience
+	ap = add -p
+	cp = cherry-pick -x
+	rbi = "! git rebase -i @{u}"
+	aliases = "! git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /'"
+	log-me = "! git log --author $(git config user.email)"
+	root = ! pwd
+	exec = ! exec
+	yolo = push --force
+	box = "! f() { git fetch upstream pull/$1/head && git checkout FETCH_HEAD && GIT_EDITOR=\"sed -i '2,\\$s/pick/squash/'\" git rebase -i master && git commit --amend -m \"[WIP] PR-in-a-box #$1\" ; }; f"
 [core]
 	whitespace = trailing-space,space-before-tab,indent-with-non-tab,cr-at-eol
 	excludesfile = /home/himdel/.gitignore

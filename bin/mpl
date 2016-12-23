@@ -247,11 +247,12 @@ def mplayer( bin, opts, files )
 	end
 
 	$stderr.puts "using tempfile #{tmp.path}"
-	params = [ bin , "-input", "conf=#{tmp.path}" ] + opts
 
 	if find_backend !~ /mpv/
+		params = [ bin , "-input", "conf=#{tmp.path}" ] + opts
 		multiprocess_run(files, params)
 	else
+		params = [ bin , "--input-conf=#{tmp.path}" ] + opts
 		system(*(params + files))
 	end
 

@@ -40,8 +40,8 @@ fi
 echo Suspend in 4 sec... "($PRG)"
 echo susp = $DO_SUSP, lock = $DO_LOCK
 
-#STATUS=`purple-send PurpleSavedstatusGetCurrent | sed -e 1d -e 's/ \+//' -e 's/ /:/'`
-#purple-remote 'setstatus?status=offline'
+STATUS=`purple-send PurpleSavedstatusGetCurrent | sed -e 1d -e 's/ \+//' -e 's/ /:/'`
+purple-remote 'setstatus?status=offline'
 #killall sonata
 #sleep 1
 #killall -9 sonata
@@ -64,9 +64,11 @@ sync
 sleep 2	# musi aby nohup stihl se znohupovat
 xset dpms force on
 #xscreensaver-command -deactivate
-#purple-remote "setstatus?status=$STATUS"
-#purple-send-async PurpleSavedstatusActivate "$STATUS"
 [ -x "$(which xbacklight)" ] && xbacklight =100
+
+# to reconnect accounts, use PurpleAccountsGetAll & purple-send 'PurpleAccountConnect' int32:9930 (for each)
+#purple-remote "setstatus?status=$STATUS"
+purple-send-async 'PurpleSavedstatusActivate' "$STATUS"
 
 ( echo -n 'wake ' ; date '+%FT%TZ' ) >> ~/.susp.log
 

@@ -3,20 +3,17 @@
 
 [ $# -eq 0 ] && exit 1
 
-INTERVAL="32s"
-LIMIT=32
+LIMIT=16
 
 # mainly to prevent dups when using {,,,} (since sort -R hashes them the same)
 DENOMINATOR=32
 
-while true; do
-	files=$( find "$@" -type f | sort -R | random $DENOMINATOR | head -n $LIMIT )
-	echo -n "$files" | oneline
-	echo -n ' ... '
 
-	feh -czZF -W 1920 -H 1080 -E 800 -y 600 -a 96 -O /tmp/wall.jpg $files
-	echo 'OK'
+files=$( find "$@" -type f | sort -R | random $DENOMINATOR | head -n $LIMIT )
+echo -n "$files" | oneline
+echo -n ' ... '
 
-	hsetroot -fill /tmp/wall.jpg
-	sleep $INTERVAL
-done
+feh -czZF -W 2420 -H 1480 -E 1024 -y 768 -a 96 -O /tmp/wall.jpg $files
+echo 'OK'
+
+hsetroot -center /tmp/wall.jpg
