@@ -13,7 +13,7 @@ files=$( find "$@" -type f | sort -R | random $DENOMINATOR | head -n $LIMIT )
 echo -n "$files" | oneline
 echo -n ' ... '
 
-feh -czZF -W 2420 -H 1480 -E 1024 -y 768 -a 96 -O /tmp/wall.jpg $files
+feh -czZF -W 2420 -H 1480 -E 1024 -y 768 -a 96 -s -O /tmp/wall.jpg $files
 echo 'OK'
 
 hsetroot -center /tmp/wall.jpg

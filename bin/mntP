@@ -1,7 +1,7 @@
 #!/bin/bash
-DRIVE=/media/data/.crypto_p
-DIR=/home/himdel/P
-DM=crypto_p
+DRIVE=${1:-/media/data/.crypto_p}
+DIR=${2:-/home/himdel/P}
+DM=${3:-crypto_p}
 
 function _mount {
 	mkdir -p "$DIR"
