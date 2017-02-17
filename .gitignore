@@ -1,2 +1,3 @@
 .agignore
 .*.sw[po]
+Gemfile.lock

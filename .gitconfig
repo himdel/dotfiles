@@ -36,7 +36,7 @@
 	yolo = push --force
 	box = "! f() { git fetch upstream pull/$1/head && git checkout FETCH_HEAD && GIT_EDITOR=\"sed -i '2,\\$s/pick/squash/'\" git rebase -i master && git commit --amend -m \"[WIP] PR-in-a-box #$1\" ; }; f"
 [core]
-	whitespace = trailing-space,space-before-tab,indent-with-non-tab,cr-at-eol
+	whitespace = trailing-space,space-before-tab,cr-at-eol
 	excludesfile = /home/himdel/.gitignore
 [push]
 	default = simple
