@@ -20,7 +20,7 @@ git remote -v | cut -f1 | grep -q \^"$UPSTREAM"\$ || UPSTREAM=origin
 
 if [ -n "$pull_id" ]; then
   url="$(git remote -v | awk '
-    /^'"$ORIGIN"'\t/ { print $2 }
+    /^'"$UPSTREAM"'\t/ { print $2 }
   ' | head -1 | sed -E 's!(git@github\.com:|git://github\.com/)!https://github.com/!')"
   url="${url%.git}"
   open "${url}/pull/${pull_id}"
