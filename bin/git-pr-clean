@@ -1,0 +1,5 @@
+#!/bin/sh
+
+git branch | grep '^\s*pr[0-9]\+$' | while read name; do
+	git branch -D $name
+done
