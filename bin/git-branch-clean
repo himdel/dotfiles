@@ -1,0 +1,10 @@
+#!/bin/bash
+
+git fetch upstream
+
+git branch --merged upstream/master
+# TODO check their remote branch is either gone or on the same commit
+# remove them locally: git branch -D $branch
+# remove them remotely: git push --delete origin $branch
+
+git fap
