@@ -3,7 +3,7 @@
 # for examples
 
 . /etc/profile
-export PATH=~/.rbenv/bin:/home/himdel/bin:$PATH:/home/himdel/.rakudobrew/bin:/home/himdel/.gopath/bin
+export PATH=~/.rbenv/bin:/home/himdel/bin:$PATH:/home/himdel/.rakudobrew/bin:/home/himdel/.gopath/bin:/home/himdel/.perl6/bin
 . ~/.environment
 
 # If not running interactively, don't do anything
@@ -385,7 +385,7 @@ alias vim=vim-wrapper.pl
 alias vimdiff=vimdiff-wrapper.sh
 
 alias trek='mpl -R -fs /l/{tos,tas,tng,ds9,voy,ent}'
-alias ifre='sudo ifdown wlan0 ; sudo ifup wlan0'
+alias ifre='sudo ifdown wlan0 ; sleep 0.5 ; sudo ifup wlan0'
 
 function gn {
 	. ~/.gn
@@ -430,15 +430,16 @@ alias ':q'=exit
 alias ':e'="$EDITOR"
 complete -cf :e
 
-alias ack='ack-grep'
+#alias ack='ack-grep'
 
 host="\h"
 if [ "$TERM" = "rxvt-unicode" ]; then
-	[ `hostname` = mjollnir ] && host=`echo -ne '\[\e[38;5;14m\]mjollnir\[\e[0m\]'`
-	[ `hostname` = yavanna ] && host=`echo -ne '\[\e[38;5;40m\]yavanna\[\e[0m\]'`
-	[ `hostname` = nienna ] && host=`echo -ne '\[\e[38;5;22m\]nienna\[\e[0m\]'`
-	[ `hostname` = yggdrasil ] && host=`echo -ne '\[\e[38;5;5m\]yggdrasil\[\e[0m\]'`
-	[ `hostname` = niniel ] && host=`echo -ne '\[\e[38;5;48m\]niniel\[\e[0m\]'`
+	[ `hostname` = mjollnir ] && host=`echo -ne '\[\e[38;5;14m\]\h\[\e[0m\]'`
+	[ `hostname` = yavanna ] && host=`echo -ne '\[\e[38;5;40m\]\h\[\e[0m\]'`
+	[ `hostname` = nienna ] && host=`echo -ne '\[\e[38;5;22m\]\h\[\e[0m\]'`
+	[ `hostname` = yggdrasil ] && host=`echo -ne '\[\e[38;5;5m\]\h\[\e[0m\]'`
+	[ `hostname` = niniel ] && host=`echo -ne '\[\e[38;5;48m\]\h\[\e[0m\]'`
+	[ `hostname` = durin ] && host=`echo -ne '\[\e[38;5;24m\]\h\[\e[0m\]'`
 fi
 export PS1="${debian_chroot:+($debian_chroot)}\\u@${host}:\\w\\$ "
 
@@ -461,7 +462,7 @@ function rt {
 }
 
 alias imdb='gl imdb'
-alias screenshot='sleep 1 ; xwd | convert -'
+alias screenshot='sleep 1 ; xwd | convert xwd:-'
 alias vncustredna='vncviewer -bgr233 -quality 0 10.230.0.14'
 alias vncjanca='vncviewer -bgr233 -quality 0 192.168.1.100'
 alias wakejanca='wakeonlan  -i 192.168.2.4 BC:AE:C5:AE:D1:3C'
@@ -490,6 +491,8 @@ alias gdrive='gdocs.sh'
 alias docker='sudo docker'
 alias minecraft="java -jar ~/.minecraft/launcher.jar"
 alias be='bundle exec'
+alias bi='bundle install'
+alias bu='bundle update'
 alias vmdb='cd ~/manageiq/vmdb || cd ~/manageiq'
 alias phinx='~/wrk/prihlasky/vendor/bin/phinx'
 
@@ -505,3 +508,19 @@ function bugz {
 eval "$(rbenv init -)"
 export GEMS=~/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/
 shopt -s globstar
+
+# same as python -mSimpleHTTPServer, but serves utf8
+alias httpdir='python -c "import SimpleHTTPServer; m = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map; m[''] = 'text/plain'; m.update(dict([(k, v + ';charset=UTF-8') for k, v in m.items()])); SimpleHTTPServer.test();"'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+function bj {
+	url=${1:-7642919332}
+	chromium --app="https://redhat.bluejeans.com/$url"
+}
+
+alias berc="(cd ~/manageiq ; be bin/rails c)"
+
+export CHROMIUM_FLAGS='--enable-remote-extensions'
+alias netflix='google-chrome-beta https://www.netflix.com/'
