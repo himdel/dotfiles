@@ -154,8 +154,10 @@ execute pathogen#infect()
 map <C-T> :Files<CR>
 map <C-C> :Commits<CR>
 map <C-G> :Tags<CR>
-map <C-A> :Ag 
-nnoremap <F8> :GundoToggle<CR>
+"map <C-A> :Ag 
+"nnoremap <F8> :GundoToggle<CR>
+map <C-A> :Ack 
+nnoremap <F8> :UndotreeToggle<CR>
 
 map <F2> :NERDTreeToggle<CR>
 
@@ -201,7 +203,7 @@ nmap \t :set noexpandtab tabstop=4 softtabstop=4 shiftwidth=4<CR>
 nmap \w :setlocal wrap!<CR>:setlocal wrap?<CR>
 
 au BufNewFile,BufReadPost *.cs set expandtab
-au BufNewFile,BufReadPost *.rb,*.erb,*.haml,*.js set expandtab tabstop=2 shiftwidth=2 softtabstop=2
+au BufNewFile,BufReadPost *.rb,*.erb,*.haml,*.js,*.ts,*.html set expandtab tabstop=2 shiftwidth=2 softtabstop=2
 
 " set digraph
 
@@ -217,7 +219,14 @@ au BufNewFile,BufReadPost *.rb,*.erb,*.haml,*.js set expandtab tabstop=2 shiftwi
 " }}}
 
 " :PlugInstall to install plugins
-call plug#begin('~/.vim/plugged')
-	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-	Plug 'junegunn/fzf.vim'
-call plug#end()
+"call plug#begin('~/.vim/plugged')
+"	Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+"	Plug 'junegunn/fzf.vim'
+"	Plug 'Xuyuanp/nerdtree-git-plugin'
+"call plug#end()
+
+nnoremap Q <nop>
+let g:typescript_indent_disable = 1
+set rtp+=~/.fzf
+
+" TODO Xuyuanp/nerdtree-git-plugin'
