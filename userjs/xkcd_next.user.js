@@ -11,10 +11,10 @@
 // ==/UserScript==
 
 var comic = $("#comic > img"),
-	caption = $("<p></p>").insertAfter(comic),
-	next = $('.comicNav a[rel=next]'),
-	prev = $('.comicNav a[rel=prev]'),
-	rand = $('.comicNav a:not([rel])').filter(function(i,e) { return e.text == 'Random' });
+  caption = $("<p></p>").insertAfter(comic),
+  next = $('.comicNav a[rel=next]'),
+  prev = $('.comicNav a[rel=prev]'),
+  rand = $('.comicNav a:not([rel])').filter(function(i,e) { return e.text == 'Random' });
 
 caption.text( comic.attr("title") );
 caption.css('margin', '0 30px 15px 30px');
@@ -24,22 +24,22 @@ caption.css('background-color', '#e8e8ff');
 caption.css('font', 'initial');
 
 if (next.attr('href').match(/.*#$/))
-	next.css('background-color', '#000000');
+  next.css('background-color', '#000000');
 
 function keys(o) {
-	return window.onkeypress = function(e) {
-		for (var k in o)
-			if (e.keyCode == k.charCodeAt(0))
-				o[k][0]['click']();
-	};
+  return window.onkeypress = function(e) {
+    for (var k in o)
+      if (e.keyCode == k.charCodeAt(0))
+        o[k][0]['click']();
+  };
 }
 
 keys({
-	'r': rand,
-	'n': next,
-	'p': prev,
+  'r': rand,
+  'n': next,
+  'p': prev,
 
-	'z': prev,
-	'x': rand,
-	'c': next,
+  'z': prev,
+  'x': rand,
+  'c': next,
 });

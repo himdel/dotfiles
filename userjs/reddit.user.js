@@ -5,13 +5,13 @@
 // ==/UserScript==
 
 var noCSSsubreddits = {
-	'reddithax' : 1,
-	'redstone' : 1,
-	'skiing' : 1,
-	'chrome' : 1,
-	'bsg' : 1,
+  'reddithax' : 1,
+  'redstone' : 1,
+  'skiing' : 1,
+  'chrome' : 1,
+  'bsg' : 1,
 };
 var match = /www\.reddit\.com\/r\/(\w+)/i.exec( document.location.href );
 
 if (match && match[1] && (match[1] in noCSSsubreddits))
-	document.styleSheets[1].disabled = true;
+  document.styleSheets[1].disabled = true;

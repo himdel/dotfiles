@@ -10,7 +10,6 @@
 /* jshint -W097 */
 'use strict';
 
-// Your code here...
 $('ul.offer>li:has(:contains("olivy"))').each(function(_i, e) {
-    $(e).css('background-color', 'olive');
+  $(e).css('background-color', 'olive');
 });

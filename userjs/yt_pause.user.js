@@ -19,7 +19,7 @@
 // ==/UserScript==
 
 window.addEventListener('load', function() {
-	var video = document.getElementsByTagName('video')[0];
-	video.pause();
-	video.currentTime = 0;
+  var video = document.getElementsByTagName('video')[0];
+  video.pause();
+  video.currentTime = 0;
 }, false);

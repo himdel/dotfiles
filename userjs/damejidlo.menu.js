@@ -10,15 +10,14 @@
 /* jshint -W097 */
 'use strict';
 
-// Your code here...
 $('#deliveryMenu .floating-category-list').each(function(_i, e) {
-    function show() {
-        $(e).addClass('visible').css({
-            left: '245.5px',
-            top: '24px',
-            bottom: 'auto',
-        });
-    }
-    
-    $(window).on('scroll', show);
+  function show() {
+    $(e).addClass('visible').css({
+      left: '245.5px',
+      top: '24px',
+      bottom: 'auto',
+    });
+  }
+
+  $(window).on('scroll', show);
 });

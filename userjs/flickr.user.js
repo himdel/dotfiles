@@ -16,4 +16,4 @@ par.appendChild(dl);
 
 var spaceball = document.querySelector('.spaceball');
 if (spaceball)
-    spaceball.parentElement.removeChild(spaceball);
+  spaceball.parentElement.removeChild(spaceball);
