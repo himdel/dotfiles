@@ -1,3 +1,13 @@
+// ==UserScript==
+// @name         damejidlo - sort restaurants
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://www.damejidlo.cz/
+// @grant        none
+// ==/UserScript==
+
 $(function() {
   var list = $('ul#restaurantListItems');
 
@@ -37,7 +47,7 @@ $(function() {
     o.rating.debug = { score: score, order: order, sign: sign };
     o.rating.reddit = sign * order;
 
-    console.log(o.rating);
+    // console.log(o.rating);
     return o;
   })
   .sort(function(a, b) {
@@ -66,6 +76,4 @@ $(function() {
   })
   .detach()  // remove..
   .appendTo(list);  // ..and insert in new order
-
-  $('#livechat-compact-container, #livechat-full, #livechat-ping, #lc_invite_layer, #lc_overlay_layer').remove();
 });
