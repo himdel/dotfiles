@@ -1,5 +1,5 @@
 #!/bin/bash
-DRIVE=${1:-/media/data/.crypto_p}
+DRIVE=${1:-/home/himdel/.crypto_p}
 DIR=${2:-/home/himdel/P}
 DM=${3:-crypto_p}
 
