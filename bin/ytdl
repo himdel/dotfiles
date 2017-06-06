@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+cd `dirname "$0"`
+
+TEMPDIR=`mktemp -dp.`
+cd "$TEMPDIR"
+
+cat ../"$@" | while read link; do
+	if grep -q "$link" ../links.DONE; then
+		echo -e "skip[DONE]\t$link" 1>&2
+		continue
+	fi
+
+	if grep -q "$link" ../links.ERR; then
+		echo -e "skip[ERR]\t$link" 1>&2
+		continue
+	fi
+
+	youtube-dl "$link" &&
+	echo "$link" >> ../links.DONE ||
+	echo "$link" >> ../links.ERR
+done
+
+mv -iv * ../ytdl.d/
+
+rmdir ../"$TEMPDIR"
