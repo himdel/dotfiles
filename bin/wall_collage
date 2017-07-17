@@ -3,10 +3,10 @@
 
 [ $# -eq 0 ] && exit 1
 
-LIMIT=16
+LIMIT=24
 
 # mainly to prevent dups when using {,,,} (since sort -R hashes them the same)
-DENOMINATOR=32
+DENOMINATOR=1
 
 
 files=$( find "$@" -type f | sort -R | random $DENOMINATOR | head -n $LIMIT )
