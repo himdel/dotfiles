@@ -1,0 +1,7 @@
+#!/bin/bash
+while true; do
+	wget http://portal.chmi.cz/files/portal/docs/meteo/kam/brno.jpg
+	hsetroot -extend brno.jpg
+	rm brno.jpg
+	sleep $(( 45 + (($RANDOM >> 2) % 20) ))m
+done
