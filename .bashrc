@@ -524,3 +524,6 @@ alias berc="(cd ~/manageiq ; be bin/rails c)"
 
 export CHROMIUM_FLAGS='--enable-remote-extensions'
 alias netflix='google-chrome-beta https://www.netflix.com/'
+
+alias dmesg='sudo dmesg'
+alias mcedit='(cd ~/mcedit; . ENV/bin/activate ; ./mcedit.py )'
