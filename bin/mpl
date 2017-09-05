@@ -172,6 +172,8 @@ def input(config)
 
 		'y' => 'sub_step +1',
 		'g' => 'sub_step -1',
+
+		'I' => 'show-text "${filename}"',
 	})
 
 	file = Tempfile.new('mpl-input')
