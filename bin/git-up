@@ -15,6 +15,9 @@ fi
 if pwd | grep -q manageiq-fine; then
 	remote_branch=fine
 fi
+if pwd | grep -q manageiq-gaprindashvili; then
+	remote_branch=gaprindashvili
+fi
 
 if [ "$BRANCH" = master ]; then
   git fetch "$UPSTREAM"
