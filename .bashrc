@@ -48,7 +48,7 @@ esac
 
 [ "$TERM" != "dumb" ] && eval "`dircolors -b`"
 
-alias ls='ls --color=tty'
+alias ls='ls --color=tty -N'
 alias ll='ls -l'
 alias l=ls
 alias L=less
@@ -527,3 +527,6 @@ alias netflix='google-chrome-beta https://www.netflix.com/'
 
 alias dmesg='sudo dmesg'
 alias mcedit='(cd ~/mcedit; . ENV/bin/activate ; ./mcedit.py )'
+
+# ruby2.5 - disable inverted stacktrace
+# alias ruby="rc -c 'ruby $* |[2] cat'"
