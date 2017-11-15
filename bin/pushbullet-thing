@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+# coding=utf-8
+
+# pip install pushbullet.py
+# apt install libnotify-bin
+# ensure $BROWSER is set
+# save token from https://www.pushbullet.com/#settings/account to ~/.pushbullet-thing-token
+
+import os
+import signal
+import socket
+import sys
+from pushbullet import Listener
+from pushbullet import Pushbullet
+from subprocess import call
+
+TOKEN_PATH = os.path.expanduser('~/.pushbullet-thing-token')
+HOSTNAME = socket.gethostname()
+BROWSER = os.environ['BROWSER'] or 'open'
+
+pb = None
+device = None
+modified_after = None
+
+def init():
+  global pb, device
+
+  with open(TOKEN_PATH) as file:
+    api_key = file.read().strip()
+
+  pb = Pushbullet(api_key)
+
+  device = pb.new_device(HOSTNAME, icon = "laptop")
+
+  signal.signal(signal.SIGINT, sigint)
+
+def cleanup():
+  global pb, device
+
+  if pb and device:
+    pb.remove_device(device)
+  device = None
+  pb = None
+
+def sigint(signal, frame):
+  cleanup()
+  sys.exit(0)
+
+def notify(text):
+  call(["notify-send", text])
+
+def browser(url):
+  call([BROWSER, url])
+
+def process(push):
+  global my_iden
+
+  if push.get('target_device_iden') != my_iden:
+    return
+
+  if push.get('type') == 'note':
+    notify(push.get('body'))
+  elif push.get('type') == 'link':
+    browser(push.get('url'))
+  else:
+    print("Unknown push type", push)
+
+def on_tickle(tickle):
+  if tickle.get('type') != 'tickle':
+    return
+
+  get_pushes()
+
+def get_pushes():
+  global pb, modified_after
+
+  pushes = pb.get_pushes(modified_after = modified_after, limit = 16)
+  if len(pushes):
+    modified_after = pushes[0].get('modified')
+
+  for push in pushes:
+    process(push)
+
+def main():
+  global pb, device, my_iden
+
+  init()
+
+  my_iden = device.device_iden
+
+  #signal.pause()
+
+  listener = Listener(account = pb,
+                      on_push = on_tickle)
+  try:
+    listener.run_forever()
+  except KeyboardInterrupt:
+    listener.close()
+
+  cleanup()
+
+if __name__ == '__main__':
+  main()
