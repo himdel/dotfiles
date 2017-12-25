@@ -506,7 +506,7 @@ function bugz {
 }
 
 eval "$(rbenv init -)"
-export GEMS=~/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems/
+export GEMS=~/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/
 shopt -s globstar
 
 # same as python -mSimpleHTTPServer, but serves utf8
@@ -530,3 +530,8 @@ alias mcedit='(cd ~/mcedit; . ENV/bin/activate ; ./mcedit.py )'
 
 # ruby2.5 - disable inverted stacktrace
 # alias ruby="rc -c 'ruby $* |[2] cat'"
+
+alias miq='cd ~/manageiq'
+alias miqui='cd ~/manageiq-ui-classic'
+
+alias bers='SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 bin/update && be bin/rails s'
