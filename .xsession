@@ -67,7 +67,7 @@ fi
 
 [ -x /usr/bin/dropbox ] && dropbox start
 
-# ( sleep 2 ; konversation ) &
+#( sleep 2 ; konversation ) &
 
 #xrandr --output DP2 --auto
 
@@ -75,10 +75,15 @@ fi
 xmodmap -e 'pointer = 1 2 3 4 5 0 0 0 0 0 0 0 0'
 
 # druhy memcached kvuli cfme
-memcached -p 11212 -l 127.0.0.1 -d
+#memcached -p 11212 -l 127.0.0.1 -d
 
 [ -x /usr/bin/qasmixer ] && qasmixer --tray &
 
 [ -x ~/bin/pushbullet-thing ] && ~/bin/pushbullet-thing &
+
+xrandr --auto
+~/wallpapers/.random.sh
+
+[ -x /usr/bin/redshift ] && redshift -l 49.19522:16.60796 &
 
 exec "$WM"

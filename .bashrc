@@ -521,6 +521,7 @@ function bj {
 }
 
 alias berc="(cd ~/manageiq ; be bin/rails c)"
+alias bers="(cd ~/manageiq ; SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 bin/update ; be bin/rails s)"
 
 export CHROMIUM_FLAGS='--enable-remote-extensions'
 alias netflix='google-chrome-beta https://www.netflix.com/'
@@ -534,4 +535,5 @@ alias mcedit='(cd ~/mcedit; . ENV/bin/activate ; ./mcedit.py )'
 alias miq='cd ~/manageiq'
 alias miqui='cd ~/manageiq-ui-classic'
 
-alias bers='SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 bin/update && be bin/rails s'
+alias factorio='~/.steam/steam/steamapps/common/Factorio/bin/x64/factorio'
+alias steam-wine='wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe'
