@@ -67,9 +67,9 @@ fi
 
 [ -x /usr/bin/dropbox ] && dropbox start
 
-( sleep 2 ; konversation ) &
+# ( sleep 2 ; konversation ) &
 
-xrandr --output DP2 --auto
+#xrandr --output DP2 --auto
 
 # disable mouse buttons 8 & 9
 xmodmap -e 'pointer = 1 2 3 4 5 0 0 0 0 0 0 0 0'
@@ -78,5 +78,7 @@ xmodmap -e 'pointer = 1 2 3 4 5 0 0 0 0 0 0 0 0'
 memcached -p 11212 -l 127.0.0.1 -d
 
 [ -x /usr/bin/qasmixer ] && qasmixer --tray &
+
+[ -x ~/bin/pushbullet-thing ] && ~/bin/pushbullet-thing &
 
 exec "$WM"
