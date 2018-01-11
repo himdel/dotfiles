@@ -1,0 +1,19 @@
+[{
+  "command": "urxvt",
+  "title": "Terminal",
+  "icon": "█",
+},{
+  "command": "$BROWSER",
+  "title": "Browser",
+  "icon": "🌍",
+},{
+  "command": "xs",
+  "title": "Sleep",
+  "icon": "🌘",
+  "color": "blue",
+},{
+  "command": "slock",
+  "title": "Lock",
+  "icon": "🔒",
+  "color": "red",
+}]

@@ -9,7 +9,7 @@ case $1 in
 		;;
 	1)
 		[ -d /tmp/xox ] || mkdir /tmp/xox
-		cp "$2" /tmp/xox/"$md5ext"
+		cp -a "$2" /tmp/xox/"$md5ext"
 		;;
 	2)
 		(nohup gimp "$2" >/dev/null 2>/dev/null & exit)

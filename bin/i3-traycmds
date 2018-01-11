@@ -4,30 +4,29 @@ $0 = "i3-traycmds";
 use v5.14;
 use Gtk2::TrayIcon;
 use Data::Dumper;
+use JSON;
+use File::Slurp qw(slurp);
 
 Gtk2->init();
 
-my %pairs = (
-	T => 'urxvt',
-	'@' => 'chromium',
-);
-
-for my $k (keys %pairs) {
-	my $cmd = $pairs{$k};
-
-	my $ico = Gtk2::TrayIcon->new($0);
-	my $btn = Gtk2::Button->new();
-
-	$btn->set_label($k);
-	$btn->signal_connect(clicked => runner($cmd));
-
-	$ico->add($btn);
-	$ico->show_all();
-}
+my $items = [];
+my $tooltips = Gtk2::Tooltips->new();
+my $widgets = [];
 
 $SIG{CHLD} = "IGNORE";
+$SIG{USR1} = \&reload;
 
+reload();
 Gtk2->main();
+
+sub reload() {
+	for my $widget (@$widgets) {
+		$widget->destroy();
+	}
+
+	load_config();
+	create_icons();
+}
 
 sub runner {
 	my $cmd = shift;
@@ -37,4 +36,31 @@ sub runner {
 		return if $pid > 0;
 		exec $cmd;
 	};
+}
+
+sub load_config() {
+	my $config = slurp(glob("~/.i3-traycmds"), {binmode => ':utf8'});
+	$items = JSON->new()->relaxed()->decode($config);
+}
+
+sub create_icons() {
+	for my $item (@$items) {
+		my $ico = Gtk2::TrayIcon->new($0);	# only 1 widget per icon
+
+		my $btn = Gtk2::Button->new();
+		$btn->set_label($item->{icon});
+		$btn->set_relief('none');
+		$btn->signal_connect(clicked => runner($item->{command}));
+		($btn->get_children)[0]->modify_fg(normal => Gtk2::Gdk::Color->parse($item->{color} // 'white'));
+
+		$ico->add($btn);
+		$ico->show_all();
+
+		push @$widgets, $btn;
+		push @$widgets, $ico;
+
+		$tooltips->set_tip($btn, $item->{title});
+	}
+
+	$tooltips->enable();
 }
