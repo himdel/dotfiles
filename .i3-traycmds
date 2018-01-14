@@ -1,7 +1,7 @@
 [{
   "command": "urxvt",
   "title": "Terminal",
-  "icon": "█",
+  "icon": "$_",
 },{
   "command": "$BROWSER",
   "title": "Browser",
@@ -10,10 +10,10 @@
   "command": "xs",
   "title": "Sleep",
   "icon": "🌘",
-  "color": "blue",
+  "color": "#6a8afa",
 },{
   "command": "slock",
   "title": "Lock",
   "icon": "🔒",
-  "color": "red",
+  "color": "#faa",
 }]

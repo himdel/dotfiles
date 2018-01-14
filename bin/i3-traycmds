@@ -15,6 +15,7 @@ my $widgets = [];
 
 $SIG{CHLD} = "IGNORE";
 $SIG{USR1} = \&reload;
+$SIG{HUP} = \&reload;
 
 reload();
 Gtk2->main();
