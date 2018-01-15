@@ -488,6 +488,7 @@ if [ "$TERM" = "rxvt-unicode" ]; then
 	[ `hostname` = yggdrasil ] && host=`echo -ne '\[\e[38;5;5m\]\h\[\e[0m\]'`
 	[ `hostname` = niniel ] && host=`echo -ne '\[\e[38;5;48m\]\h\[\e[0m\]'`
 	[ `hostname` = durin ] && host=`echo -ne '\[\e[38;5;24m\]\h\[\e[0m\]'`
+	[ `hostname` = thror ] && host=`echo -ne '\[\e[38;5;23m\]\h\[\e[0m\]'`
 fi
 export PS1="${debian_chroot:+($debian_chroot)}\\u@${host}:\\w\\$ "
 
