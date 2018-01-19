@@ -38,44 +38,10 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
+# set a fancy prompt (non-color)
+PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# enable color support of ls and also add handy aliases
+# enable color support of ls
 if [ -x /usr/bin/dircolors ] && [ "$TERM" != "dumb" ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 fi
@@ -247,7 +213,6 @@ alias Ab='apt build-dep'
 alias radior='mplayer -cache 8192 http://quark3.video.muni.cz:8000/FSS_ogg-q8.ogg'
 alias bax='firefox https://is.muni.cz/auth/el/1421/podzim2009/BAX403/um/'
 
-#export PS1=' `if [ $? -eq 0 ]; then echo -e "\e[32m:)\e[0m"; else echo -e "\e[31m:(\e[0m"; fi` C:${PWD//\//\\\}>'
 ulimit -c unlimited
 
 alias dyna='dosbox ~/dyna/dyna.exe'
@@ -369,7 +334,7 @@ function yt {
 	@ "http://www.youtube.com/results?search_query=$*"
 }
 alias fb="@ https://www.facebook.com"
-alias rea="@ https://reader.google.com"
+alias rea="@ https://theoldreader.com/posts/all"
 alias grd=rea
 alias ismuni="@ https://is.muni.cz/auth"
 alias is="@ https://is.mendelu.cz/auth/student/moje_studium.pl?lang=cz"
@@ -481,7 +446,13 @@ complete -cf :e
 #alias ack='ack-grep'
 
 host="\h"
+window_title=""
+if [ "$TERM" = "rxvt-unicode-256color" ]; then
+	echo "Using 256color rxvt :(" 1>&2
+fi
 if [ "$TERM" = "rxvt-unicode" ]; then
+	window_title="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]"
+
 	[ `hostname` = mjollnir ] && host=`echo -ne '\[\e[38;5;14m\]\h\[\e[0m\]'`
 	[ `hostname` = yavanna ] && host=`echo -ne '\[\e[38;5;40m\]\h\[\e[0m\]'`
 	[ `hostname` = nienna ] && host=`echo -ne '\[\e[38;5;22m\]\h\[\e[0m\]'`
@@ -490,7 +461,9 @@ if [ "$TERM" = "rxvt-unicode" ]; then
 	[ `hostname` = durin ] && host=`echo -ne '\[\e[38;5;24m\]\h\[\e[0m\]'`
 	[ `hostname` = thror ] && host=`echo -ne '\[\e[38;5;23m\]\h\[\e[0m\]'`
 fi
-export PS1="${debian_chroot:+($debian_chroot)}\\u@${host}:\\w\\$ "
+#export PS1=' `if [ $? -eq 0 ]; then echo -e "\e[32m:)\e[0m"; else echo -e "\e[31m:(\e[0m"; fi` C:${PWD//\//\\\}>'
+export PS1="${window_title}${debian_chroot:+($debian_chroot)}\\u@${host}:\\w\\$ "
+unset host window_title
 
 alias mysql='mysql --user=root --default-character-set=utf8'
 alias mysqldump='mysqldump --user=root'
@@ -555,7 +528,7 @@ function bugz {
 }
 
 eval "$(rbenv init -)"
-export GEMS=~/.rbenv/versions/2.3.3/lib/ruby/gems/2.3.0/gems/
+export GEMS=~/.rbenv/versions/`cat ~/.rbenv/version`/lib/ruby/gems/*/gems/
 shopt -s globstar
 
 # same as python -mSimpleHTTPServer, but serves utf8
@@ -571,6 +544,8 @@ function bj {
 
 alias berc="(cd ~/manageiq ; be bin/rails c)"
 alias bers="(cd ~/manageiq ; SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 bin/update ; be bin/rails s)"
+alias berS="(cd ~/manageiq ; be bin/rails s)"
+alias suis="(cd ~/manageiq-ui-service ; yarn start)"
 
 export CHROMIUM_FLAGS='--enable-remote-extensions'
 alias netflix='google-chrome-beta https://www.netflix.com/'
@@ -583,6 +558,12 @@ alias mcedit='(cd ~/mcedit; . ENV/bin/activate ; ./mcedit.py )'
 
 alias miq='cd ~/manageiq'
 alias miqui='cd ~/manageiq-ui-classic'
+alias miqsui='cd ~/manageiq-ui-service'
+alias miquic='cd ~/ui-components'
+alias miqapi='cd ~/manageiq-api'
 
 alias factorio='~/.steam/steam/steamapps/common/Factorio/bin/x64/factorio'
 alias steam-wine='wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe'
+
+alias altchromium='chromium --user-data-dir=$HOME/.config/altchromium'
+alias screenrec='recordmydesktop --on-the-fly-encoding --v_bitrate 2000000'
