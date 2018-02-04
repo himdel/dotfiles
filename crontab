@@ -1,0 +1,12 @@
+# m h  dom mon dow   command
+
+#0,20,40 * * * * wget -O ~/.calendar-google.ics 'https://www.google.com/calendar/ical/himdel%40gmail.com/private-HASH/basic.ics'
+#10 * * * * wget -O ~/.calendar-miq.ics 'https://www.google.com/calendar/ical/johnmark.org_ojrd0eh3qaovfm8mm24fa7ijbg%40group.calendar.google.com/public/basic.ics'
+#15,45 * * * * /home/himdel/bin/ddns-himdel-usersys
+#0 9 * * 1-5 sudo service motion stop
+#30 16 * * 1-5 sudo service motion start
+
+14 17 * * * [ -d ~/bbccomedy ] && podget -s
+22 */4 * * * [ `find .fvwm/preferences/LastChoosenWallpaper -mmin +180 | wc -l` = 1 ] && PATH=~/bin:/usr/local/bin:$PATH DISPLAY=:0 ~/wallpapers/.random.sh
+30 14 * * * hardlink -pot ~/.rbenv/ ~/ManageIQ/
+11 21 * * */3 for i in ~/.vim/bundle/*; do git -C $i pull; done
