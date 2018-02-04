@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+smbnetfs /media/smbnetfs -o allow_other
+
+( cd ~himdel/`hostname`.vpn/ ; openvpn --config `hostname`.conf --daemon )
+
+exit 0
