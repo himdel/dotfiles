@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ $# = 0 ]; then
+	echo "Usage: git fork <someones github login>"
+	echo "	(adds somebody elses repo with the same name as a remote)"
+	exit 1
+fi
+
+git remote -v add "$1" $( git url | sed 's/himdel\|ManageIQ/'"$1"/ )
+git fetch "$1"
