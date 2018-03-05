@@ -1,0 +1,34 @@
+#!/bin/bash
+DRIVE=$1
+if [ -z "$1" ]; then
+	echo no drive 1>&2
+	exit 1
+fi
+
+function _mount {
+	sudo mkdir -p /media/wd4t
+	sudo cryptsetup luksOpen "$DRIVE"1 wd4t
+	sleep 0.5
+	sudo vgchange -ay wd4t
+	sleep 0.5
+	sudo mount /dev/wd4t/data /media/wd4t
+}
+
+function _umount {
+	sudo umount /media/wd4t
+	sudo vgchange -an wd4t
+	sudo cryptsetup luksClose wd4t
+	sudo rmdir /media/wd4t
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+else
+	if ! [ -e $DRIVE ]; then
+		echo no drive $DRIVE 1>&2
+		exit 1
+	fi
+fi
+
+$FNC

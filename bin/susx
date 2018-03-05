@@ -1,0 +1,33 @@
+#!/bin/bash
+for opt in `getopt hln "$@"`; do
+	case $opt in
+		-h)
+			echo "usage: $0 [-h]"
+			echo "	-h	this help"
+			exit 0
+			;;
+		--)
+			break;
+			;;
+		*)
+			echo unkown opt $opt
+			;;
+	esac
+done
+
+ps -A | grep motion || sudo service motion start
+
+( echo -n 'susx ' ; date '+%FT%TZ' ) >> ~/.susp.log
+
+xss &
+slock
+
+sleep 2
+while pidof i3lock >/dev/null ; do
+	sleep 10
+done
+
+( echo -n 'wake ' ; date '+%FT%TZ' ) >> ~/.susp.log
+ps -A | grep motion && sudo service motion stop
+
+~/wallpapers/.random.sh
