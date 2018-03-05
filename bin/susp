@@ -34,7 +34,11 @@ done
 if [ -e ~/.nosusp -a "$DO_SUSP" = true ]; then
 	echo .nosusp found, not actually suspending
 	DO_SUSP=false
-	rm -vf ~/.nosusp
+	if grep -q keep ~/.nosusp; then
+		echo .nosusp: keep
+	else
+		rm -vf ~/.nosusp
+	fi
 fi
 
 echo Suspend in 4 sec... "($PRG)"
