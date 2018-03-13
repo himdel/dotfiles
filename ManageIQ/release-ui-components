@@ -3,7 +3,7 @@ set -x
 set -e
 
 cd ~/ui-components
-[`git branch-name` != 'master'] && exit 1
+[ `git branch-name` != 'gaprindashvili' ] && exit 1
 git up
 
 TAG=$(npm version patch)
