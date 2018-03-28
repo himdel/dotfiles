@@ -13,6 +13,9 @@ else
 	*jpg|*gif|*jpeg|*png|*JPG)
 		exec qiv "$@"
 		;;
+	http:*|https:*)
+		exec $BROWSER "$@"
+		;;
 	*)
 		exec /usr/bin/xdg-open "$@"
 		;;
