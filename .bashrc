@@ -3,7 +3,7 @@
 # for examples
 
 . /etc/profile
-export PATH=~/.rbenv/bin:/home/himdel/bin:$PATH:/home/himdel/.rakudobrew/bin:/home/himdel/.gopath/bin:/home/himdel/.perl6/bin
+export PATH=~/.rbenv/bin:~/bin:$PATH:~/.rakudobrew/bin:~/.gopath/bin:~/.perl6/bin:~/.local/bin:~/.yarn/bin
 . ~/.environment
 
 # If not running interactively, don't do anything
@@ -540,7 +540,7 @@ export NVM_DIR="$HOME/.nvm"
 
 function bj {
 	url=${1:-7642919332}
-	chromium --app="https://redhat.bluejeans.com/$url"
+	chromium --no-sandbox --app="https://redhat.bluejeans.com/$url"
 }
 
 alias berc="(cd ~/manageiq ; be bin/rails c)"
