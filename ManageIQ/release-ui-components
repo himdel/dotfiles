@@ -27,7 +27,7 @@ git commit -a -m "$VER"
 rm -rf node_modules
 yarn
 
-git push upstream master
+git push upstream gaprindashvili
 npm publish
 
 git checkout -b tmp-"$VER"
@@ -40,7 +40,7 @@ git add -f dist/js/ui-components.js dist/js/ui-components.js.map
 git commit -m "bower build for $TAG"
 
 git tag "$TAG" # create the tag on the bower commit
-git checkout master
+git checkout gaprindashvili
 
 git push upstream --tags
 git branch -D tmp-"$VER"
