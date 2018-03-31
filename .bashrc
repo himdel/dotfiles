@@ -484,7 +484,6 @@ function rt {
 }
 
 alias imdb='gl imdb'
-alias screenshot='sleep 1 ; xwd | convert xwd:-'
 alias vncustredna='vncviewer -bgr233 -quality 0 10.230.0.14'
 alias vncjanca='vncviewer -bgr233 -quality 0 192.168.1.100'
 alias wakejanca='wakeonlan  -i 192.168.2.4 BC:AE:C5:AE:D1:3C'
@@ -580,4 +579,13 @@ function screenrec {
 		read x y w h
 		ffmpeg -video_size "$w"x"$h" -framerate 25 -f x11grab -i :0.0+"$x","$y" "$out"
 	)
+}
+
+# alias screenshot='sleep 1 ; xwd | convert xwd:-'
+function screenshot {
+	out="$1"
+	[ $# -ne 1 ] && out=`date +%Y%m%d%H%M%S`.png
+
+	sleep 1
+	xwd | convert xwd:- "$out"
 }
