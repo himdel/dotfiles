@@ -1,0 +1,47 @@
+#!/bin/sh
+set -e
+[ $# != 1 ] && exit 1
+VER="$1"
+
+
+cd ~/manageiq-gaprindashvili
+git reset --hard
+git checkout master
+git up
+
+
+cd ~/manageiq-gaprindashvili/plugins/manageiq-ui-classic
+git reset --hard
+git checkout master
+git up
+
+git checkout -b uic-"$VER"
+yarn run bower-locker unlock
+bower install -F manageiq-ui-components@"$VER"
+yarn run bower-locker lock
+
+git add -Ap
+PAGER=cat git diff --cached
+
+git commit -m "Update ui-components to $VER for gaprindashvili"
+git push -u origin uic-"$VER"
+
+hub pull-request -b gaprindashvili -l dependencies -a simaishi
+git reset --hard
+git checkout master
+
+
+cd ~/manageiq-gaprindashvili/plugins/manageiq-ui-service
+git reset --hard
+git checkout master
+git up
+
+git checkout -b uic-"$VER"
+yarn add @manageiq/ui-components@"$VER"
+
+git commit package.json yarn.lock -m "Update ui-components to $VER for gaprindashvili"
+git push -u origin uic-"$VER"
+
+hub pull-request -b gaprindashvili -l dependencies -a simaishi
+git reset --hard
+git checkout master
