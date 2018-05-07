@@ -1,25 +1,41 @@
 #!/bin/bash
+
+notify() {
+  notify-send -t 800 "$@"
+}
+
 case "$1" in
 "")
   # volume - get volume
   awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master) | sed 's/%//'
   ;;
+"muted")
+  # volume muted - get muted status
+  awk '/dB/ { print }' <(amixer sget Master) | sed -e 's/^.*\[on\].*$/unmuted/' -e 's/^.*\[off\].*$/muted/'
+  ;;
+
 "toggle")
   # volume toggle - toggle mute
   amixer sset Master toggle
+  notify 'mute toggled to '$(volume muted)
   ;;
 "up")
   # volume up - increase volume by 5%
   amixer sset Master 5%+
+  notify 'volume up to '$(volume)'%'
   ;;
 "down")
   # volume down - decrease volume by 5%
   amixer sset Master 5%-
+  notify 'volume down to '$(volume)'%'
   ;;
+
 [0-9]*)
   # volume 50 - set volume to 50%
   amixer sset Master "$1"%
+  notify 'volume set to '$(volume)'%'
   ;;
+
 *) # else
   echo "$(basename "$0"): invalid args: $1" 1>&2
   exit 1
