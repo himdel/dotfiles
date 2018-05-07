@@ -1,0 +1,2 @@
+#!/bin/sh
+cat | oneline | sed -e 's/ / ; vim /g' -e 's/^/vim /'

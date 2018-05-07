@@ -1,0 +1,3 @@
+#!/bin/sh
+vim=vim-wrapper.pl
+cut -d: -f1,2 | while read f; do $vim "$f" < /dev/tty ; done

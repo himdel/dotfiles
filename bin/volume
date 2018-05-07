@@ -1,0 +1,27 @@
+#!/bin/bash
+case "$1" in
+"")
+  # volume - get volume
+  awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master) | sed 's/%//'
+  ;;
+"toggle")
+  # volume toggle - toggle mute
+  amixer sset Master toggle
+  ;;
+"up")
+  # volume up - increase volume by 5%
+  amixer sset Master 5%+
+  ;;
+"down")
+  # volume down - decrease volume by 5%
+  amixer sset Master 5%-
+  ;;
+[0-9]*)
+  # volume 50 - set volume to 50%
+  amixer sset Master "$1"%
+  ;;
+*) # else
+  echo "$(basename "$0"): invalid args: $1" 1>&2
+  exit 1
+  ;;
+esac
