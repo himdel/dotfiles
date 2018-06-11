@@ -40,9 +40,9 @@ my ($verbose, $no_act, $force, $op);
 
 die "Usage: rename [-v] [-n] [-f] perlexpr [filenames]\n"
     unless GetOptions(
-	'v|verbose' => \$verbose,
-	'n|no-act'  => \$no_act,
-	'f|force'   => \$force,
+        'v|verbose' => \$verbose,
+        'n|no-act'  => \$no_act,
+        'f|force'   => \$force,
     ) and $op = shift;
 
 $verbose++ if $no_act;
@@ -55,22 +55,22 @@ if (!@ARGV) {
 
 for (@ARGV) {
     my $was = $_;
-	$. ||= 1;
+    $. ||= 1;
     eval $op;
-	$.++;
+    $.++;
     die $@ if $@;
     next if $was eq $_; # ignore quietly
     if (-e $_ and !$force)
     {
-	warn  "$was not renamed: $_ already exists\n";
+        warn  "$was not renamed: $_ already exists\n";
     }
     elsif ($no_act or rename $was, $_)
     {
-	print "$was renamed as $_\n" if $verbose;
+        print "$was renamed as $_\n" if $verbose;
     }
     else
     {
-	warn  "Can't rename $was $_: $!\n";
+        warn  "Can't rename $was $_: $!\n";
     }
 }
 
