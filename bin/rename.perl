@@ -30,19 +30,23 @@
 #
 #
 ## added $. support - himdel, 2016
+## added -m support - himdel, 2018
 
 use strict;
 
 use Getopt::Long;
 Getopt::Long::Configure('bundling');
 
-my ($verbose, $no_act, $force, $op);
+use File::Copy;
 
-die "Usage: rename [-v] [-n] [-f] perlexpr [filenames]\n"
+my ($verbose, $no_act, $force, $op, $move);
+
+die "Usage: rename [-v] [-n] [-f] [-m] perlexpr [filenames]\n"
     unless GetOptions(
         'v|verbose' => \$verbose,
         'n|no-act'  => \$no_act,
         'f|force'   => \$force,
+        'm|move'    => \$move,
     ) and $op = shift;
 
 $verbose++ if $no_act;
@@ -64,7 +68,11 @@ for (@ARGV) {
     {
         warn  "$was not renamed: $_ already exists\n";
     }
-    elsif ($no_act or rename $was, $_)
+    elsif ($move and ($no_act or move($was, $_)))
+    {
+        print "$was moved as $_\n" if $verbose;
+    }
+    elsif (!$move and ($no_act or rename $was, $_))
     {
         print "$was renamed as $_\n" if $verbose;
     }
@@ -82,7 +90,7 @@ rename - renames multiple files
 
 =head1 SYNOPSIS
 
-B<rename> S<[ B<-v> ]> S<[ B<-n> ]> S<[ B<-f> ]> I<perlexpr> S<[ I<files> ]>
+B<rename> S<[ B<-v> ]> S<[ B<-n> ]> S<[ B<-f> ]> S<[ B<-m> ]> I<perlexpr> S<[ I<files> ]>
 
 =head1 DESCRIPTION
 
@@ -121,6 +129,10 @@ No Action: show what files would have been renamed.
 =item B<-f>, B<--force>
 
 Force: overwrite existing files.
+
+=item B<-m>, B<--move>
+
+Force: move, not rename (useful for cross-device renames)
 
 =back
 
