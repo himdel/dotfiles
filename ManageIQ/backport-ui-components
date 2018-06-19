@@ -17,7 +17,7 @@ git up
 
 git checkout -b uic-"$VER"
 yarn run bower-locker unlock
-bower install -F manageiq-ui-components@"$VER"
+bower install --save -F manageiq-ui-components#"$VER"
 yarn run bower-locker lock
 
 git add -Ap
