@@ -6,6 +6,7 @@ DM=${3:-crypto_p}
 function _mount {
 	mkdir -p "$DIR"
 	sudo cryptsetup luksOpen "$DRIVE" "$DM"
+	sudo fsck /dev/mapper/"$DM"
 	sudo mount /dev/mapper/"$DM" "$DIR"
 }
 
