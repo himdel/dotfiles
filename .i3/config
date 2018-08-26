@@ -22,6 +22,8 @@ for_window [class="Chromium" window_role="browser"] border none
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
 
+for_window [class="konversation"] resize shrink width 10%
+
 # kill focused window
 bindsym $alt+Shift+q kill
 
@@ -168,6 +170,8 @@ bar {
 
 workspace 1 output eDP1
 workspace 2 output DP2-2
-workspace 3 output VGA1
+workspace 3 output DP2-1
 
 assign [class="Chromium" window_role="browser"] 2
+
+for_window [class="VirtualBox"] floating enable
