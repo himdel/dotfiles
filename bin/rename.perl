@@ -30,7 +30,8 @@
 #
 #
 ## added $. support - himdel, 2016
-## added -m support - himdel, 2018
+## added -m (move) support - himdel, 2018
+## added -c=COMMAND support - himdel, 2018
 
 use strict;
 
@@ -39,14 +40,15 @@ Getopt::Long::Configure('bundling');
 
 use File::Copy;
 
-my ($verbose, $no_act, $force, $op, $move);
+my ($verbose, $no_act, $force, $op, $move, $command);
 
-die "Usage: rename [-v] [-n] [-f] [-m] perlexpr [filenames]\n"
+die "Usage: rename [-v] [-n] [-f] [-m] [-c=COMMAND] perlexpr [filenames]\n"
     unless GetOptions(
-        'v|verbose' => \$verbose,
-        'n|no-act'  => \$no_act,
+        'c|command=s' => \$command,
         'f|force'   => \$force,
         'm|move'    => \$move,
+        'n|no-act'  => \$no_act,
+        'v|verbose' => \$verbose,
     ) and $op = shift;
 
 $verbose++ if $no_act;
@@ -58,27 +60,32 @@ if (!@ARGV) {
 }
 
 for (@ARGV) {
-    my $was = $_;
-    $. ||= 1;
-    eval $op;
+    # can use $. as a counter in patterns
+    $. ||= 0;
     $.++;
+
+    my $was = $_;
+
+    eval $op;
     die $@ if $@;
-    next if $was eq $_; # ignore quietly
-    if (-e $_ and !$force)
-    {
-        warn  "$was not renamed: $_ already exists\n";
+
+    next if $was eq $_; # no change, ignore quietly
+
+    # don't overwrite unless forced
+    if (-e $_ and !$force) {
+        warn "$was not renamed: $_ already exists\n";
+        next;
     }
-    elsif ($move and ($no_act or move($was, $_)))
-    {
+
+    my $cmd = ($command // "") . " \'$was\' \'$_\'";
+    if ($command and ($no_act or !system($cmd))) {
+        print "worked: $cmd\n" if $verbose;
+    } elsif ($move and ($no_act or move($was, $_))) {
         print "$was moved as $_\n" if $verbose;
-    }
-    elsif (!$move and ($no_act or rename $was, $_))
-    {
+    } elsif (!$move and ($no_act or rename($was, $_))) {
         print "$was renamed as $_\n" if $verbose;
-    }
-    else
-    {
-        warn  "Can't rename $was $_: $!\n";
+    } else {
+        warn "Can't rename $was $_: $!\n";
     }
 }
 
