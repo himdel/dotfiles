@@ -546,8 +546,9 @@ function bj {
 }
 
 alias berc="(cd ~/manageiq ; be bin/rails c)"
-alias bers="(cd ~/manageiq ; SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 bin/update ; be bin/rails s)"
+alias bers="(cd ~/manageiq ; SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 WEBPACK_EXCLUDE_NODE_MODULES=1 bin/update ; be bin/rails s)"
 alias berS="(cd ~/manageiq ; be bin/rails s)"
+alias .berS="be bin/rails s"
 alias suis="(cd ~/manageiq-ui-service ; yarn start)"
 
 export CHROMIUM_FLAGS='--enable-remote-extensions'
