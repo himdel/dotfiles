@@ -80,6 +80,9 @@ alias aptitude='sudo aptitude'
 
 alias sshim='ssh -X yavanna.himdel.eu'
 #alias aisa='ssh xhrad1@aisa.fi.muni.cz'
+alias durin='ssh -X 10.8.8.6'
+alias niniel='ssh -X 10.8.8.10'
+alias thror='ssh -X 10.8.8.14'
 
 SSHFS="sudo sshfs -o reconnect,allow_other,fsname=sshfs,transform_symlinks,IdentityFile=/home/himdel/.ssh/id_dsa"
 #alias mntpenny="$SSHFS him@penny:/ /media/penny"
