@@ -18,6 +18,9 @@ fi
 if pwd | grep -q manageiq-gaprindashvili; then
   remote_branch=gaprindashvili
 fi
+if pwd | grep -q foreman; then
+  remote_branch=develop
+fi
 
 if [ "$BRANCH" = master ]; then
   git fetch "$UPSTREAM"
