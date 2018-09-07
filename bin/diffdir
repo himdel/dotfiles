@@ -1,4 +1,11 @@
 #!/bin/bash
+
+UNIQ=""	# default to sort -u
+if [ "$1" = "-d" ]; then
+	shift
+	UNIQ="-d"	# intersection
+fi
+
 pushd "$1" >/dev/null
 A=`/bin/pwd`
 popd >/dev/null
@@ -8,12 +15,16 @@ popd >/dev/null
 
 # TODO if only 1 param (diffdir trunk), look for trunk/{,../}.diffdir then $OLDPWD and die if not found
 
-(cd "$A" ; find -type f; cd "$B"; find -type f) | sed 's/^\.\///' | sort -u | while read f; do
+(cd "$A" ; find -type f; cd "$B"; find -type f) | sed 's/^\.\///' | sort | uniq $UNIQ | while read f; do
 	echo "$f" | grep -q '^.svn/' && continue
 	echo "$f" | grep -q '/.svn/' && continue
 	echo "$f" | grep -q '.svnbase$' && continue
 	echo "$f" | grep -q '^.git/' && continue
 	echo "$f" | grep -q '/.git/' && continue
+	echo "$f" | grep -q '^bower_components/' && continue
+	echo "$f" | grep -q '^node_modules/' && continue
+	echo "$f" | grep -q '/bower_components/' && continue
+	echo "$f" | grep -q '/node_modules/' && continue
 
 	if [ -f "$A"/"$f" -a ! -f "$B"/"$f" ]; then
 		echo "$B"/"$f" doesn\'t exist, "$A"/"$f" does
