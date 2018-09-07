@@ -1,3 +1,2 @@
 #!/bin/sh
-sudo iwlist wlan0 scan | grep -i essid | cut -d: -f2-
-
+sudo iwlist wlan0 scan | grep -i essid | cut -d\" -f2 | sort -u
