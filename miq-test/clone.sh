@@ -13,6 +13,7 @@ sudo apt install ruby-dev libpq-dev libxml2-dev cmake libsqlite3-dev libcurl4-op
 
 (
 cd manageiq
+gem install bundler
 bundle install --path vendor/bundle/
 bin/setup
 )
