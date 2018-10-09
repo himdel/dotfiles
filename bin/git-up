@@ -18,6 +18,12 @@ fi
 if pwd | grep -q manageiq-gaprindashvili; then
   remote_branch=gaprindashvili
 fi
+if pwd | grep -q manageiq-hammer; then
+  remote_branch=hammer
+fi
+if pwd | grep -q manageiq-ivanchuk; then
+  remote_branch=ivanchuk
+fi
 if pwd | grep -q foreman; then
   remote_branch=develop
 fi
