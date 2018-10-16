@@ -48,6 +48,7 @@ models.each do |model|
                                         :button_icon => "fa fa-star",
                                         :button_color => "#2d7623"})
   group[:set_data][:button_order] = [button.id]
+  button.uri_attributes = {"request" => "create"}
   button.parent = group
   button.save!
   group.save!
