@@ -24,7 +24,7 @@ fi
 if pwd | grep -q manageiq-ivanchuk; then
   remote_branch=ivanchuk
 fi
-if pwd | grep -q foreman; then
+if pwd | grep -q foreman && pwd | grep -q -v manageiq-providers-foreman ; then
   remote_branch=develop
 fi
 
