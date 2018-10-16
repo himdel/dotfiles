@@ -1,5 +1,6 @@
 ENV['RAILS_ENV'] = 'development'
-MIQ_DIR = "/Users/zita/Desktop/ManageIQ/manageiq"
+MIQ_DIR = File.directory?('spec/manageiq') ? './spec/manageiq' : '.'
+
 require MIQ_DIR + '/config/environment'
 
 models = %w(AvailabilityZone CloudNetwork CloudObjectStoreContainer CloudSubnet CloudTenant
