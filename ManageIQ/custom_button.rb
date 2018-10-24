@@ -7,7 +7,7 @@ models = %w(AvailabilityZone CloudNetwork CloudObjectStoreContainer CloudSubnet 
             CloudVolume ContainerGroup ContainerImage ContainerNode ContainerProject
             ContainerTemplate ContainerVolume EmsCluster ExtManagementSystem
             GenericObject GenericObjectDefinition Host LoadBalancer
-            MiqGroup MiqTemplate NetworkRouter OrchestrationStack SecurityGroup Service
+            MiqGroup MiqTemplate NetworkRouter OrchestrationStack PersistentVolume SecurityGroup Service
             ServiceTemplate Storage Switch Tenant User Vm VmOrTemplate).freeze
 
 if ARGV.include?("delete_previous")
