@@ -1,0 +1,17 @@
+#!/bin/bash
+TEMPDIR=`mktemp -d`
+
+cleanup() {
+	rm -rf "$TEMPDIR"
+}
+
+trap cleanup SIGTERM SIGINT EXIT
+
+SOURCE="$1"
+shift
+
+tail -n+2 "$SOURCE" > "$TEMPDIR"/source.c &&
+gcc "$TEMPDIR"/source.c -o "$TEMPDIR"/a.out &&
+"$TEMPDIR"/a.out "$@"
+
+exit $?
