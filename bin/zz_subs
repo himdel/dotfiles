@@ -1,7 +1,8 @@
+#!/usr/bin/env gccrun
 #include <stdio.h>
 #include <stdlib.h>
 
-int 
+int
 main(void)
 {
 	char map[256];
