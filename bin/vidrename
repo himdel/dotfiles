@@ -1,0 +1,5 @@
+#!/bin/sh
+rename '
+  my $x;
+  s/\./"-" . (print($`."-"), $x = <STDIN>, chomp $x, $x) . "."/e
+' -v ?x??.???
