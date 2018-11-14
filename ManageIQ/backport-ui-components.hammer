@@ -10,7 +10,23 @@ reset() {
 	git up
 }
 
-xyarn() {
+clean() {
+	cd "$1"
+	git reset --hard
+	git checkout master
+	git branch -D uic-"$VER"
+}
+
+cyarn() {
+	cd "$1"
+
+	git checkout -b uic-"$VER"
+	yarn add @manageiq/ui-components@~"$VER"
+
+	git commit package.json yarn.lock -m "Update ui-components to $VER for hammer"
+}
+
+syarn() {
 	cd "$1"
 
 	git checkout -b uic-"$VER"
@@ -29,12 +45,11 @@ reset ~/manageiq-hammer
 reset ~/manageiq-hammer/plugins/manageiq-ui-classic
 reset ~/manageiq-hammer/plugins/manageiq-ui-service
 
-xyarn ~/manageiq-hammer/plugins/manageiq-ui-classic
-xyarn ~/manageiq-hammer/plugins/manageiq-ui-service
+cyarn ~/manageiq-hammer/plugins/manageiq-ui-classic
+syarn ~/manageiq-hammer/plugins/manageiq-ui-service
 
 pr ~/manageiq-hammer/plugins/manageiq-ui-classic
 pr ~/manageiq-hammer/plugins/manageiq-ui-service
 
-reset ~/manageiq-hammer
-reset ~/manageiq-hammer/plugins/manageiq-ui-classic
-reset ~/manageiq-hammer/plugins/manageiq-ui-service
+clean ~/manageiq-hammer/plugins/manageiq-ui-classic
+clean ~/manageiq-hammer/plugins/manageiq-ui-service

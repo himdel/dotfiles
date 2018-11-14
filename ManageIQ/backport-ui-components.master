@@ -10,13 +10,29 @@ reset() {
 	git up
 }
 
-xyarn() {
+clean() {
+	cd "$1"
+	git reset --hard
+	git checkout master
+	git branch -D uic-"$VER"
+}
+
+cyarn() {
+	cd "$1"
+
+	git checkout -b uic-"$VER"
+	yarn add @manageiq/ui-components@~"$VER"
+
+	git commit package.json -m "Update ui-components to $VER"
+}
+
+syarn() {
 	cd "$1"
 
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@"$VER"
 
-	git commit package.json -m "Update ui-components to $VER"
+	git commit package.json yarn.lock -m "Update ui-components to $VER"
 }
 
 pr() {
@@ -29,11 +45,11 @@ reset ~/manageiq
 reset ~/manageiq-ui-classic
 reset ~/manageiq-ui-service
 
-xyarn ~/manageiq-ui-classic
-xyarn ~/manageiq-ui-service
+cyarn ~/manageiq-ui-classic
+syarn ~/manageiq-ui-service
 
 pr ~/manageiq-ui-classic
 pr ~/manageiq-ui-service
 
-reset ~/manageiq-ui-classic
-reset ~/manageiq-ui-service
+clean ~/manageiq-ui-classic
+clean ~/manageiq-ui-service
