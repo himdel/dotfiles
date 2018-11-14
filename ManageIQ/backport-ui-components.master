@@ -1,0 +1,39 @@
+#!/bin/sh
+set -e
+[ $# != 1 ] && exit 1
+VER="$1"
+
+reset() {
+	cd "$1"
+	git reset --hard
+	git checkout master
+	git up
+}
+
+yarn() {
+	cd "$1"
+
+	git checkout -b uic-"$VER"
+	yarn add @manageiq/ui-components@"$VER"
+
+	git commit package.json -m "Update ui-components to $VER"
+}
+
+pr() {
+	cd "$1"
+	git push -u origin uic-"$VER"
+	hub pull-request -b master -l dependencies
+}
+
+reset ~/manageiq
+reset ~/manageiq-ui-classic
+reset ~/manageiq-ui-service
+
+yarn ~/manageiq-ui-classic
+yarn ~/manageiq-ui-service
+
+pr ~/manageiq-ui-classic
+pr ~/manageiq-ui-service
+
+reset ~/manageiq-ui-classic
+reset ~/manageiq-ui-service
