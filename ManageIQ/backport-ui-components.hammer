@@ -10,7 +10,7 @@ reset() {
 	git up
 }
 
-yarn() {
+xyarn() {
 	cd "$1"
 
 	git checkout -b uic-"$VER"
@@ -29,8 +29,8 @@ reset ~/manageiq-hammer
 reset ~/manageiq-hammer/plugins/manageiq-ui-classic
 reset ~/manageiq-hammer/plugins/manageiq-ui-service
 
-yarn ~/manageiq-hammer/plugins/manageiq-ui-classic
-yarn ~/manageiq-hammer/plugins/manageiq-ui-service
+xyarn ~/manageiq-hammer/plugins/manageiq-ui-classic
+xyarn ~/manageiq-hammer/plugins/manageiq-ui-service
 
 pr ~/manageiq-hammer/plugins/manageiq-ui-classic
 pr ~/manageiq-hammer/plugins/manageiq-ui-service
