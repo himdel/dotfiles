@@ -7,7 +7,7 @@ floating_modifier $alt
 bindsym $alt+Return exec rxvt-unicode
 bindsym $alt+Shift+grave exec rxvt-unicode -name 'floating_urxvt'
 
-for_window [instance="floating_urxvt"] floating enable
+for_window [instance="floating_urxvt"] floating enable, move position mouse
 
 # TODO nejedou proc?
 for_window [instance="gdeskcal"] floating enable
