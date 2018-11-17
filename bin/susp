@@ -97,23 +97,7 @@ WLAN_ON=`ps -A | grep wpa_supplicant | wc -l`
 [ "$ETH0_IN" = no -a "$WLAN_ON" = 0 ] && sudo ifup wlan0
 
 xrandr --auto
-
-if xrandr-output-connected 'DP2-2'; then
-	# ugly hack to revive screen after suspend, see https://bugzilla.redhat.com/show_bug.cgi?id=1179924
-	xrandr --output 'DP2-1' --mode 1024x768 &&
-	xrandr --output 'DP2-2' --mode 1024x768 &&
-	xrandr --output 'DP2-1' --auto &&
-	xrandr --output 'DP2-2' --auto &&
-	true
-
-	~/.screenlayout/rh.sh
-else if xrandr-output-connected 'HDMI1'; then
-	xrandr --output 'HDMI1' --primary
-	xrandr --output 'eDP1' --left-of 'HDMI1'
-else
-	xrandr --output 'eDP1' --primary
-fi; fi
+[ -x ~/.screenlayout/detect.sh ] && ~/.screenlayout/detect.sh
+~/wallpapers/.random.sh
 
 [ "$ETH0_IN" = yes ] && ~/bin/ddns-himdel-usersys
-
-~/wallpapers/.random.sh

@@ -82,6 +82,7 @@ xmodmap -e 'pointer = 1 2 3 4 5 0 0 0 0 0 0 0 0'
 [ -x ~/bin/pushbullet-thing ] && ~/bin/pushbullet-thing &
 
 xrandr --auto
+[ -x ~/.screenlayout/detect.sh ] && ~/.screenlayout/detect.sh
 ~/wallpapers/.random.sh
 
 [ -x /usr/bin/redshift ] && redshift -l 49.19522:16.60796 &
