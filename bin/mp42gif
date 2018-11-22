@@ -1,0 +1,2 @@
+#!/bin/sh
+ffmpeg -i "$1" -f gif -filter_complex "[0:v] fps=12,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1" "$1".gif
