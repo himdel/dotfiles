@@ -3,6 +3,6 @@
 echo TODO figure out from now+day, not hardcode
 sleep 15h
 
-[ $# > 0 ] && sleep "$@"
+[ $# -gt 0 ] && sleep "$@"
 
 date
