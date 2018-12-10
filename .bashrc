@@ -19,8 +19,9 @@ export HISTCONTROL=ignoredups
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+export HISTSIZE=4096
+export HISTFILESIZE=8192
+export HISTTIMEFORMAT="%F %T	"
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -606,3 +607,8 @@ function movrename {
 
 # light <on|off>
 alias light='wemo switch "WeMo Insight"'
+
+# strips BOMs off utf-8 files
+alias debom='perl -i -npe s/\\xef\\xbb\\xbf//'
+
+alias ytmp3="youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s'"
