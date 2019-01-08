@@ -1,0 +1,12 @@
+#!/bin/sh
+INPUT="$1"
+START="$2"
+END="$3"
+OUTPUT="$4"
+
+if [ -z "$OUTPUT" ]; then
+	echo "syntax: "`basename "$0"`" INPUT START END OUTPUT" 1>&2
+	exit 1
+fi
+
+ffmpeg -nostdin -i "$INPUT" -c copy -ss "$START" -to "$END" "$OUTPUT"

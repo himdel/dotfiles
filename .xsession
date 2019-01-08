@@ -87,4 +87,6 @@ xrandr --auto
 
 [ -x /usr/bin/redshift ] && redshift -l 49.19522:16.60796 &
 
+xsetroot -cursor_name arrow # X_cursor
+
 exec "$WM"
