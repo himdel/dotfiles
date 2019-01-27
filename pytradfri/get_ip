@@ -1,0 +1,3 @@
+#!/bin/sh
+cd `dirname "$0"`
+sudo arping -c1 `cat mac` 2>/dev/null | grep from | sed 's/^.*from \([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\) .*$/\1/' | tee ./ip

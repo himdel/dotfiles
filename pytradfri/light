@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+import sys
+
+from pytradfri import Gateway
+from pytradfri.api.libcoap_api import APIFactory
+from pytradfri.error import PytradfriError
+from pytradfri.util import load_json, save_json
+
+IP_FILE = sys.path[0] + '/ip'
+KEYS_FILE = sys.path[0] + '/tradfri_standalone_psk.conf'
+MODES_FILE = sys.path[0] + '/modes.json'
+
+host = open(IP_FILE).read().strip()
+conf = load_json(KEYS_FILE)
+
+mode_name = sys.argv[1] if len(sys.argv) > 1 else "on"
+modes = load_json(MODES_FILE)
+
+def run(config, mode):
+    identity = config.get('identity')
+    psk = config.get('key')
+    api_factory = APIFactory(host=host, psk_id=identity, psk=psk)
+
+    api = api_factory.request
+
+    gateway = Gateway()
+
+    devices_command = gateway.get_devices()
+    devices_commands = api(devices_command)
+    devices = api(devices_commands)
+
+    lights = [dev for dev in devices if dev.has_light_control]
+
+    for light in lights:
+      try:
+        dim_command = light.light_control.set_dimmer(mode.get('dimmer')) # 0-254
+        api(dim_command)
+      except:
+        print("No `dimmer` in mode", mode_name, mode)
+        pass
+
+      try:
+        color_command = light.light_control.set_color_temp(mode.get('color_temp')) # 250-454
+        api(color_command)
+      except:
+        print("No `color_temp` in mode", mode_name, mode)
+        pass
+
+run(conf[host], modes[mode_name])

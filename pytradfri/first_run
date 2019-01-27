@@ -1,0 +1,2 @@
+#!/bin/sh
+python3 -i -m pytradfri `cat ip` -K `cat security`

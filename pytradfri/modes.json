@@ -1,0 +1,38 @@
+{
+  "on": {
+    "dimmer": 127,
+    "color_temp": 454
+  },
+  "off": {
+    "dimmer": 0
+  },
+
+  "max": {
+    "dimmer": 254,
+    "color_temp": 250
+  },
+  "min": {
+    "dimmer": 1,
+    "color_temp": 454
+  },
+
+  "intmax": {
+    "dimmer": 254
+  },
+  "intmid": {
+    "dimmer": 127
+  },
+  "intmin": {
+    "dimmer": 1
+  },
+
+  "tempmax": {
+    "color_temp": 250
+  },
+  "tempmid": {
+    "color_temp": 352
+  },
+  "tempmin": {
+    "color_temp": 454
+  }
+}

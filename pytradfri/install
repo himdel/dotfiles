@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# dependencies
+sudo apt install python3 \
+                 python3-pip \
+                 python3-setuptools \
+                 python3-wheel \
+                 libpython3-dev \
+                 arping \
+                 libtool
+
+# python dependencies
+pip3 install 'aiocoap==0.4a1' \
+             'DTLSSocket==0.1.7' \
+             'typing>=3,<4' \
+             pytradfri
+
+# /usr/lobcal/bin/coap-client
+git clone --depth 1 --recursive -b dtls https://github.com/home-assistant/libcoap.git
+cd libcoap
+./autogen.sh
+./configure --disable-documentation --disable-shared --without-debug CFLAGS="-D COAP_DEBUG_FD=stderr"
+make
+sudo make install
+cd ..
+rm -rf libcoap/
