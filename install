@@ -1,0 +1,2 @@
+dpkg --add-architecture i386
+apt install steam:i386

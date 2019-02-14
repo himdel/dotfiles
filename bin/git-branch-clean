@@ -1,10 +1,12 @@
 #!/bin/bash
+set -e
 
-git fetch upstream
+git fetch --all --prune
 
-git branch --merged upstream/master
-# TODO check their remote branch is either gone or on the same commit
-# remove them locally: git branch -D $branch
-# remove them remotely: git push --delete origin $branch
+# Remove local fully merged branches
+git branch --merged upstream/master | sed 's/^[ ]\+//' | grep -v '^master$' | xargs -d'\n' git branch -D
 
-git fap
+# Remove origin/ fully merged branches, except for master
+git branch --remotes --merged upstream/master | sed 's/^[ ]\+//' | grep '^origin/' | grep -v '/master$' | sed 's/^origin\///' | xargs -d'\n' git push --delete origin
+
+git fetch --all --prune

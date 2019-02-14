@@ -1,0 +1,12 @@
+#!/bin/sh
+NAME=$1
+if [ -z "$1" ]; then
+	echo "$0 <name>" 1>&2
+	exit 1
+fi
+
+URL=`git remote get-url origin`
+
+NEWURL=`echo "$URL" | sed "s/$USER/$NAME/"`
+git remote add "$NAME" "$NEWURL"
+git fetch "$NAME"
