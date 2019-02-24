@@ -1,2 +1,7 @@
-dpkg --add-architecture i386
-apt install steam:i386
+sudo dpkg --add-architecture i386
+sudo apt install steam:i386
+
+sudo apt install lua5.2 luarocks lua-socket lua-xmlrpc lua-zlib mpv
+sudo ln -s /usr/share/lua/5.1/xmlrpc /usr/share/lua/5.2/xmlrpc
+mkdir -p ~/.config/mpv/scripts
+git clone https://github.com/rumkex/osdb-mpv.git ~/.config/mpv/scripts
