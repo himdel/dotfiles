@@ -2,6 +2,7 @@
 use v5.14;
 use Carp;
 use Data::Dumper;
+use File::Globstar qw(globstar);
 
 my $VIM='/usr/bin/vim';
 
@@ -37,9 +38,11 @@ sub railsfind {
 	$file =~ s/[A-Z]/_\l$&/g;
 	$file =~ s/$/.rb/;
 
-	#TODO asi nahradit hledanim souboru
-	my $dir = ($class =~ m/Controller/) ? 'controllers' : 'models';
-	return ("app/$dir/$file", $func ? '+/def ' . $func . '/' : undef);
+	my @files = globstar("**/$file");
+	if ($func) {
+		@files = map { ($_, '+/def ' . $func . '/') } @files;
+	}
+	return @files;
 
 	carp "railsfind: $_ not found";
 	return ();
