@@ -31,6 +31,14 @@ fi
 if [ "$BRANCH" = master ]; then
   git fetch "$UPSTREAM"
   git merge --ff-only "$UPSTREAM"/"$remote_branch"
+else if [ "$BRANCH" = ivanchuck ]; then
+  remote_branch=ivanchuck
+  git fetch "$UPSTREAM"
+  git merge --ff-only "$UPSTREAM"/"$remote_branch"
+else if [ "$BRANCH" = hammer ]; then
+  remote_branch=hammer
+  git fetch "$UPSTREAM"
+  git merge --ff-only "$UPSTREAM"/"$remote_branch"
 else if [ "$BRANCH" = gaprindashvili ]; then
   remote_branch=gaprindashvili
   git fetch "$UPSTREAM"
@@ -51,4 +59,4 @@ else
   done
   diff -Naur .git/refs/heads/master .git/refs/remotes/"$UPSTREAM"/"$remote_branch"
   cp .git/refs/remotes/"$UPSTREAM"/"$remote_branch" .git/refs/heads/master
-fi;fi;fi;fi;fi
+fi;fi;fi;fi;fi;fi;fi
