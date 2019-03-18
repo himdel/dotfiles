@@ -613,3 +613,7 @@ alias light='wemo switch "WeMo Insight"'
 alias debom='perl -i -npe s/\\xef\\xbb\\xbf//'
 
 alias ytmp3="youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 -o '%(title)s.%(ext)s'"
+
+alias ffmpeg="ffmpeg -nostdin"
+
+alias grc='git rebase --continue'
