@@ -16,6 +16,20 @@ conf = load_json(KEYS_FILE)
 mode_name = sys.argv[1] if len(sys.argv) > 1 else "on"
 modes = load_json(MODES_FILE)
 
+def foo(ary, idx):
+  if not isinstance(ary, list):
+    return ary
+
+  i = idx % len(ary)
+
+  return ary[i]
+
+def dimmer(mode, light_index):
+  return foo(mode.get('dimmer'), light_index)
+
+def temp(mode, light_index):
+  return foo(mode.get('color_temp'), light_index)
+
 def run(config, mode):
     identity = config.get('identity')
     psk = config.get('key')
@@ -31,19 +45,22 @@ def run(config, mode):
 
     lights = [dev for dev in devices if dev.has_light_control]
 
+    i = 0
     for light in lights:
       try:
-        dim_command = light.light_control.set_dimmer(mode.get('dimmer')) # 0-254
+        dim_command = light.light_control.set_dimmer(dimmer(mode, i)) # 0-254
         api(dim_command)
       except:
         print("No `dimmer` in mode", mode_name, mode)
         pass
 
       try:
-        color_command = light.light_control.set_color_temp(mode.get('color_temp')) # 250-454
+        color_command = light.light_control.set_color_temp(temp(mode, i)) # 250-454
         api(color_command)
       except:
         print("No `color_temp` in mode", mode_name, mode)
         pass
+
+      i += 1
 
 run(conf[host], modes[mode_name])

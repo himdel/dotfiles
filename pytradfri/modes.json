@@ -34,5 +34,9 @@
   },
   "tempmin": {
     "color_temp": 454
+  },
+
+  "1": {
+    "dimmer": [1, 0, 0]
   }
 }
