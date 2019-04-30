@@ -6,6 +6,7 @@ $backends = %w( mpv mplayer mplayer2 );
 # params:
 # -R	randomize files		(keeps subsequent files with increasing _\d+ suffix together) (1x02-Ep_1.avi and 1x03-Ep_2.avi will be kept together but 1x02-Ep1.avi and 1x03-Ep2.avi won't)
 # -R/	randomize dirs		(randomizes order of directories but not the files within)
+# -RR	randomize without suffix matching
 # -S	random start	(doesn't randomize order, just where to start)
 # -S<number>	(drop first $number elements)
 # -C<number>	cut after first N files (applied *after* both R and S)
@@ -40,13 +41,14 @@ randomize = ! opts.select { |s| s.start_with? "-R" }.empty?
 justone = opts.select { |s| s =~ /^-[RC]\d+$/ }.first.sub(/^-[RC]/, '').to_i rescue 0
 rotate = opts.select { |s| s =~ /^-S\d*$/ }.first.sub(/^-S/, '').to_i rescue nil
 sortdir = opts.include? "-R/"
+simplerandom = opts.include? "-RR"
 exclude = opts.select { |s| s.start_with? "-X=" }.map { |s| s.sub(/^-X=/, '') }
 $setvolume = opts.select { |s| s.start_with? "-V=" }.map { |s| s.sub(/^-V=/, '').to_i }
 $newterm = opts.include? '-T'
 opts = [opts, "-framedrop", "-fs"].flatten if opts.include? '-DF'
 opts.reject! do |s|
 	r = false
-	['-DF', '-S', '-R', '-R/', '-T', '-1', '-2'].each { |p| r ||= (s == p) }
+	['-DF', '-S', '-R', '-R/', '-RR', '-T', '-1', '-2'].each { |p| r ||= (s == p) }
 	['-X=', '-S', '-C', '-R'].each { |p| r ||= s.start_with?(p) }
 	r
 end
@@ -340,8 +342,8 @@ opts = opts.flatten.map do |o|
 	o
 end
 
-# -R or -R\d+
-if randomize and !sortdir
+# -R or -R\d+, not -RR
+if randomize and !sortdir and !simplerandom
 	# merge 1x02-Ep_1.avi and 1x03-Ep_2.avi together
 	q = 0
 	a = []
@@ -372,6 +374,11 @@ if randomize and !sortdir
 
 	# and shuffle
 	files = f.shuffle.flatten
+end
+
+# -RR
+if simplerandom
+	files.shuffle!
 end
 
 # -R/
