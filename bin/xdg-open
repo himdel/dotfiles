@@ -3,21 +3,23 @@
 
 echo `date +%F` "$0" "$@" >> /tmp/xdg-open
 
-if echo "$@" | grep -q ^magnet: ; then
+case "$@" in
+*docx|*doc|*xlsx|*xls|*pptx|*ppt)
+	exec /home/himdel/bin/gdocs.sh "$@"
+	;;
+*jpg|*gif|*jpeg|*png|*JPG)
+	exec pqiv "$@"
+	;;
+http:*|https:*)
+	exec $BROWSER "$@"
+	;;
+magnet:*)
 	exec magnet "$@"
-else
-	case "$@" in
-	*docx|*doc|*xlsx|*xls|*pptx|*ppt)
-		exec /home/himdel/bin/gdocs.sh "$@"
-		;;
-	*jpg|*gif|*jpeg|*png|*JPG)
-		exec qiv "$@"
-		;;
-	http:*|https:*)
-		exec $BROWSER "$@"
-		;;
-	*)
-		exec /usr/bin/xdg-open "$@"
-		;;
-	esac
-fi
+	;;
+*webm)
+	exec mpv "$@"
+	;;
+*)
+	exec /usr/bin/xdg-open "$@"
+	;;
+esac
