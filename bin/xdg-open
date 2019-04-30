@@ -3,11 +3,14 @@
 
 echo `date +%F` "$0" "$@" >> /tmp/xdg-open
 
+# case insensitive
+shopt -s nocasematch
+
 case "$@" in
 *docx|*doc|*xlsx|*xls|*pptx|*ppt)
 	exec /home/himdel/bin/gdocs.sh "$@"
 	;;
-*jpg|*gif|*jpeg|*png|*JPG)
+*jpg|*gif|*jpeg|*png|*bmp|*webp)
 	exec pqiv "$@"
 	;;
 http:*|https:*)
@@ -16,7 +19,7 @@ http:*|https:*)
 magnet:*)
 	exec magnet "$@"
 	;;
-*webm)
+*webm|*mp4|*avi|*webm|*mp|*flv|*mkv)
 	exec mpv "$@"
 	;;
 *)
