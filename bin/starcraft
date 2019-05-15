@@ -1,5 +1,12 @@
 #!/bin/bash
+sudo ifdown eth0
+sudo ifdown wlan0
+sudo ifup wlan0
 sudo service ferm stop
+
+xdotool mousemove 0 0
+
 cd ~/StarCraft
 wine "StarCraft.exe"
+
 sudo service ferm start
