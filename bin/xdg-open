@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # should be symlinked from /usr/local/bin/xdg-open
 
 echo `date +%F` "$0" "$@" >> /tmp/xdg-open
