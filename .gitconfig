@@ -15,12 +15,12 @@
 	fixup = "! HASH=$([ $1 ] && echo $1 || echo `git rev-parse HEAD`) && git commit --fixup=$HASH && EDITOR=: git rebase -i --autosquash $HASH~1 && echo"
 	cm = "! git add -A && git commit -m"
 	branch-name = "symbolic-ref -q --short HEAD"
-	current-remote = "!git config branch.$(git branch-name).remote"
+	current-remote = "! git config branch.$(git branch-name).remote"
 	url = "! f() { git config remote.${1:-$(git current-remote)}.url ; }; f"
 #	hub-url = "! f() { hu="$(echo $(git url $1) | sed -e 'sX^git@\\([^:]*\\):Xhttp://\\1/X' -e 'sX\\.git$XX')" ; echo "${hu}/${2:-tree}/$(git branch-name)${3:+?}${3}" ; }; f"
 #	open = "! f() { open $(git hub-url ${1} ${2} ${3}) ; }; f"
 #	pr = "! f() { git push -u ${1:-origin} HEAD ; git open ${1:-origin} compare expand=1 ; }; f"
-	pr = "! git fetch upstream pull/$1/head && git checkout FETCH_HEAD && git checkout -b pr$1 -- && echo"
+	pr = "! git branch -D pr$1 ; git fetch upstream pull/$1/head && git checkout FETCH_HEAD && git checkout -b pr$1 -- && echo"
 	prqgh = "! git fetch git://github.com/$1.git $2 && git checkout FETCH_HEAD && git checkout -b $2 -- && echo"
 	br = "branch -av"
 	praise = "blame"
@@ -40,3 +40,7 @@
 	excludesfile = /home/himdel/.gitignore
 [push]
 	default = simple
+[pull]
+	rebase = true
+[protocol]
+	version = 2
