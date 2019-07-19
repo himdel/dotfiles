@@ -1,0 +1,4 @@
+#!/bin/bash
+sudo fdisk -l /dev/sd? | perl -nE '
+  say "$1\t$3\t$2" if /^Disk (.*?):.*?\b([\d\.]+ [MGT]i?B).*\b(\d+) bytes/
+'

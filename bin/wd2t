@@ -1,6 +1,10 @@
 #!/bin/bash
+
 DRIVE=$1
-if [ -z "$1" ]; then
+if [ -z "$DRIVE" ]; then
+	disks | grep '\<2000' | awk '{ print $1 }'
+fi
+if [ -z "$DRIVE" ]; then
 	echo no drive 1>&2
 	exit 1
 fi
