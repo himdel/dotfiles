@@ -1,7 +1,28 @@
 #!/bin/bash
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+fi
+if [ "$1" = '-r' ]; then
+	FNC=_resize
+fi
+[ "$FNC" != "_mount" ] && shift
+
 DRIVE=${1:-/home/himdel/.crypto_p}
 DIR=${2:-/home/himdel/P}
 DM=${3:-crypto_p}
+
+# TODO param
+function _resize {
+	mkdir -p "$DIR"
+	sudo cryptsetup luksOpen "$DRIVE" "$DM"
+	sudo truncate -s +2G "$DRIVE"
+	sudo fsck -f /dev/mapper/"$DM"
+	sudo resize2fs /dev/mapper/"$DM"
+	sudo fsck -f /dev/mapper/"$DM"
+	sudo mount /dev/mapper/"$DM" "$DIR"
+}
 
 function _mount {
 	mkdir -p "$DIR"
@@ -15,10 +36,5 @@ function _umount {
 	sudo cryptsetup luksClose "$DM"
 	rmdir "$DIR"
 }
-
-FNC=_mount
-if [ "$1" = '-u' ]; then
-	FNC=_umount
-fi
 
 $FNC

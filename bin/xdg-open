@@ -19,7 +19,7 @@ http:*|https:*)
 magnet:*)
 	exec magnet "$@"
 	;;
-*webm|*mp4|*avi|*webm|*mp|*flv|*mkv)
+*webm|*mp4|*avi|*webm|*mp|*flv|*mkv|*h264)
 	exec mpv "$@"
 	;;
 *)
