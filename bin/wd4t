@@ -2,7 +2,7 @@
 
 DRIVE=$1
 if [ -z "$DRIVE" ]; then
-	disks | grep '\<4000' | awk '{ print $1 }'
+	DRIVE=`disks | grep '\<4000' | awk '{ print $1 }' | tee /dev/stderr`
 fi
 if [ -z "$DRIVE" ]; then
 	echo no drive 1>&2
