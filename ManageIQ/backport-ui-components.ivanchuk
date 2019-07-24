@@ -1,0 +1,55 @@
+#!/bin/sh
+set -e
+[ $# != 1 ] && exit 1
+VER="$1"
+
+reset() {
+	cd "$1"
+	git reset --hard
+	git checkout master
+	git up
+}
+
+clean() {
+	cd "$1"
+	git reset --hard
+	git checkout master
+	git branch -D uic-"$VER"
+}
+
+cyarn() {
+	cd "$1"
+
+	git checkout -b uic-"$VER"
+	yarn add @manageiq/ui-components@~"$VER"
+
+	git commit package.json yarn.lock -m "Update ui-components to $VER for ivanchuk"
+}
+
+syarn() {
+	cd "$1"
+
+	git checkout -b uic-"$VER"
+	yarn add @manageiq/ui-components@"$VER"
+
+	git commit package.json yarn.lock -m "Update ui-components to $VER for ivanchuk"
+}
+
+pr() {
+	cd "$1"
+	git push -u origin uic-"$VER"
+	hub pull-request -b ivanchuk -l dependencies -a simaishi
+}
+
+reset ~/manageiq-ivanchuk
+reset ~/manageiq-ivanchuk/plugins/manageiq-ui-classic
+reset ~/manageiq-ivanchuk/plugins/manageiq-ui-service
+
+cyarn ~/manageiq-ivanchuk/plugins/manageiq-ui-classic
+syarn ~/manageiq-ivanchuk/plugins/manageiq-ui-service
+
+pr ~/manageiq-ivanchuk/plugins/manageiq-ui-classic
+pr ~/manageiq-ivanchuk/plugins/manageiq-ui-service
+
+clean ~/manageiq-ivanchuk/plugins/manageiq-ui-classic
+clean ~/manageiq-ivanchuk/plugins/manageiq-ui-service
