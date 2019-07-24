@@ -31,8 +31,8 @@ fi
 if [ "$BRANCH" = master ]; then
   git fetch "$UPSTREAM"
   git merge --ff-only "$UPSTREAM"/"$remote_branch"
-else if [ "$BRANCH" = ivanchuck ]; then
-  remote_branch=ivanchuck
+else if [ "$BRANCH" = ivanchuk ]; then
+  remote_branch=ivanchuk
   git fetch "$UPSTREAM"
   git merge --ff-only "$UPSTREAM"/"$remote_branch"
 else if [ "$BRANCH" = hammer ]; then
