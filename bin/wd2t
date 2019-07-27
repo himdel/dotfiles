@@ -15,6 +15,7 @@ fi
 
 function _mount {
 	sudo cryptsetup luksOpen "$DRIVE"1 wd2t
+	#sudo fsck -fp /dev/mapper/wd2t
 	sudo zfs mount wd2t || sudo zpool import wd2t
 }
 

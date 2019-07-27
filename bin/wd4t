@@ -15,6 +15,7 @@ function _mount {
 	sleep 0.5
 	sudo vgchange -ay wd4t
 	sleep 0.5
+	sudo fsck -fp /dev/wd4t/data
 	sudo mount /dev/wd4t/data /media/wd4t
 }
 

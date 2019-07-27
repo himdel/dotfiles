@@ -27,7 +27,7 @@ function _resize {
 function _mount {
 	mkdir -p "$DIR"
 	sudo cryptsetup luksOpen "$DRIVE" "$DM"
-	sudo fsck /dev/mapper/"$DM"
+	sudo fsck -fp /dev/mapper/"$DM"
 	sudo mount /dev/mapper/"$DM" "$DIR"
 }
 
