@@ -1,9 +1,34 @@
 #!/bin/sh
-BACKUP=/media/wd3t/archive/niniel-`date +%Y-%m-%d`
+BACKUP=/media/wd3t/archive/`hostname -s`-`date +%Y-%m-%d`
 
 mkdir -pv "$BACKUP"
 
-rsync -aPv "/home/himdel/" "$BACKUP/home_himdel/" --exclude /.cache --exclude /.bundler --exclude /.bundle --exclude /.minishift/cache --exclude /.minecraft --exclude /.factorio --exclude /.npm --exclude /.yarn --exclude /.rbenv/versions
-rsync -aPv "/media/data/" "$BACKUP/media_data/" --exclude /steam --exclude /dot_steam --exclude /var_lib_motion --exclude /dot_ievms --exclude /VirtualBox --exclude /local_share_Steam --exclude /.crypto_p
-sudo rsync -aPvx "/" "$BACKUP/root/" --exclude /home --exclude /var/lib/docker/devicemapper/ --exclude /var/lib/mongodb/
-sudo rsync -aPv "/boot/" "$BACKUP/boot/"
+rsync -aPvx "/home/himdel/" "$BACKUP/home_himdel/" \
+	--exclude /.bundle \
+	--exclude /.bundler \
+	--exclude /.cache \
+	--exclude /.crypto_p \
+	--exclude /.factorio \
+	--exclude /.ievms \
+	--exclude /.minecraft \
+	--exclude /.minishift/cache \
+	--exclude /.npm \
+	--exclude /.rbenv/versions \
+	--exclude /.steam \
+	--exclude /.yarn \
+	--exclude /ManageIQ/\*/ \
+	--exclude /VirtualBox \
+	--exclude /bbccomedy \
+	--exclude /miq-test/manageiq/vendor \
+	--exclude /wallpapers \
+	--exclude node_modules \
+
+sudo rsync -aPvx "/" "$BACKUP/root/" \
+	--exclude /home \
+	--exclude /var/lib/docker \
+	--exclude /var/lib/mongodb \
+	--exclude /var/lib/mysql \
+	--exclude /var/lib/motion \
+	--exclude /var/lib/postgresql \
+
+sudo rsync -aPvx "/boot/" "$BACKUP/boot/"
