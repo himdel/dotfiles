@@ -7,6 +7,7 @@ rsync -aPvx "/home/himdel/" "$BACKUP/home_himdel/" \
 	--exclude /.bundle \
 	--exclude /.bundler \
 	--exclude /.cache \
+	--exclude /.config/*chr*/**/Cache \
 	--exclude /.crypto_p \
 	--exclude /.factorio \
 	--exclude /.ievms \
@@ -16,19 +17,23 @@ rsync -aPvx "/home/himdel/" "$BACKUP/home_himdel/" \
 	--exclude /.rbenv/versions \
 	--exclude /.steam \
 	--exclude /.yarn \
+	--exclude '/.wine/drive_c/Program Files (x86)/Steam' \
 	--exclude /ManageIQ/\*/ \
 	--exclude /VirtualBox \
 	--exclude /bbccomedy \
+	--exclude /manageiq* \
 	--exclude /miq-test/manageiq/vendor \
 	--exclude /wallpapers \
 	--exclude node_modules \
 
 sudo rsync -aPvx "/" "$BACKUP/root/" \
 	--exclude /home \
+	--exclude /var/cache/apt/archives \
+	--exclude /var/cache/locate/locatedb \
 	--exclude /var/lib/docker \
 	--exclude /var/lib/mongodb \
-	--exclude /var/lib/mysql \
 	--exclude /var/lib/motion \
+	--exclude /var/lib/mysql \
 	--exclude /var/lib/postgresql \
 
 sudo rsync -aPvx "/boot/" "$BACKUP/boot/"
