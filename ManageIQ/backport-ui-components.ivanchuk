@@ -2,9 +2,10 @@
 set -e
 [ $# != 1 ] && exit 1
 VER="$1"
+RELEASE=ivanchuk
 
 if ! expr "$VER" : '^1\.2\.[0-9]\+$' >/dev/null ; then
-	echo "$0: ivanchuk should use 1.2.*" 1>&2
+	echo "$0: $RELEASE should use 1.2.*" 1>&2
 	exit 2
 fi
 
@@ -28,7 +29,7 @@ cyarn() {
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@~"$VER"
 
-	git commit package.json yarn.lock -m "Update ui-components to $VER for ivanchuk"
+	git commit package.json yarn.lock -m "Update ui-components to $VER for $RELEASE"
 }
 
 syarn() {
@@ -37,13 +38,13 @@ syarn() {
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@"$VER"
 
-	git commit package.json yarn.lock -m "Update ui-components to $VER for ivanchuk"
+	git commit package.json yarn.lock -m "Update ui-components to $VER for $RELEASE"
 }
 
 pr() {
 	cd "$1"
 	git push -u origin uic-"$VER"
-	hub pull-request -b ivanchuk -l dependencies -a simaishi
+	hub pull-request -b $RELEASE -l dependencies -a simaishi
 }
 
 reset ~/manageiq-ivanchuk
