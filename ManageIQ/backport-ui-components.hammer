@@ -2,12 +2,24 @@
 set -e
 [ $# != 1 ] && exit 1
 VER="$1"
-RELEASE=hammer
+BRANCH=hammer
 
 if ! expr "$VER" : '^1\.1\.[0-9]\+$' >/dev/null ; then
-	echo "$0: $RELEASE should use 1.1.*" 1>&2
+	echo "$0: $BRANCH should use 1.1.*" 1>&2
 	exit 2
 fi
+
+last_version() {
+	jq -r .version node_modules/@manageiq/ui-components/package.json
+}
+
+changelog() {
+	LAST_VERSION=`last_version`
+
+	pushd ~/ui-components
+	git log --decorate=short upstream/"$BRANCH" | REPO="ManageIQ/ui-components" release-log.pl v$LAST_VERSION
+	popd
+}
 
 reset() {
 	cd "$1"
@@ -29,7 +41,9 @@ cyarn() {
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@~"$VER"
 
-	git commit package.json yarn.lock -m "Update ui-components to $VER for $RELEASE"
+	git commit package.json yarn.lock -m "Update ui-components to $VER for $BRANCH
+
+`changelog`"
 }
 
 syarn() {
@@ -38,13 +52,15 @@ syarn() {
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@"$VER"
 
-	git commit package.json yarn.lock -m "Update ui-components to $VER for $RELEASE"
+	git commit package.json yarn.lock -m "Update ui-components to $VER for $BRANCH
+
+`changelog`"
 }
 
 pr() {
 	cd "$1"
 	git push -u origin uic-"$VER"
-	hub pull-request -b $RELEASE -l dependencies -a simaishi
+	hub pull-request -b "$BRANCH" -l dependencies -a simaishi
 }
 
 reset ~/manageiq-hammer
