@@ -14,11 +14,11 @@ last_version() {
 }
 
 changelog() {
-	LAST_VERSION=`last_version`
+	LAST_VERSION=$1
 
-	pushd ~/ui-components
+	cd ~/ui-components
 	git log --decorate=short upstream/"$BRANCH" | REPO="ManageIQ/ui-components" release-log.pl v$LAST_VERSION
-	popd
+	cd - >/dev/null
 }
 
 reset() {
@@ -37,24 +37,26 @@ clean() {
 
 cyarn() {
 	cd "$1"
+	LAST_VERSION=`last_version`
 
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@~"$VER"
 
 	git commit package.json yarn.lock -m "Update ui-components to $VER for $BRANCH
 
-`changelog`"
+`changelog $LAST_VERSION`"
 }
 
 syarn() {
 	cd "$1"
+	LAST_VERSION=`last_version`
 
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@"$VER"
 
 	git commit package.json yarn.lock -m "Update ui-components to $VER for $BRANCH
 
-`changelog`"
+`changelog $LAST_VERSION`"
 }
 
 pr() {
