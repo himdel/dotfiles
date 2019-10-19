@@ -1,0 +1,38 @@
+#!/bin/bash
+
+DRIVE=$1
+if [ -z "$DRIVE" ]; then
+	DRIVE=`disks | grep '\<5000' | awk '{ print $1 }' | tee /dev/stderr`
+fi
+if [ -z "$DRIVE" ]; then
+	echo no drive 1>&2
+	exit 1
+fi
+
+## setup
+# sudo zpool create wd5t /dev/mapper/wd5t
+# sudo zfs set compression=on wd5t
+
+function _mount {
+	sudo cryptsetup luksOpen "$DRIVE"1 wd5t
+	#sudo fsck -fp /dev/mapper/wd5t
+	sudo zfs mount wd5t || sudo zpool import wd5t
+}
+
+function _umount {
+	sudo zfs unmount wd5t
+	sudo zpool export wd5t
+	sudo cryptsetup luksClose wd5t
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+else
+	if ! [ -e $DRIVE ]; then
+		echo no drive $DRIVE 1>&2
+		exit 1
+	fi
+fi
+
+$FNC
