@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$1" = "size" ]; then
+	pg-databases | while read db; do
+		psql -U root postgres -c 'select pg_size_pretty( pg_database_size('\'"$db"\'') );' | grep -B1 '1 row' | grep -v -- '--' | grep -v '1 row' | sed 's/$/\t'"$db"'/' | sed 's/^ \+//' | sed 's/ //'
+	done | sort -h
+	exit
+fi
+
+psql -U root postgres -c \\l | sed -e '1,3d' | head -n -2 | awk '{ print $1 }' | grep -v '^|'
