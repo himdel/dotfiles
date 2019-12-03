@@ -7,4 +7,14 @@ if [ "$1" = "size" ]; then
 	exit
 fi
 
+if [ "$#" -eq 2 -a "$1" = "drop" ]; then
+	psql -U root postgres -c 'drop database "'"$2"'";'
+	exit
+fi
+
+if [ "$#" -eq 2 -a "$1" = "create" ]; then
+	psql -U root postgres -c 'create database "'"$2"'";'
+	exit
+fi
+
 psql -U root postgres -c \\l | sed -e '1,3d' | head -n -2 | awk '{ print $1 }' | grep -v '^|'
