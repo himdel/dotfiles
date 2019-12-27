@@ -168,16 +168,6 @@ def input(config)
 		})
 	end
 
-	hash.update({
-		'PGUP' => 'seek +600',
-		'PGDWN' => 'seek -600',
-
-		'y' => 'sub_step +1',
-		'g' => 'sub_step -1',
-
-		'I' => 'show-text "${filename}"',
-	})
-
 	file = Tempfile.new('mpl-input')
 	hash.each do |k, v|
 		file.write("#{k} #{v}\n");
