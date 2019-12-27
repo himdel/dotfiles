@@ -241,18 +241,25 @@ def multiprocess_run(files, params)
 	end
 end
 
-def mplayer( bin, opts, files )
-	if File.exists? "/etc/#{bin}/input.conf"
-		tmp = input("/etc/#{bin}/input.conf")
-#	elsif File.exists? '/etc/mplayer/input.conf'
-#		tmp = input('/etc/mplayer/input.conf')
-	else
-		tmp = input('/dev/null')
+def find_input_conf(path)
+	name = File.basename path
+	[
+		"~/.config/#{name}/input.conf",
+		"~/.#{name}/input.conf",
+		"/etc/#{name}/input.conf",
+	].map do |path|
+		File.expand_path path
+	end.find do |path|
+		File.exists? path
 	end
+end
+
+def mplayer(bin, opts, files)
+	tmp = input(find_input_conf(bin) || '/dev/null')
 
 	$stderr.puts "using tempfile #{tmp.path}"
 
-	if find_backend !~ /mpv/
+	if bin !~ /mpv/
 		params = [ bin , "-input", "conf=#{tmp.path}" ] + opts
 		multiprocess_run(files, params)
 	else
