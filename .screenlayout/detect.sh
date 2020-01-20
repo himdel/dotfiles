@@ -1,6 +1,8 @@
 #!/bin/sh
-if xrandr-output-connected 'DP2-1' && xrandr-output-connected 'DP2-2'; then
-  ~/.screenlayout/eDP1,DP2-2,DP2-1
+if xrandr-output-connected 'DP-2-1' && xrandr-output-connected 'DP-2-2'; then
+  ~/.screenlayout/set.sh DP-2-1 DP-2-2 eDP-1
+else if xrandr-output-connected 'DP-2-2'; then
+  ~/.screenlayout/set.sh DP-2-2 eDP-1
 else
-  ~/.screenlayout/eDP1
-fi
+  ~/.screenlayout/set.sh eDP-1
+fi; fi
