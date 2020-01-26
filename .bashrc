@@ -401,7 +401,7 @@ function vimdate {
 alias vim=vim-wrapper.pl
 alias vimdiff=vimdiff-wrapper.sh
 
-alias trek='mpl -R -fs /l/{tos,tas,tng,ds9,voy,ent}'
+alias trek='mpl -R -fs /l/series/{tos,tas,tng,ds9,voy,ent}'
 alias ifre='sudo ifdown wlan0 ; sleep 0.5 ; sudo ifup wlan0'
 
 function gn {
@@ -514,7 +514,9 @@ function vimx {
 
 alias gdrive='gdocs.sh'
 alias docker='sudo docker'
-alias minecraft="java -jar ~/.minecraft/launcher.jar"
+#alias minecraft="java -jar ~/.minecraft/launcher.jar"
+# https://launcher.mojang.com/download/Minecraft.deb
+alias minecraft='(cd ~/.minecraft ; minecraft-launcher)'
 alias be='bundle exec'
 alias bi='bundle install'
 alias bu='bundle update'
@@ -543,11 +545,19 @@ export NVM_DIR="$HOME/.nvm"
 
 function bj {
 	url=${1:-7642919332}
-	chromium --no-sandbox --app="https://redhat.bluejeans.com/$url"
+	if ! expr "$url" : '^[0-9]\+' >/dev/null ; then
+		url=`grep "$url" ~/bj | awk '{ print $2 }'`
+	fi
+	if ! expr "$url" : ^http >/dev/null ; then
+		url="https://redhat.bluejeans.com/$url"
+	fi
+
+	#chromium --no-sandbox --app="$url"
+	firefox "$url"
 }
 
 alias berc="(cd ~/manageiq ; be bin/rails c)"
-alias bers="(cd ~/manageiq ; SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 WEBPACK_EXCLUDE_NODE_MODULES=1 bin/update ; be bin/rails s)"
+alias bers="(cd ~/manageiq ; SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 WEBPACK_EXCLUDE_NODE_MODULES=1 bin/update && be bin/rails s)"
 alias berS="(cd ~/manageiq ; be bin/rails s)"
 alias .berS="be bin/rails s"
 alias suis="(cd ~/manageiq-ui-service ; yarn start)"
@@ -606,8 +616,10 @@ function movrename {
 	rename 's/^(.*?)(\d{4}).*(\....)$/$2-$1/; my $ext = $3; s/[\. ](.)/\u$1/g; s/[\.\(\[\]]$//; s/[^-a-zA-Z0-9]/_/g; s/_$//; s/$/$ext/' -n "$@"
 }
 
-# light <on|off>
-alias light='wemo switch "WeMo Insight"'
+# plug <on|off>
+alias plug='wemo switch "WeMo Insight"'
+# light on/off/min/max/{int,temp}{max,mid,min}
+alias light='~/pytradfri/light'
 
 # strips BOMs off utf-8 files
 alias debom='perl -i -npe s/\\xef\\xbb\\xbf//'
@@ -617,3 +629,6 @@ alias ytmp3="youtube-dl --extract-audio --audio-format mp3 --audio-quality 0 -o 
 alias ffmpeg="ffmpeg -nostdin"
 
 alias grc='git rebase --continue'
+
+alias gah='date --rfc-3339=s >> ~/.gah'
+#alias miqversions='cfme-versions'
