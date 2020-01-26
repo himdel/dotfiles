@@ -8,72 +8,84 @@
 // @grant        none
 // ==/UserScript==
 
-$(function() {
-  var list = $('ul#restaurantListItems');
+setTimeout(function() {
+    const list = document.querySelector('.Restaurant-list__content');
+    const items = list.querySelectorAll('.Restaurant-box');
 
-  list
-  .children('li')
-  .map(function(_idx, li) {
-    // extract data
-    var count = ~~ ($(li).find('.restaurant-rating').attr('title') || "").replace(/\D+/g, '');
-    var percent = $(li).find('.restaurant-rating .restaurant-rating__text-top strong').text();
+    const num = (elem) => {
+        if (! elem) {
+            return null;
+        }
 
-    // convert to numbers or both null
-    percent = (count && percent) ? ( ~~ percent.replace(/\D+/g, '') ) : null;
-    if (percent === null)
-      count = null;
-
-    return {
-      element: li,
-      rating: {
-        count: count,
-        percent: percent,
-      },
+        let s = elem.innerText.trim();
+        return ~~(s.replace(/\D+/g, ''));
     };
-  })
-  .map(function(_idx, o) {
-    // extract ups and downs, if appliable
-    if (! o.rating.count)
-      return o;
 
-    o.rating.ups = o.rating.count * (o.rating.percent / 100);
-    o.rating.downs = o.rating.count * ((100 - o.rating.percent) / 100);
+    Array.from(items)
+    .map(function(box) {
+        // extract data
+        let count = num(box.querySelector('.RestaurantRating__rating-count'));
+        let percent = num(box.querySelector('.RestaurantRating__info'));
 
-    var score = o.rating.ups - o.rating.downs;
+        // both or nothing
+        if (!count || !percent) {
+            count = null;
+            percent = null;
+        }
 
-    var order = Math.log10( Math.max(Math.abs( score ), 1) );
-    var sign = (score > 0) ? 1 : ( (score < 0) ? -1 : 0 );
+        return {
+            element: box,
+            rating: {
+                count,
+                percent,
+            },
+        };
+    })
+    .map(function(o) {
+        // extract ups and downs, if appliable
+        if (! o.rating.count) {
+            return o;
+        }
 
-    o.rating.debug = { score: score, order: order, sign: sign };
-    o.rating.reddit = sign * order;
+        o.rating.ups = o.rating.count * (o.rating.percent / 100);
+        o.rating.downs = o.rating.count * ((100 - o.rating.percent) / 100);
 
-    // console.log(o.rating);
-    return o;
-  })
-  .sort(function(a, b) {
-    // sort by rating, 100->0, then null
+        var score = o.rating.ups - o.rating.downs;
 
-    if (! a.rating.count)
-      return 1;
-    if (! b.rating.count)
-      return -1;
+        var order = Math.log10( Math.max(Math.abs( score ), 1) );
+        var sign = (score > 0) ? 1 : ( (score < 0) ? -1 : 0 );
 
-    // if (a.rating.percent < b.rating.percent)
-    //   return 1;
-    // if (a.rating.percent > b.rating.percent)
-    //   return -1;
+//		o.rating.debug = { score: score, order: order, sign: sign };
+        o.rating.reddit = sign * order;
 
-    if (a.rating.reddit < b.rating.reddit)
-      return 1;
-    if (a.rating.reddit > b.rating.reddit)
-      return -1;
+        return o;
+    })
+    .sort(function(a, b) {
+        // sort by rating, 100->0, then null
 
-    return 0;
-  })
-  .map(function(_idx, item) {
-    // pluck elements
-    return item.element;
-  })
-  .detach()  // remove..
-  .appendTo(list);  // ..and insert in new order
-});
+        if (! a.rating.count) {
+            return 1;
+        }
+        if (! b.rating.count) {
+            return -1;
+        }
+
+        if (a.rating.reddit < b.rating.reddit) {
+            return 1;
+        }
+        if (a.rating.reddit > b.rating.reddit) {
+            return -1;
+        }
+
+        return 0;
+    })
+    .map(function(item) {
+        // pluck elements
+        return item.element;
+    })
+    .forEach((element) => {
+        // remove and insert in new order
+        list.removeChild(element);
+        list.appendChild(element);
+    });
+}, 8000); // TODO mutationobserver to wait for load?
