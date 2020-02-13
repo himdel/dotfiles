@@ -3,7 +3,7 @@ fullpath=$(cd "$(dirname "$2")" ; pwd)/$(basename "$2")
 md5ext=$(md5sum "$2" | awk '{print $1}').$(basename "$2" | sed 's/^.*\.//')
 
 case $1 in
-	0)
+	0|9)
 		~/wallpapers/.set.sh "$2"
 		[ -x ~/wallpapers/.like.sh ] && ~/wallpapers/.like.sh
 		;;
