@@ -1,0 +1,48 @@
+#!/bin/bash
+
+DRIVES=$1
+if [ -z "$DRIVES" ]; then
+	DRIVES=`disks | grep '\<5000947302400' | awk '{ print $1 }' | tee /dev/stderr`
+fi
+if [ -z "$DRIVES" ]; then
+	echo no drives 1>&2
+	exit 1
+fi
+
+## setup
+# sudo cryptsetup luksFormat /dev/sde1
+# sudo cryptsetup luksFormat /dev/sdf1
+# sudo cryptsetup luksOpen /dev/sde1 wd5tA
+# sudo cryptsetup luksOpen /dev/sdf1 wd5tB
+# sudo zpool create wd5tAB mirror /dev/mapper/wd5tA /dev/mapper/wd5tB
+# sudo zfs set compression=on wd5tAB
+
+function _mount {
+	l=A
+	for DRIVE in $DRIVES; do
+		sudo cryptsetup luksOpen "$DRIVE"1 wd5t$l
+		l=B
+	done
+	sudo zfs mount wd5tAB || sudo zpool import wd5tAB
+}
+
+function _umount {
+	sudo zfs unmount wd5tAB
+	sudo zpool export wd5tAB
+	sudo cryptsetup luksClose wd5tA
+	sudo cryptsetup luksClose wd5tB
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+else
+	for DRIVE in $DRIVES; do
+		if ! [ -e $DRIVE ]; then
+			echo no drive $DRIVE 1>&2
+			exit 1
+		fi
+	done
+fi
+
+$FNC
