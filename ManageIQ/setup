@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e
+set -x
+
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update
+
+sudo apt install \
+  git ssh sudo vim \
+  curl wget \
+  ruby rake bundler \
+  node npm yarn \
+  postgresql memcached \
+  libpq-dev libsqlite3-dev \
+  libxml2-dev libz-dev libcurl4-openssl-dev libffi-dev \
+  cmake pkg-config build-essential \
+
+sudo su - postgres -c psql <<< 'create user "root" superuser login;'
+sudo sed -i 's/^\(local\s\+all\s\+all\s\+\)peer\s*$/\1trust/' /etc/postgresql/*/main/pg_hba.conf
+
+git clone https://github.com/ManageIQ/manageiq.git
+cd manageiq
+bundle install --path vendor
+bin/setup
+bin/update
+
+sed -i -e 's/^development:$/& \&dev/' -e '28s/\*base/*dev/' -e '/vmdb_production/d' config/database.yml
+RAILS_ENV=production bundle exec rake assets:precompile
+RAILS_ENV=production RAILS_SERVE_STATIC_FILES=true UNSAFE_PG_VERSION=true bundle exec rails s -b0
