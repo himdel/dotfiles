@@ -5,53 +5,29 @@ BRANCH=`git branch-name`
 UPSTREAM=upstream
 git remote -v | cut -f1 | grep -q \^"$UPSTREAM"\$ || UPSTREAM=origin
 
+MIQ_RELEASES="anand botvinnik capablanca darga euwe fine gaprindashvili hammer ivanchuk jansa"
+
 remote_branch=master
-if pwd | grep -q manageiq-darga; then
-  remote_branch=darga
-fi
-if pwd | grep -q manageiq-euwe; then
-  remote_branch=euwe
-fi
-if pwd | grep -q manageiq-fine; then
-  remote_branch=fine
-fi
-if pwd | grep -q manageiq-gaprindashvili; then
-  remote_branch=gaprindashvili
-fi
-if pwd | grep -q manageiq-hammer; then
-  remote_branch=hammer
-fi
-if pwd | grep -q manageiq-ivanchuk; then
-  remote_branch=ivanchuk
-fi
-if pwd | grep -q foreman && pwd | grep -q -v manageiq-providers-foreman ; then
-  remote_branch=develop
-fi
+master=false
 
 if [ "$BRANCH" = master ]; then
+  master=true
+fi
+
+for release in $MIQ_RELEASES; do
+  if pwd | grep -q manageiq-$release; then
+    remote_branch=$release
+  fi
+
+  if [ "$BRANCH" = $release ]; then
+    remote_branch=$release
+    master=true
+  fi
+done
+
+if $master; then
   git fetch "$UPSTREAM"
   git merge --ff-only "$UPSTREAM"/"$remote_branch"
-else if [ "$BRANCH" = ivanchuk ]; then
-  remote_branch=ivanchuk
-  git fetch "$UPSTREAM"
-  git merge --ff-only "$UPSTREAM"/"$remote_branch"
-else if [ "$BRANCH" = hammer ]; then
-  remote_branch=hammer
-  git fetch "$UPSTREAM"
-  git merge --ff-only "$UPSTREAM"/"$remote_branch"
-else if [ "$BRANCH" = gaprindashvili ]; then
-  remote_branch=gaprindashvili
-  git fetch "$UPSTREAM"
-  git merge --ff-only "$UPSTREAM"/"$remote_branch"
-else if [ "$BRANCH" = 5.5.z ]; then
-  git fetch downstream
-  git merge --ff-only downstream/5.5.z
-else if [ "$BRANCH" = 5.4.z ]; then
-  git fetch downstream
-  git merge --ff-only downstream/5.4.z
-else if [ "$BRANCH" = 5.3.z ]; then
-  git fetch downstream
-  git merge --ff-only downstream/5.3.z
 else
   git fetch "$UPSTREAM" "$remote_branch"
   while ! [ -d .git ]; do
@@ -59,4 +35,4 @@ else
   done
   diff -Naur .git/refs/heads/master .git/refs/remotes/"$UPSTREAM"/"$remote_branch"
   cp .git/refs/remotes/"$UPSTREAM"/"$remote_branch" .git/refs/heads/master
-fi;fi;fi;fi;fi;fi;fi
+fi
