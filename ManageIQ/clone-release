@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+set -x
+
+release="$1"
+
+clone() {
+  miq="$1"
+  my=`echo "$miq" | sed -e 's/^https.../git@/' -e 's/\/ManageIQ/:himdel/' -e 's/ManageIQ/himdel/'`
+
+  git clone "$my" "$2"
+
+  (
+    cd "$2"
+
+    git remote add upstream "$miq"
+    git fetch --all
+
+    git checkout upstream/"$release"
+    git branch -D master
+    git branch -t master upstream/"$release"
+    git checkout master
+  )
+}
+
+#clone https://github.com/ManageIQ/manageiq.git manageiq-"$release"
+mkdir -p manageiq-"$release"/bundler.d
+cp -av `dirname "$0"`/clone-release.Gemfile.dev.rb manageiq-"$release"/bundler.d/Gemfile.dev.rb
+mkdir -p manageiq-"$release"/plugins
+
+for repo in manageiq-api manageiq-ui-service manageiq-ui-classic manageiq-providers-{lenovo,nuage,redfish} manageiq-v2v ; do
+  clone https://github.com/ManageIQ/$repo.git manageiq-"$release"/plugins/$repo
+done
+
+cp -av manageiq-"$release"/config/database.{pg.yml,yml}
+sed -i -e s/vmdb_development/"$release"/ -e s/vmdb_production/"$release"/ -e s/vmdb_test/"$release"_test/ manageiq-"$release"/config/database.yml
+
+echo 'TODO update git-up, backport-ui-components.$release, clone database, maybe rbenv local'
