@@ -2,10 +2,10 @@
 set -e
 [ $# != 1 ] && exit 1
 VER="$1"
-BRANCH=master
+BRANCH=jansa
 
-if ! expr "$VER" : '^1\.4\.[0-9]\+$' >/dev/null ; then
-	echo "$0: $BRANCH should use 1.4.*" 1>&2
+if ! expr "$VER" : '^1\.3\.[0-9]\+$' >/dev/null ; then
+	echo "$0: $BRANCH should use 1.3.*" 1>&2
 	exit 2
 fi
 
@@ -42,7 +42,7 @@ cyarn() {
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@~"$VER"
 
-	git commit package.json -m "Update ui-components to $VER
+	git commit package.json yarn.lock -m "Update ui-components to $VER for $BRANCH
 
 `changelog $LAST_VERSION`"
 }
@@ -54,7 +54,7 @@ syarn() {
 	git checkout -b uic-"$VER"
 	yarn add @manageiq/ui-components@"$VER"
 
-	git commit package.json yarn.lock -m "Update ui-components to $VER
+	git commit package.json yarn.lock -m "Update ui-components to $VER for $BRANCH
 
 `changelog $LAST_VERSION`"
 }
@@ -62,18 +62,18 @@ syarn() {
 pr() {
 	cd "$1"
 	git push -u origin uic-"$VER"
-	hub pull-request -b "$BRANCH" -l dependencies
+	hub pull-request -b "$BRANCH" -l dependencies -a simaishi
 }
 
-reset ~/manageiq
-reset ~/manageiq-ui-classic
-reset ~/manageiq-ui-service
+reset ~/manageiq-jansa
+reset ~/manageiq-jansa/plugins/manageiq-ui-classic
+reset ~/manageiq-jansa/plugins/manageiq-ui-service
 
-cyarn ~/manageiq-ui-classic
-syarn ~/manageiq-ui-service
+cyarn ~/manageiq-jansa/plugins/manageiq-ui-classic
+syarn ~/manageiq-jansa/plugins/manageiq-ui-service
 
-pr ~/manageiq-ui-classic
-pr ~/manageiq-ui-service
+pr ~/manageiq-jansa/plugins/manageiq-ui-classic
+pr ~/manageiq-jansa/plugins/manageiq-ui-service
 
-clean ~/manageiq-ui-classic
-clean ~/manageiq-ui-service
+clean ~/manageiq-jansa/plugins/manageiq-ui-classic
+clean ~/manageiq-jansa/plugins/manageiq-ui-service
