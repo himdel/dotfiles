@@ -1,0 +1,37 @@
+#!/bin/bash
+set -e
+set -x
+
+# needs clone-release to have happened
+
+RELEASE=jansa
+cd ~/manageiq-"$RELEASE"/plugins
+
+#nvm use 10
+
+# skip manageiq-ui-service, has yarn.lock in master
+
+# TODO descriptions like in https://github.com/ManageIQ/manageiq-ui-classic/pull/6737
+
+for REPO in manageiq-ui-classic manageiq-v2v manageiq-providers-{lenovo,nuage,redfish}; do
+  echo "$REPO"
+  cd "$REPO"
+  git checkout master
+  git up
+  git st
+
+  BRANCH=yarn-lock-"$RELEASE"
+  git checkout -b "$BRANCH"
+
+  rm -rf yarn.lock node_modules
+  sed -i '/yarn.lock/d' .gitignore
+  yarn
+  git add yarn.lock
+
+  git commit .gitignore yarn.lock -m 'yarn: lock versions by adding yarn.lock'
+  git push -u origin "$BRANCH"
+  hub pull-request -b "$RELEASE" -l dependencies -a simaishi
+
+  git checkout master
+  cd -
+done

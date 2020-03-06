@@ -35,4 +35,4 @@ done
 cp -av manageiq-"$release"/config/database.{pg.yml,yml}
 sed -i -e s/vmdb_development/"$release"/ -e s/vmdb_production/"$release"/ -e s/vmdb_test/"$release"_test/ manageiq-"$release"/config/database.yml
 
-echo 'TODO update git-up, backport-ui-components.$release, clone database, maybe rbenv local'
+echo 'TODO update git-up, backport-ui-components.$release, clone database, maybe rbenv local, new-release'
