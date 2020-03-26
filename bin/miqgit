@@ -1,0 +1,45 @@
+#!/bin/bash
+# run git stuff in all enabled miq repos
+# -r just ruby repos
+# -s run in shell, not git
+
+set -e
+cd ~/manageiq
+
+nonruby=true
+git=git
+
+for _param in 1 2; do
+  if [ "$1" = '-s' ]; then
+    shift
+    git=""
+    continue
+  fi
+
+  if [ "$1" = '-r' ]; then
+    shift
+    nonruby=false
+    continue
+  fi
+done
+
+(
+  # miq itself
+  pwd
+
+  # hardcoded non-bundle repos
+  $nonruby && echo ~/manageiq-ui-service
+  $nonruby && echo ~/ui-components
+  $nonruby && echo ~/react-ui-components
+
+  # added/overridden local repos
+  cat bundler.d/* | sed -e 's/#.*$//' -e '/^\s*$/d' | grep :path | sed 's/^.*:path\s*=>\s*//' | sed -e 's/File.expand_path[( ]['\''"]//' -e 's/['\''"()]//g'
+
+) | while read dir; do
+  (
+    echo `basename "$dir"`
+    cd "$dir"
+    $git "$@"
+    echo
+  )
+done
