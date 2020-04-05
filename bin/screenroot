@@ -1,0 +1,4 @@
+#!/bin/sh
+out="$1"
+[ $# -ne 1 ] && out=`date +%Y%m%d%H%M%S`.png
+xwd -root | convert xwd:- "$out"
