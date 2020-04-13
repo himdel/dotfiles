@@ -4,7 +4,9 @@ cd "`dirname "$0"`"
 for dir in */; do
   cd "$dir"
   echo "$dir"
-  git reset --hard
-  git up
+  if [ -d .git ]; then
+    git reset --hard
+    git up
+  fi
   cd ..
 done
