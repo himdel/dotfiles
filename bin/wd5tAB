@@ -14,8 +14,11 @@ fi
 # sudo cryptsetup luksFormat /dev/sdf1
 # sudo cryptsetup luksOpen /dev/sde1 wd5tA
 # sudo cryptsetup luksOpen /dev/sdf1 wd5tB
-# sudo zpool create wd5tAB mirror /dev/mapper/wd5tA /dev/mapper/wd5tB
+# sudo zpool create -o ashift=12 wd5tAB mirror /dev/mapper/wd5tA /dev/mapper/wd5tB
+# sudo zfs set acltype=posixacl wd5tAB
 # sudo zfs set compression=on wd5tAB
+# sudo zfs set dedup=on wd5tAB
+# sudo zfs set relatime=on wd5tAB
 
 function _mount {
 	l=A
