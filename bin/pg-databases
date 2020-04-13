@@ -17,4 +17,9 @@ if [ "$#" -eq 2 -a "$1" = "create" ]; then
 	exit
 fi
 
+if [ "$#" -eq 2 -a "$1" = "dump" ]; then
+	pg_dump -U root -d "$2" -Fc > "$2".dump
+	exit
+fi
+
 psql -U root postgres -c \\l | sed -e '1,3d' | head -n -2 | awk '{ print $1 }' | grep -v '^|'
