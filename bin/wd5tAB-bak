@@ -1,0 +1,52 @@
+#!/bin/sh
+BACKUP=/wd5tAB/archive/`hostname -s`-`date +%Y-%m-%d`
+
+mkdir -pv "$BACKUP"
+
+rsync -aPvx "/home/himdel/" "$BACKUP/home_himdel/" \
+	--exclude '/.bundle/cache' \
+	--exclude '/.cache' \
+	--exclude '/.cargo/registry/cache' \
+	--exclude '/.config/**/Cache' \
+	--exclude '/.crypto_p' \
+	--exclude '/.ievms' \
+	--exclude '/.kube/cache' \
+	--exclude '/.minishift/cache' \
+	--exclude '/.npm/_cacache' \
+	--exclude '/.steam' \
+	--exclude '/.wine/drive_c/Program Files (x86)/Steam' \
+	--exclude '/VirtualBox' \
+	--exclude '/bbccomedy' \
+	--exclude '/fun' \
+	--exclude '/wallpapers' \
+	--exclude 'gems/?.?.?/cache' \
+	--exclude 'ruby/?.?.?/cache' \
+
+sudo rsync -aPvx "/" "$BACKUP/root/" \
+	--exclude '.cargo/registry/cache' \
+	--exclude '/home' \
+	--exclude '/var/cache/apt/archives' \
+	--exclude '/var/cache/locate/locatedb' \
+	--exclude '/var/lib/docker' \
+	--exclude '/var/lib/mongodb' \
+	--exclude '/var/lib/motion' \
+	--exclude '/var/lib/mysql' \
+	--exclude '/var/lib/postgresql' \
+	--exclude 'gems/?.?.?/cache' \
+	--exclude 'ruby/?.?.?/cache' \
+
+sudo rsync -aPvx "/boot/" "$BACKUP/boot/"
+
+crontab -l > "$BACKUP/crontab-himdel"
+
+# TODO
+exit 0
+
+mkdir "$BACKUP/pg"
+cd "$BACKUP/pg"
+pg-databases | while read db; do
+	# TODO skip *_test , template[01], postgres .. the 3 maybe at pg-dbs level?
+	echo db "$db"
+	[ -f "$db".dump ] && continue
+	pg-databases dump "$db"
+done
