@@ -577,6 +577,7 @@ alias miqsui='cd ~/manageiq-ui-service'
 alias miquic='cd ~/ui-components'
 alias miqapi='cd ~/manageiq-api'
 alias miqup='(miq ; git st ; git up ; miqui ; git st ; git up)'
+alias bubu='(miq ; bu ; miqui ; bu)'
 
 alias factorio='~/.steam/steam/steamapps/common/Factorio/bin/x64/factorio'
 alias steam-wine='wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe'
