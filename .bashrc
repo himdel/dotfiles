@@ -583,32 +583,6 @@ alias steam-wine='wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe'
 
 alias altchromium='chromium --user-data-dir=$HOME/.config/altchromium'
 
-#alias screenshot='sleep 1 ; xwd | convert xwd:-'
-#alias screenrec='recordmydesktop --on-the-fly-encoding --v_bitrate 2000000'
-
-function screenrec {
-	out="$1"
-	[ $# -ne 1 ] && out=`date +%Y%m%d%H%M%S`.mp4
-
-	x=0
-	y=0
-	w=1920
-	h=1080
-	slop -f '%x %y %w %h' | (
-		read x y w h
-		ffmpeg -video_size "$w"x"$h" -framerate 25 -f x11grab -i :0.0+"$x","$y" "$out"
-	)
-}
-
-# alias screenshot='sleep 1 ; xwd | convert xwd:-'
-function screenshot {
-	out="$1"
-	[ $# -ne 1 ] && out=`date +%Y%m%d%H%M%S`.png
-
-	sleep 1
-	xwd | convert xwd:- "$out"
-}
-
 alias pg_dump='pg_dump -Fc'
 alias pg_restore='pg_restore -j8'
 
