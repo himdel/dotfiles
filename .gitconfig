@@ -20,7 +20,7 @@
 #	hub-url = "! f() { hu="$(echo $(git url $1) | sed -e 'sX^git@\\([^:]*\\):Xhttp://\\1/X' -e 'sX\\.git$XX')" ; echo "${hu}/${2:-tree}/$(git branch-name)${3:+?}${3}" ; }; f"
 #	open = "! f() { open $(git hub-url ${1} ${2} ${3}) ; }; f"
 #	pr = "! f() { git push -u ${1:-origin} HEAD ; git open ${1:-origin} compare expand=1 ; }; f"
-	pr = "! git branch -D pr$1 ; git fetch upstream pull/$1/head && git checkout FETCH_HEAD && git checkout -b pr$1 -- && echo"
+	pr = "! git branch -D pr$1 ; ( git fetch upstream pull/$1/head || git fetch origin pull/$1/head ) && git checkout FETCH_HEAD && git checkout -b pr$1 -- && echo"
 	prqgh = "! git fetch git://github.com/$1.git $2 && git checkout FETCH_HEAD && git checkout -b $2 -- && echo"
 	br = "branch -av"
 	praise = "blame"
@@ -35,6 +35,7 @@
 	exec = ! exec
 	yolo = push --force
 	box = "! f() { git fetch upstream pull/$1/head && git checkout FETCH_HEAD && GIT_EDITOR=\"sed -i '2,\\$s/pick/squash/'\" git rebase -i master && git commit --amend -m \"[WIP] PR-in-a-box #$1\" ; }; f"
+	rebase-wtf = show REBASE_HEAD
 [core]
 	whitespace = trailing-space,space-before-tab,cr-at-eol
 	excludesfile = /home/himdel/.gitignore
