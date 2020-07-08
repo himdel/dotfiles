@@ -1,24 +1,22 @@
+# needs: rxvt-unicode, xdotool
+
 set $mod Mod1
 set $alt Mod1
 set $win Mod4
 
 font pango:DejaVu Sans Mono 8
 floating_modifier $alt
-bindsym $alt+Return exec rxvt-unicode
-bindsym $alt+Shift+grave exec rxvt-unicode -name 'floating_urxvt'
 
+bindsym $alt+Return exec rxvt-unicode
+
+bindsym $alt+Shift+grave exec rxvt-unicode -name 'floating_urxvt'
 for_window [instance="floating_urxvt"] floating enable, move position mouse
 
-# TODO nejedou proc?
-for_window [instance="gdeskcal"] floating enable
-for_window [instance="qiv"] floating enable
-
-# needs xdotool pkg
-#for_window [instance="scratchpad_urxvt"] move to scratchpad, border 1pixel, scratchpad show, move position 0px 0px, exec xdotool search --classname scratchpad_urxvt windowsize 100% 42%
-for_window [instance="scratchpad_urxvt"] move to scratchpad, border 1pixel, scratchpad show, move position 0px 0px, exec xdotool search --classname scratchpad_urxvt windowsize 1920px 42%
+for_window [instance="scratchpad_urxvt"] move to scratchpad, border 1pixel, move position 0px 0px, scratchpad show, exec xdotool search --classname scratchpad_urxvt windowsize 1920px 480px
 bindsym $alt+grave exec --no-startup-id /home/himdel/bin/i3-scratchpad , [instance="scratchpad_urxvt"] scratchpad show
 
 for_window [class="Chromium" window_role="browser"] border none
+for_window [class="Google Chrome" window_role="browser"] border none
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
 
@@ -168,9 +166,9 @@ bar {
 # loops infinitely with -n
 # for_window [class="i3bar"] exec compton-trans -n i3bar 70
 
-workspace 1 output eDP1
-workspace 2 output DP2-2
-workspace 3 output DP2-1
+workspace 1 output eDP-1
+workspace 2 output DP-2-1
+workspace 3 output DP-2-2
 
 assign [class="Chromium" window_role="browser"] 2
 
