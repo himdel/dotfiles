@@ -53,8 +53,32 @@ opts.reject! do |s|
 	r
 end
 
-rejary = ['sub', 'srt', 'txt', 'pdf', 'tgz', 'rb', 'jpg', 'idx', 'zip', 'png', 'gif', 'JPG', 'jpeg', 'ps', 'py', 'gz', 'bz2', 'h', 'o', 'c', 'xml', 'rar', exclude].flatten.map { |x| "." + x.downcase }
-
+rejary = (%w[
+	bz2
+	c
+	gif
+	gz
+	h
+	html
+	idx
+	jpeg
+	jpg
+	js
+	o
+	pdf
+	php
+	png
+	ps
+	py
+	rar
+	rb
+	srt
+	sub
+	tgz
+	txt
+	xml
+	zip
+] + exclude).flatten.map { |x| "." + x.downcase }
 
 
 # volume controls: mpc version, obsolete, used if amixer version fails
