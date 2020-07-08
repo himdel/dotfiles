@@ -5,3 +5,5 @@ sudo apt install lua5.2 luarocks lua-socket lua-xmlrpc lua-zlib mpv
 sudo ln -s /usr/share/lua/5.1/xmlrpc /usr/share/lua/5.2/xmlrpc
 mkdir -p ~/.config/mpv/scripts
 git clone https://github.com/rumkex/osdb-mpv.git ~/.config/mpv/scripts
+
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
