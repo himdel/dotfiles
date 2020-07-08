@@ -1,0 +1,12 @@
+#!/bin/bash
+INPUT=${1:?missing input file}
+
+ffprobe -print_format json -show_chapters -i "$INPUT" | jq -r '.chapters[] | "" + .start_time + "\t" + .end_time + "\t" + .tags.title' | while read line; do
+  start=`cut -f1 <<< $line`
+  end=`cut -f2 <<< $line`
+  name=`cut -f3 <<< $line`
+
+  output=${INPUT%.m4a}.${name// /_}.m4a
+
+  ffmpeg -nostdin -i "$INPUT" -acodec copy -ss "$start" -to "$end" "$output"
+done
