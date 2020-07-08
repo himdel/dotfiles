@@ -465,8 +465,8 @@ if [ "$TERM" = "rxvt-unicode" ]; then
 	[ `hostname` = durin ] && host=`echo -ne '\[\e[38;5;24m\]\h\[\e[0m\]'`
 	[ `hostname` = thror ] && host=`echo -ne '\[\e[38;5;23m\]\h\[\e[0m\]'`
 fi
-#export PS1=' `if [ $? -eq 0 ]; then echo -e "\e[32m:)\e[0m"; else echo -e "\e[31m:(\e[0m"; fi` C:${PWD//\//\\\}>'
-export PS1="${window_title}${debian_chroot:+($debian_chroot)}\\u@${host}:\\w\\$ "
+colorat='\[`[[ $? -gt 0 ]] && printf "\033[01;31m" || printf "\033[01;32m"`\]@'`echo -ne '\[\e[0m\]'`
+export PS1="${window_title}${debian_chroot:+($debian_chroot)}\\u${colorat}${host}:\\w\\$ "
 unset host window_title
 
 alias mysql='mysql --user=root --default-character-set=utf8'
