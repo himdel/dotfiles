@@ -594,7 +594,7 @@ function movrename {
 # plug <on|off>
 alias plug='wemo switch "WeMo Insight"'
 # light on/off/min/max/{int,temp}{max,mid,min}
-alias light='~/pytradfri/light'
+#alias light='~/pytradfri/light' .. moved to bin
 
 # strips BOMs off utf-8 files
 alias debom='perl -i -npe s/\\xef\\xbb\\xbf//'

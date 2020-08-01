@@ -6,6 +6,9 @@ from pytradfri.api.libcoap_api import APIFactory
 from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 
+from colormath.color_conversions import convert_color
+from colormath.color_objects import sRGBColor, XYZColor
+
 IP_FILE = sys.path[0] + '/ip'
 KEYS_FILE = sys.path[0] + '/tradfri_standalone_psk.conf'
 MODES_FILE = sys.path[0] + '/modes.json'
@@ -30,6 +33,26 @@ def dimmer(mode, light_index):
 def temp(mode, light_index):
   return foo(mode.get('color_temp'), light_index)
 
+def xy(mode, light_index):
+  rgb = foo(mode.get('color_rgb'), light_index)
+  if rgb == None:
+    return None
+
+  # support X;Y
+  if ";" in rgb:
+    xy = rgb.split(';')
+    return (int(xy[0]), int(xy[1]))
+
+  # support hex
+  if not "," in rgb:
+    return rgb
+
+  # support r,g,b
+  rgb = rgb.split(',')
+  xyz = convert_color(sRGBColor(int(rgb[0]) / 2, int(rgb[1]) / 2, int(rgb[2]) / 2), XYZColor, observer='2', target_illuminant='d65')
+
+  return (min(65535, int(xyz.xyz_x)), min(65535, int(xyz.xyz_y)))
+
 def run(config, mode):
     identity = config.get('identity')
     psk = config.get('key')
@@ -48,19 +71,42 @@ def run(config, mode):
     i = 0
     for light in lights:
       try:
-        dim_command = light.light_control.set_dimmer(dimmer(mode, i)) # 0-254
-        api(dim_command)
-      except:
-        print("No `dimmer` in mode", mode_name, mode)
+        print({
+          'name': light.name,
+          'state': light.light_control.lights[0].state,
+          'dimmer': light.light_control.lights[0].dimmer,
+          'color_temp': light.light_control.lights[0].color_temp,
+          'xy_color': light.light_control.lights[0].xy_color,
+          'hex_color': light.light_control.lights[0].hex_color,
+        })
+      except(e):
+        print(e)
         pass
 
+    for light in lights:
       try:
-        color_command = light.light_control.set_color_temp(temp(mode, i)) # 250-454
-        api(color_command)
-      except:
-        print("No `color_temp` in mode", mode_name, mode)
+        val = dimmer(mode, i) # 0-254
+        if val != None:
+          command = light.light_control.set_dimmer(val)
+          api(command)
+
+        val = temp(mode, i) # 250-454
+        if val != None:
+          command = light.light_control.set_color_temp(val)
+          api(command)
+
+        val = xy(mode, i) # (0-65535, 0-65535) or hex
+        if val != None and light.light_control.can_set_color:
+          if isinstance(val, str):
+            command = light.light_control.set_hex_color(val)
+          else:
+            command = light.light_control.set_xy_color(val[0], val[1])
+          api(command)
+
+      except(e):
+        print(e)
         pass
 
       i += 1
 
-run(conf[host], modes[mode_name])
+run(conf, modes[mode_name])
