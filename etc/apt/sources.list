@@ -1,20 +1,18 @@
-deb http://ftp.cz.debian.org/debian/ stretch main non-free contrib
-deb http://security.debian.org/ stretch/updates main contrib non-free
-deb http://ftp.cz.debian.org/debian/ stretch-updates main contrib non-free
-deb http://ftp.cz.debian.org/debian/ stretch-backports main contrib non-free
-
-deb-src http://ftp.cz.debian.org/debian/ stretch main non-free contrib
-deb-src http://security.debian.org/ stretch/updates main contrib non-free
-deb-src http://ftp.cz.debian.org/debian/ stretch-updates main contrib non-free
-deb-src http://ftp.cz.debian.org/debian/ stretch-backports main contrib non-free
-
+# stable = buster
 deb http://ftp.cz.debian.org/debian/ buster main non-free contrib
-deb http://security.debian.org/ buster/updates main contrib non-free
+deb http://ftp.cz.debian.org/debian/ buster-backports main contrib non-free
 deb http://ftp.cz.debian.org/debian/ buster-updates main contrib non-free
+deb http://security.debian.org/ buster/updates main contrib non-free
 
+# testing = bullseye
+deb http://ftp.cz.debian.org/debian/ bullseye main non-free contrib
+deb http://ftp.cz.debian.org/debian/ bullseye-backports main contrib non-free
+deb http://ftp.cz.debian.org/debian/ bullseye-updates main contrib non-free
+#deb http://security.debian.org/ bullseye/updates main contrib non-free
+
+# unstable = sid; experimental
 deb http://ftp.cz.debian.org/debian/ sid main non-free contrib
-deb-src http://ftp.cz.debian.org/debian/ sid main non-free contrib
 deb http://ftp.debian.org/debian/ experimental main non-free contrib
 
-# https://www.postgresql.org/download/linux/debian/
-#deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main
+# sources
+deb-src http://ftp.cz.debian.org/debian/ sid main non-free contrib

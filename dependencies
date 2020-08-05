@@ -76,7 +76,7 @@ valgrind
 vim
 wget
 wmctrl
-wpa_supplicant
+wpasupplicant
 x11-apps
 x11-utils
 x11-xkb-utils
@@ -93,3 +93,8 @@ xsel
 xttitle
 xxd
 youtube-dl
+smbnetfs
+net-tools
+rbenv
+perlbrew
+rakudo

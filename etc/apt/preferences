@@ -13,3 +13,7 @@ Pin-Priority: 400
 Package: *
 Pin: release a=experimental
 Pin-Priority: 101
+
+# Package: evil
+# Pin: release
+# Pin-Priority: -1
