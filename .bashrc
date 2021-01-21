@@ -452,7 +452,11 @@ complete -cf :e
 host="\h"
 window_title=""
 if [ "$TERM" = "rxvt-unicode-256color" ]; then
-	echo "Using 256color rxvt :(" 1>&2
+	grep -q `hostname` <<< "durin" || echo "Using 256color rxvt :(" 1>&2
+
+	window_title="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]"
+
+	[ `hostname` = durin ] && host=`echo -ne '\[\e[38;5;40m\]\h\[\e[0m\]'`
 fi
 if [ "$TERM" = "rxvt-unicode" ]; then
 	window_title="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]"
