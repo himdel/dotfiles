@@ -1,7 +1,7 @@
 . ~/.environment
 HOSTNAME=`hostname`
-CLAWS_MACHINE="niniel" # mjollnir
-BTSYNC_MACHINE=yavanna
+#CLAWS_MACHINE="niniel"
+#BTSYNC_MACHINE=yavanna
 #WM=fvwm-crystal
 WM=i3
 
@@ -17,23 +17,23 @@ fbxkb &
 #pidgin &
 #xbattbar -c &
 #x11vnc -forever &
-temptray.py &
+#temptray.py &
 
-if [ "yavanna" = "$HOSTNAME" ]; then
-	GEOM_NCMPC="102x52+3+30"
-	GEOM_ALSA="63x24-3-30"
-fi
-if [ "nienna" = "$HOSTNAME" ]; then
-	GEOM_NCMPC="80x55+3-32"
-	GEOM_ALSA="80x24-3-30"
-	GEOM_TODO="51x22+588+65"
-fi
-if [ "mjollnir" = "$HOSTNAME" ]; then
-	GEOM_NCMPC="80x24+6+35"
-	GEOM_ALSA="80x24-6-35"
-	GEOM_TODO="80x24+508+35"
-	GEOM_AUTOSAVE="80x24+272-35"
-fi
+#if [ "yavanna" = "$HOSTNAME" ]; then
+#	GEOM_NCMPC="102x52+3+30"
+#	GEOM_ALSA="63x24-3-30"
+#fi
+#if [ "nienna" = "$HOSTNAME" ]; then
+#	GEOM_NCMPC="80x55+3-32"
+#	GEOM_ALSA="80x24-3-30"
+#	GEOM_TODO="51x22+588+65"
+#fi
+#if [ "mjollnir" = "$HOSTNAME" ]; then
+#	GEOM_NCMPC="80x24+6+35"
+#	GEOM_ALSA="80x24-6-35"
+#	GEOM_TODO="80x24+508+35"
+#	GEOM_AUTOSAVE="80x24+272-35"
+#fi
 #if [ "yggdrasil" = "$HOSTNAME" ]; then
 #	WM=awesome
 #fi
@@ -65,7 +65,7 @@ fi
 #[ "yavanna" = "$HOSTNAME" ] && trayer --edge top --align right --margin 220 --widthtype request --transparent true --tint black &
 #[ "yavanna" = "$HOSTNAME" ] && sh -c 'echo 1024x768 > .res'
 
-[ -x /usr/bin/dropbox ] && dropbox start
+#[ -x /usr/bin/dropbox ] && dropbox start
 
 #( sleep 2 ; konversation ) &
 
@@ -77,7 +77,11 @@ xmodmap -e 'pointer = 1 2 3 4 5 0 0 0 0 0 0 0 0'
 # druhy memcached kvuli cfme
 #memcached -p 11212 -l 127.0.0.1 -d
 
-[ -x /usr/bin/qasmixer ] && qasmixer --tray &
+#[ -x /usr/bin/qasmixer ] && qasmixer --tray &
+
+[ -x /usr/bin/pulseaudio ] && pulseaudio -D &
+[ -x /usr/bin/pasystray ] && pasystray &
+[ -x /usr/bin/pnmixer ] && pnmixer &
 
 [ -x ~/bin/pushbullet-thing ] && ~/bin/pushbullet-thing &
 
@@ -87,6 +91,16 @@ xrandr --auto
 
 [ -x /usr/bin/redshift ] && redshift -l 49.19522:16.60796 &
 
+#i3-traycmds &
+
 xsetroot -cursor_name arrow # X_cursor
+
+[ -f ~/.barrier.conf ] && barriers --name `hostname` --enable-crypto -c ~/.barrier.conf --address :24800 &
+[ -f ~/.barrier.ip ] && barrierc --name `hostname` --enable-crypto `cat ~/.barrier.ip` &
+
+# disable screen blanking
+xset s noblank
+# xset -dpms
+# xset dpms 0 0 0
 
 exec "$WM"
