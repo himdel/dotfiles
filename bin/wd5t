@@ -15,7 +15,6 @@ fi
 
 function _mount {
 	sudo cryptsetup luksOpen "$DRIVE"1 wd5t
-	#sudo fsck -fp /dev/mapper/wd5t
 	sudo zfs mount wd5t || sudo zpool import wd5t
 }
 

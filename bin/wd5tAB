@@ -1,5 +1,8 @@
 #!/bin/bash
 
+UUID_A=10e35b91-e79a-4091-baa0-fbc173e8faab
+UUID_B=3221bba3-014e-4922-994b-bbeda97da919
+
 DRIVES=$1
 if [ -z "$DRIVES" ]; then
 	DRIVES=`disks | grep '\<5000947302400' | awk '{ print $1 }' | tee /dev/stderr`
@@ -21,11 +24,8 @@ fi
 # sudo zfs set relatime=on wd5tAB
 
 function _mount {
-	l=A
-	for DRIVE in $DRIVES; do
-		sudo cryptsetup luksOpen "$DRIVE"1 wd5t$l
-		l=B
-	done
+	sudo cryptsetup luksOpen /dev/disk/by-uuid/$UUID_A wd5tA
+	sudo cryptsetup luksOpen /dev/disk/by-uuid/$UUID_B wd5tB
 	sudo zfs mount wd5tAB || sudo zpool import wd5tAB
 }
 

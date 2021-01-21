@@ -1,0 +1,30 @@
+#!/bin/bash
+
+UUID=0797aada-1c24-4e0e-90b6-3b5e8653c366
+
+## setup
+# sudo cryptsetup luksFormat /dev/disk/by-uuid/$UUID
+# sudo cryptsetup luksOpen /dev/disk/by-uuid/$UUID wd5tC
+# sudo zpool create -o ashift=12 wd5tC /dev/mapper/wd5tC
+# sudo zfs set acltype=posixacl wd5tC
+# sudo zfs set compression=on wd5tC
+# sudo zfs set dedup=on wd5tC
+# sudo zfs set relatime=on wd5tC
+
+function _mount {
+	sudo cryptsetup luksOpen /dev/disk/by-uuid/$UUID wd5tC
+	sudo zfs mount wd5tC || sudo zpool import wd5tC
+}
+
+function _umount {
+	sudo zfs unmount wd5tC
+	sudo zpool export wd5tC
+	sudo cryptsetup luksClose wd5tC
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+fi
+
+$FNC
