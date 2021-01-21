@@ -518,8 +518,6 @@ function vimx {
 
 alias gdrive='gdocs.sh'
 alias docker='sudo docker'
-#alias minecraft="java -jar ~/.minecraft/launcher.jar"
-# https://launcher.mojang.com/download/Minecraft.deb
 alias minecraft='(cd ~/.minecraft ; minecraft-launcher)'
 alias be='bundle exec'
 alias bi='bundle install'
@@ -597,8 +595,6 @@ function movrename {
 
 # plug <on|off>
 alias plug='wemo switch "WeMo Insight"'
-# light on/off/min/max/{int,temp}{max,mid,min}
-#alias light='~/pytradfri/light' .. moved to bin
 
 # strips BOMs off utf-8 files
 alias debom='perl -i -npe s/\\xef\\xbb\\xbf//'
@@ -609,5 +605,4 @@ alias ffmpeg="ffmpeg -nostdin"
 
 alias grc='git rebase --continue'
 
-alias gah='date --rfc-3339=s >> ~/.gah'
-#alias miqversions='cfme-versions'
+alias timestamp='date --iso-8601=s | tee /dev/stdout >> ~/.timestamp'
