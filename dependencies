@@ -44,13 +44,17 @@ moreutils
 motion
 mplayer
 mpv
+net-tools
 nodejs
 npm
+perlbrew
 pmount
 powertop
 pqiv
 pv
 qiv
+rakudo
+rbenv
 ripgrep
 rofi
 rsync
@@ -59,6 +63,7 @@ rzip
 screen
 sed
 slop
+smbnetfs
 ssh
 sshfs
 strace
@@ -93,8 +98,3 @@ xsel
 xttitle
 xxd
 youtube-dl
-smbnetfs
-net-tools
-rbenv
-perlbrew
-rakudo
