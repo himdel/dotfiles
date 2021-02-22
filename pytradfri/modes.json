@@ -44,6 +44,7 @@
     "dimmer": [1, 1, 0]
   },
 
+  "status": {},
   "day": {
     "dimmer": [null, null, null, 254, 254, 254],
     "color_temp": [null, null, null, 250, null, null],
