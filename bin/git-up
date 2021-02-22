@@ -5,7 +5,7 @@ BRANCH=`git branch-name`
 UPSTREAM=upstream
 git remote -v | cut -f1 | grep -q \^"$UPSTREAM"\$ || UPSTREAM=origin
 
-MIQ_RELEASES="anand botvinnik capablanca darga euwe fine gaprindashvili hammer ivanchuk jansa kasparov"
+MIQ_RELEASES="anand botvinnik capablanca darga euwe fine gaprindashvili hammer ivanchuk jansa kasparov lasker morphy"
 
 remote_branch=master
 master=false

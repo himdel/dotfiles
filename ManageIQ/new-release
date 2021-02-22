@@ -4,16 +4,17 @@ set -x
 
 # needs clone-release to have happened
 
-RELEASE=jansa
+RELEASE="$1"
+
 cd ~/manageiq-"$RELEASE"/plugins
 
 #nvm use 10
 
-# skip manageiq-ui-service, has yarn.lock in master
+# skip manageiq-ui-service for now, has yarn.lock in master
 
 # TODO descriptions like in https://github.com/ManageIQ/manageiq-ui-classic/pull/6737
 
-for REPO in manageiq-ui-classic manageiq-v2v manageiq-providers-{lenovo,nuage,redfish}; do
+for REPO in manageiq-ui-classic manageiq-v2v manageiq-providers-{lenovo,nsxt,nuage,redfish}; do
   echo "$REPO"
   cd "$REPO"
   git checkout master
@@ -31,7 +32,14 @@ for REPO in manageiq-ui-classic manageiq-v2v manageiq-providers-{lenovo,nuage,re
   git commit .gitignore yarn.lock -m 'yarn: lock versions by adding yarn.lock'
   git push -u origin "$BRANCH"
   hub pull-request -b "$RELEASE" -l dependencies -a simaishi
+  echo TODO
+  echo @miq-bot assign simaishi
+  echo @miq-bot add_label dependencies
+  echo
+  echo also TODO auto-add the ui-classic pr link to all the others
 
   git checkout master
   cd -
 done
+
+echo TODO add to manageiq-release/bin/somewhere
