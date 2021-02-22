@@ -11,7 +11,7 @@ my $delimiter = $*PROGRAM-NAME ~~ /avg/ ?? @items.elems
 
 sub to_num($item) {
   try {
-    return $item.Num;
+    return $item.Rat;
   };
 
   # time conversion - 10:20:30 -> 37230
