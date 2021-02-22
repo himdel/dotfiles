@@ -1,3 +1,7 @@
+## etc/wpa_supplicant/wpa_supplicant.conf, etc/network/interfaces, etc/udev.d/rules/70-persistent-net.rules
+## apt update
+## apt install ssh sudo vim git
+
 sudo dpkg --add-architecture i386
 sudo apt install steam:i386
 
@@ -10,7 +14,7 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 
 sudo apt install `cat dependencies`
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - # TODO tee /etc/apt/trusted.gpg.d/yarn.asc
 wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 
 wget https://dl.google.com/linux/direct/google-chrome-beta_current_amd64.deb
