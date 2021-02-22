@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+url="$1"
+myurl=`echo "$url" | sed -e 's/^https.../git@/' -e 's/\/ManageIQ/:himdel/' -e 's/ManageIQ/himdel/'`
+dir=`basename "$myurl" | sed 's/\.git$//'`
+
+git clone "$myurl" "$dir"
+
+cd "$dir"
+
+git remote add upstream "$url"
+git fetch --all
+
+git checkout upstream/master
+git branch -D master
+git branch -t master upstream/master
+git checkout master
