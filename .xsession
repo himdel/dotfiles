@@ -93,6 +93,8 @@ xrandr --auto
 
 #i3-traycmds &
 
+[ -x /usr/bin/blueman-applet ] && blueman-applet &
+
 xsetroot -cursor_name arrow # X_cursor
 
 [ -f ~/.barrier.conf ] && barriers --name `hostname` --enable-crypto -c ~/.barrier.conf --address :24800 &
