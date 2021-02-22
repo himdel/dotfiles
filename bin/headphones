@@ -1,0 +1,14 @@
+#!/bin/sh
+
+case "$1" in
+"on")
+  bluetoothctl connect `bluetoothctl devices | grep Aeropex | awk '{ print $2 }'`
+  ;;
+"off")
+  bluetoothctl disconnect `bluetoothctl info | grep ^Device | awk '{ print $2 }'`
+  ;;
+*)
+  echo "usage: `basename "$0"` <on|off>" 1>&2
+  exit 1
+  ;;
+esac
