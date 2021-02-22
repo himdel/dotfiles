@@ -2,7 +2,7 @@
 CMD=hsetroot
 
 if [ `hostname -s` = 'niniel' -a `xrandr | grep ' connected' | wc -l` -eq 1 ]; then
-	CMD=/usr/bin/hsetroot
+  CMD=/usr/bin/hsetroot
 fi
 
 WALL="$1"
