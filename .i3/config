@@ -119,6 +119,8 @@ bindsym $alt+BackSpace move container to workspace 12:iconified
 bindsym $alt+Shift+Tab exec i3-winmenu.py 12
 bindsym $alt+Tab exec i3-winmenu.py current
 
+bindsym $alt+Shift+b border none
+
 # reload the configuration file
 bindsym $alt+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
