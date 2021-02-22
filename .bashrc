@@ -452,11 +452,12 @@ complete -cf :e
 host="\h"
 window_title=""
 if [ "$TERM" = "rxvt-unicode-256color" ]; then
-	grep -q `hostname` <<< "durin" || echo "Using 256color rxvt :(" 1>&2
-
 	window_title="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]"
 
+	[ `hostname` = aule ] && host=`echo -ne '\[\e[38;5;226m\]\h\[\e[0m\]'`
 	[ `hostname` = durin ] && host=`echo -ne '\[\e[38;5;40m\]\h\[\e[0m\]'`
+	[ `hostname` = niniel ] && host=`echo -ne '\[\e[38;5;160m\]\h\[\e[0m\]'`
+	[ `hostname` = thror ] && host=`echo -ne '\[\e[38;5;33m\]\h\[\e[0m\]'`
 fi
 if [ "$TERM" = "rxvt-unicode" ]; then
 	window_title="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]"
