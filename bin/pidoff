@@ -1,0 +1,2 @@
+#!/bin/sh
+ps -A | grep "$@" | awk '{ print $1 }' | grep .
