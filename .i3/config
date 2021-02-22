@@ -46,10 +46,10 @@ bindsym $alt+Up focus up
 bindsym $alt+Right focus right
 
 # move focused window
-bindsym $alt+Shift+h move left
-bindsym $alt+Shift+j move down
-bindsym $alt+Shift+k move up
-bindsym $alt+Shift+l move right
+#bindsym $alt+Shift+h move left
+#bindsym $alt+Shift+j move down
+#bindsym $alt+Shift+k move up
+#bindsym $alt+Shift+l move right
 
 # alternatively, you can use the cursor keys:
 bindsym $alt+Shift+Left move left
@@ -58,10 +58,10 @@ bindsym $alt+Shift+Up move up
 bindsym $alt+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $win+h split h
+bindsym $alt+Shift+h split h
 
 # split in vertical orientation
-bindsym $win+v split v
+bindsym $alt+Shift+v split v
 
 # enter fullscreen mode for the focused container
 bindsym $alt+f fullscreen
