@@ -24,7 +24,7 @@ clone() {
   )
 }
 
-#clone https://github.com/ManageIQ/manageiq.git manageiq-"$release"
+clone https://github.com/ManageIQ/manageiq.git manageiq-"$release"
 mkdir -p manageiq-"$release"/bundler.d
 cp -av `dirname "$0"`/clone-release.Gemfile.dev.rb manageiq-"$release"/bundler.d/Gemfile.dev.rb
 mkdir -p manageiq-"$release"/plugins
