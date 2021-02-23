@@ -404,45 +404,6 @@ alias vimdiff=vimdiff-wrapper.sh
 alias trek='mpl -R -fs /l/series/{tos,tas,tng,ds9,voy,ent}'
 alias ifre='sudo ifdown wlan0 ; sleep 0.5 ; sudo ifup wlan0'
 
-function gn {
-	. ~/.gn
-	# cpu down
-	sudo bash -c 'echo userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor'
-	sudo bash -c 'echo userspace > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor'
-	sudo bash -c "echo $FREQ > /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed"
-	sudo bash -c "echo $FREQ > /sys/devices/system/cpu/cpu1/cpufreq/scaling_setspeed"
-
-	# fix volume, play music
-	echo $VOL1 | sed 's/^/set /' | amixer -s
-	mpc play
-
-	# volume up for mplayer; xss
-	(
-		sleep 6
-		echo $VOL2 | sed 's/^/set /' | amixer -s
-	) &
-	rxvt -e bash -c 'xttitle xss ; sleep 15 ; xss' &
-
-	# play, wait and sleep
-	if echo "$@" | egrep -q '^-|^/'; then
-		# absolute path or a param, generic mpl
-		mpl "$@"
-	else
-		# relpath, assuming nowshow
-		mpl -ss=30 -R1 /l/nowshow/"$@"
-	fi
-	sleep 1h
-	$SUSP && susp
-
-	## wakeup
-	# cpu up
-	sudo bash -c "echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"
-	sudo bash -c "echo ondemand > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor"
-
-	# cleanup
-	wait
-}
-
 alias ':q'=exit
 alias ':e'="$EDITOR"
 complete -cf :e
@@ -540,7 +501,7 @@ export GEMS=~/.rbenv/versions/`cat ~/.rbenv/version`/lib/ruby/gems/*/gems/
 shopt -s globstar
 
 # same as python -mSimpleHTTPServer, but serves utf8
-alias httpdir='python -c "import SimpleHTTPServer; m = SimpleHTTPServer.SimpleHTTPRequestHandler.extensions_map; m[''] = 'text/plain'; m.update(dict([(k, v + ';charset=UTF-8') for k, v in m.items()])); SimpleHTTPServer.test();"'
+alias httpdir='python -m http.server'
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -549,7 +510,7 @@ export NVM_DIR="$HOME/.nvm"
 function bj {
 	url=${1:-7642919332}
 	if ! expr "$url" : '^[0-9]\+' >/dev/null ; then
-		url=`grep "$url" ~/bj | awk '{ print $2 }'`
+		url=`grep ^"$url" ~/bj | awk '{ print $2 }'`
 	fi
 	if ! expr "$url" : ^http >/dev/null ; then
 		url="https://redhat.bluejeans.com/$url"
@@ -607,3 +568,12 @@ alias ffmpeg="ffmpeg -nostdin"
 alias grc='git rebase --continue'
 
 alias timestamp='date --iso-8601=s | tee /dev/stdout >> ~/.timestamp'
+alias miqversions='cfme-versions'
+alias xunrar='unrar x'
+
+function gn {
+	light off
+	ssh 192.168.1.30 DISPLAY=:0 xss &
+	xss &
+	wait;wait
+}
