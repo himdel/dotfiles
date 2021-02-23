@@ -161,7 +161,8 @@ URxvt.color0: rgb:0/0/0
 URxvt.color1: rgb:cc/00/00
 URxvt.color2: rgb:00/cc/00
 URxvt.color3: #bd5e01
-URxvt.color4: rgb:00/00/cc
+!URxvt.color4: rgb:00/00/cc
+URxvt.color4: rgb:22/22/ee
 URxvt.color5: rgb:cc/00/cc
 URxvt.color6: rgb:00/cc/cc
 URxvt.color7: rgb:aa/aa/aa
