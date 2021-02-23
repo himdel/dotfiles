@@ -22,6 +22,18 @@ magnet:*)
 *webm|*mp4|*avi|*webm|*mp|*flv|*mkv|*h264)
 	exec mpv "$@"
 	;;
+slack:*)
+	exec perl -nE '
+	  chomp;
+
+	  # from slack://channel?team=TRD1BFQKU&id=DS8TS89UK&message=1579280533.000100
+	  my $id = /id=([^&]*)/ && $1;
+	  my $message = /message=([^&]*)/ && $1;
+	  my $team = /team=([^&]*)/ && $1;
+
+	  system("open", "https://app.slack.com/client/$team/$id/$message");
+	' <<< "$@"
+	;;
 *)
 	exec /usr/bin/xdg-open "$@"
 	;;
