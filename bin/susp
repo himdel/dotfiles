@@ -88,7 +88,7 @@ ETH0_ON=`sudo ifconfig | grep ^eth0 | wc -l`
 WLAN_ON=`ps -A | grep wpa_supplicant | wc -l`
 
 # link detected fails but monitor connected might not
-[ "$ETH0_IN" = no ] && xrandr-output-connected 'DP2-2' && ETH0_IN=yes
+#[ "$ETH0_IN" = no ] && xrandr-output-connected 'DP2-2' && ETH0_IN=yes
 
 [ "$ETH0_IN" = yes -a "$WLAN_ON" = 1 ] && sudo ifdown wlan0
 [ "$ETH0_IN" = yes -a "$ETH0_ON" = 0 ] && sudo ifup eth0
@@ -100,4 +100,4 @@ xrandr --auto
 [ -x ~/.screenlayout/detect.sh ] && ~/.screenlayout/detect.sh
 ~/wallpapers/.random.sh
 
-[ "$ETH0_IN" = yes ] && ~/bin/ddns-himdel-usersys
+#[ "$ETH0_IN" = yes ] && ~/bin/ddns-himdel-usersys
