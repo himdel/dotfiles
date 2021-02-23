@@ -130,6 +130,11 @@ au BufNewFile *.rb call append (1, "# -*- encoding: utf-8 -*-")
 au BufNewFile *.rb call append (2, "")
 au BufNewFile *.rb :$d
 
+" sh
+au BufNewFile *.sh call append (0, "#!/bin/bash")
+au BufNewFile *.sh call append (1, "")
+au BufNewFile *.sh :$d
+
 " sane filename completion
 set wildmode=longest,list:longest,list:full
 
