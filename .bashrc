@@ -3,7 +3,7 @@
 # for examples
 
 . /etc/profile
-export PATH=~/.rbenv/bin:~/bin:$PATH:~/.rakudobrew/bin:~/.gopath/bin:~/.perl6/bin:~/.local/bin:~/.yarn/bin
+export PATH=~/.rbenv/bin:~/bin:$PATH:~/.rakudobrew/bin:~/.gopath/bin:~/.perl6/bin:~/.local/bin:~/.yarn/bin:~/.cargo/bin
 . ~/.environment
 
 # If not running interactively, don't do anything
@@ -496,8 +496,11 @@ function bugz {
 	fi
 }
 
-eval "$(rbenv init -)"
-export GEMS=~/.rbenv/versions/`cat ~/.rbenv/version`/lib/ruby/gems/*/gems/
+if [ -d ~/.rbenv ]; then
+	eval "$(rbenv init -)"
+	export GEMS=~/.rbenv/versions/`cat ~/.rbenv/version`/lib/ruby/gems/*/gems/
+fi
+
 shopt -s globstar
 
 # same as python -mSimpleHTTPServer, but serves utf8
