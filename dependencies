@@ -4,12 +4,12 @@ arandr
 barrier
 bash
 blueman
-bsdextrautils
+#bsdextrautils
 bsdgames
 bsdgames-nonfree
 bsdmainutils
 bsdutils
-calendar
+#calendar
 cryptsetup
 curl
 dctrl-tools
@@ -49,6 +49,8 @@ net-tools
 nodejs
 npm
 perlbrew
+pinentry-tty
+pinentry-curses-
 pmount
 powertop
 pqiv

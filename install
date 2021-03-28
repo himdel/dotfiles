@@ -1,8 +1,14 @@
 ## etc/wpa_supplicant/wpa_supplicant.conf, etc/network/interfaces, etc/udev.d/rules/70-persistent-net.rules
 ## apt update
 ## apt install ssh sudo vim git
+## ssh-keygen, add to github, clone doftiles
+## sudoers
 
 sudo dpkg --add-architecture i386
+sudo apt update
+
+#TODO first etc stuff?
+
 sudo apt install steam:i386
 
 sudo apt install lua5.2 luarocks lua-socket lua-xmlrpc lua-zlib mpv
@@ -22,3 +28,5 @@ sudo dpkg -i google-chrome-beta_current_amd64.deb
 rm -vf google-chrome-beta_current_amd64.deb
 
 [ -e ~/bin ] || ln -sv ~/dotfiles/bin ~/bin
+
+# TODO diff stuff, bashrc, all?
