@@ -1,6 +1,0 @@
-#!/bin/sh
-
-HASH=123
-HOSTNAME=himdel
-
-curl "http://ddns.../.../updater.php?name=$HOSTNAME&domain=...&hash=$HASH"
