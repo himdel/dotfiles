@@ -1,6 +1,2 @@
 #!/bin/sh
-if [ -f /proc/acpi/sleep ]; then
-	echo 3 > /proc/acpi/sleep
-else
-	echo mem > /sys/power/state
-fi
+echo mem > /sys/power/state
