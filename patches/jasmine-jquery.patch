@@ -1,0 +1,19 @@
+--- jasmine-jquery-2.0.5.vanilla.js	2016-01-14 18:04:43.453047014 +0000
++++ jasmine-jquery-2.0.5.manageiq.js	2015-12-17 18:05:21.940429885 +0000
+@@ -216,7 +216,7 @@
+ 
+   jasmine.JSONFixtures = function () {
+     this.fixturesCache_ = {}
+-    this.fixturesPath = 'spec/javascripts/fixtures/json'
++    this.fixturesPath = '__spec__/fixtures/json'
+   }
+ 
+   jasmine.JSONFixtures.prototype.load = function () {
+@@ -248,6 +248,7 @@
+       , url = this.fixturesPath.match('/$') ? this.fixturesPath + relativeUrl : this.fixturesPath + '/' + relativeUrl
+ 
+     $.ajax({
++      method: 'GET',
+       async: false, // must be synchronous to guarantee that no tests are run before fixture is loaded
+       cache: false,
+       dataType: 'json',
