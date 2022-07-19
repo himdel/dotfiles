@@ -454,12 +454,6 @@ function rt {
 }
 
 alias imdb='gl imdb'
-alias vncustredna='vncviewer -bgr233 -quality 0 10.230.0.14'
-alias vncjanca='vncviewer -bgr233 -quality 0 192.168.1.100'
-alias wakejanca='wakeonlan  -i 192.168.2.4 BC:AE:C5:AE:D1:3C'
-alias psql-lepsiobec='psql lepsiobec lepsiobec -h localhost'
-alias psql-selfaudit='psql selfaudit -U root -h localhost'
-alias composer='composer.phar'
 
 # alias col1="awk '{ print \$1 }'"
 for c in {1..16}; do alias col$c="awk '{ print \$$c }'"; done
@@ -481,20 +475,6 @@ function vimx {
 alias gdrive='gdocs.sh'
 alias docker='sudo docker'
 alias minecraft='(cd ~/.minecraft ; minecraft-launcher)'
-alias be='bundle exec'
-alias bi='bundle install'
-alias bu='bundle update'
-alias vmdb='cd ~/manageiq/vmdb || cd ~/manageiq'
-alias phinx='~/wrk/prihlasky/vendor/bin/phinx'
-
-function bugz {
-	id="$1"
-	if [ -n "$id" ]; then
-		bugzilla query -fb "$id"
-	else
-		bugzilla query --product="Red Hat CloudForms Management Engine" --bug_status=NEW,ASSIGNED,ON_DEV --outputformat="%{id} %{status} %{severity}:%{priority} %{summary}" --assigned_to=mhradil | ~/bin/bzcolors
-	fi
-}
 
 if [ -d ~/.rbenv ]; then
 	eval "$(rbenv init -)"
@@ -523,12 +503,6 @@ function bj {
 	firefox "$url"
 }
 
-alias berc="(cd ~/manageiq ; be bin/rails c)"
-alias bers="(cd ~/manageiq ; SKIP_TEST_RESET=1 SKIP_AUTOMATE_RESET=1 WEBPACK_EXCLUDE_NODE_MODULES=1 bin/update && be bin/rails s)"
-alias berS="(cd ~/manageiq ; be bin/rails s)"
-alias .berS="be bin/rails s"
-alias suis="(cd ~/manageiq-ui-service ; yarn start)"
-
 export CHROMIUM_FLAGS='--enable-remote-extensions'
 alias netflix='google-chrome-beta https://www.netflix.com/'
 
@@ -537,17 +511,6 @@ alias mcedit='(cd ~/mcedit; . ENV/bin/activate ; ./mcedit.py )'
 
 # ruby2.5 - disable inverted stacktrace
 # alias ruby="rc -c 'ruby $* |[2] cat'"
-
-alias miq='cd ~/manageiq'
-alias miqui='cd ~/manageiq-ui-classic'
-alias miqsui='cd ~/manageiq-ui-service'
-alias miquic='cd ~/ui-components'
-alias miqapi='cd ~/manageiq-api'
-alias miqup='(miq ; git st ; git up ; miqui ; git st ; git up)'
-alias bubu='(miq ; bu ; miqui ; bu)'
-
-alias factorio='~/.steam/steam/steamapps/common/Factorio/bin/x64/factorio'
-alias steam-wine='wine ~/.wine/drive_c/Program\ Files\ \(x86\)/Steam/Steam.exe'
 
 alias altchromium='chromium --user-data-dir=$HOME/.config/altchromium'
 
@@ -571,7 +534,6 @@ alias ffmpeg="ffmpeg -nostdin"
 alias grc='git rebase --continue'
 
 alias timestamp='date --iso-8601=s | tee /dev/stdout >> ~/.timestamp'
-alias miqversions='cfme-versions'
 alias xunrar='unrar x'
 
 function gn {
