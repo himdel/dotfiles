@@ -1,0 +1,14 @@
+#!/bin/bash
+TARGET=${1:-~/dotfiles/bin}
+
+CHECK=$( cd "$TARGET" ; /bin/pwd )
+if [ "$CHECK" = `/bin/pwd` ]; then
+  echo "$0: Same dir $CHECK" 1&>2
+  exit
+fi
+
+for f in *; do
+  cmp -s "$f" "$TARGET"/"$f" &&
+  rm -v "$f" &&
+  ln -sv "$TARGET"/"$f" .
+done

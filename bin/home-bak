@@ -1,0 +1,26 @@
+#!/bin/bash
+TARGET=${1:?missing target}
+
+rsync -aPvux "/home/himdel/" "$TARGET/" \
+	--exclude '/.bundle' \
+	--exclude '/.bundler' \
+	--exclude '/.cache' \
+	--exclude '/.cargo' \
+	--exclude '/.config/**/Cache' \
+	--exclude '/.config/**/CacheStorage' \
+	--exclude '/.crypto_p' \
+	--exclude '/.ievms' \
+	--exclude '/.kube' \
+	--exclude '/.minecraft' \
+	--exclude '/.minishift' \
+	--exclude '/.miniconda3' \
+	--exclude '/.local/lib/python*' \
+	--exclude '/.local/share/containers' \
+	--exclude '/.npm' \
+	--exclude '/.nvm' \
+	--exclude '/.rbenv' \
+	--exclude '/.steam' \
+	--exclude '/.wine' \
+	--exclude '/.yarn' \
+	--exclude 'node_modules' \
+

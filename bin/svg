@@ -1,0 +1,7 @@
+#!/bin/sh
+# go get -u github.com/fogleman/primitive
+
+FILE=`tempfile -d. -p svg. --suffix .svg | tee /dev/stderr`
+
+primitive -i "$1" -o "$FILE" -m 0 -n 256 --rep 4 -s 1920 -v &&
+$BROWSER "$FILE"

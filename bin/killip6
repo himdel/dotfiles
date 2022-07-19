@@ -1,0 +1,5 @@
+#!/bin/sh
+ip -6 addr ls dev $1 | grep inet6 | awk '{ print $2 }' | while read ip; do
+	echo "$ip"
+	sudo ip addr del "$ip" dev $1
+done
