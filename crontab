@@ -4,8 +4,4 @@
 22 */4 * * * [ `find .fvwm/preferences/LastChoosenWallpaper -mmin +180 | wc -l` = 1 ] && PATH=~/bin:/usr/local/bin:$PATH DISPLAY=:0 ~/wallpapers/.random.sh
 11 21 * * */3 for i in ~/.vim/bundle/*; do git -C $i pull; done
 
-#30 14 * * * hardlink -pot ~/.rbenv/ ~/ManageIQ/
-#20 8 * * * PATH=~/bin:/usr/local/bin:$PATH ~/ManageIQ/up-all.sh
-#30 10 * * 1 gem install cfme-versions
-
 #* * * * * ~/temper/measure.sh
