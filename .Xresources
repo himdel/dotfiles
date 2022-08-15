@@ -200,3 +200,4 @@ URxvt.color15: rgb:ff/ff/ff
 !QuakeConsoleNeedsUniqueName.font: xft:Monospace:pixelsize=12
 
 Xcursor.size: 16
+#Xft.dpi: 96

@@ -1,4 +1,0 @@
-# vimdiff files in both
-find -type f | grep -v ^./.git | while read f; do cmp -s "$f" ~/"$f" || ([ -f "$f" ] && [ -f ~/"$f" ] && vimdiff "$f" ~/"$f" </dev/tty >/dev/tty 2>/dev/tty ) ; echo;done
-# list missing
-find -type f | grep -v ^./.git | while read f; do cmp -s "$f" ~/"$f" || ([ -f "$f" ] && [ \! -f ~/"$f" ] && ls -l  "$f" ~/"$f" ) ; echo;done

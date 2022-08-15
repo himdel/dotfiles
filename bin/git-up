@@ -5,34 +5,54 @@ BRANCH=`git branch-name`
 UPSTREAM=upstream
 git remote -v | cut -f1 | grep -q \^"$UPSTREAM"\$ || UPSTREAM=origin
 
-MIQ_RELEASES="anand botvinnik capablanca darga euwe fine gaprindashvili hammer ivanchuk jansa kasparov lasker morphy"
-
 remote_branch=master
+git branch -r | awk '{ print $1 }' | grep -q '^'"$UPSTREAM"'/master$' || remote_branch=main
+
 master=false
-
-if [ "$BRANCH" = master ]; then
-  master=true
-fi
-
-for release in $MIQ_RELEASES; do
-  if pwd | grep -q manageiq-$release; then
-    remote_branch=$release
-  fi
-
-  if [ "$BRANCH" = $release ]; then
-    remote_branch=$release
+case $BRANCH in
+  master)
+    remote_branch=master
     master=true
+    ;;
+  main)
+    remote_branch=main
+    master=true
+    ;;
+  feature/*)
+    remote_branch=$BRANCH
+    master=true
+    ;;
+  stable-*)
+    remote_branch=$BRANCH
+    master=true
+    ;;
+esac
+
+ZSTREAMS="4.2 4.3 4.4 4.5 4.6"
+for release in $ZSTREAMS; do
+  if pwd | grep -q ansible-hub-ui-$release; then
+    remote_branch=stable-$release
+  fi
+  if pwd | grep -q galaxy_ng-$release; then
+    remote_branch=stable-$release
   fi
 done
 
+echo "git-up: Fetching from $UPSTREAM/$remote_branch" 1>&2
 if $master; then
   git fetch "$UPSTREAM"
   git merge --ff-only "$UPSTREAM"/"$remote_branch"
 else
   git fetch "$UPSTREAM" "$remote_branch"
+
+  branch="master"
+  git branch | awk '{ print $1 }' | grep -q '^master$' || branch=main
+  echo "git-up: Updating $branch, not $BRANCH" 1>&2
+
   while ! [ -d .git ]; do
     cd ..
   done
-  diff -Naur .git/refs/heads/master .git/refs/remotes/"$UPSTREAM"/"$remote_branch"
-  cp .git/refs/remotes/"$UPSTREAM"/"$remote_branch" .git/refs/heads/master
+
+  diff -Naur .git/refs/heads/"$branch" .git/refs/remotes/"$UPSTREAM"/"$remote_branch"
+  cp .git/refs/remotes/"$UPSTREAM"/"$remote_branch" .git/refs/heads/"$branch"
 fi

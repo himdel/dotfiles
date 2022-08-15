@@ -2,7 +2,8 @@
 
 case "$1" in
 "on")
-  bluetoothctl connect `bluetoothctl devices | grep Aeropex | awk '{ print $2 }'`
+  DEV=`bluetoothctl devices | grep ${2:-'Aeropex\|OpenMove'} | awk '{ print $2 }'`
+  bluetoothctl connect "$DEV"
   ;;
 "off")
   bluetoothctl disconnect `bluetoothctl info | grep ^Device | awk '{ print $2 }'`

@@ -1,0 +1,26 @@
+#!/bin/bash
+cd "$( dirname "$0" )"
+
+find etc/ -type f | while read f; do
+  cmp -s "$f" /"$f" && continue
+
+  echo "vimdiff $f"
+  vimdiff "$f" /"$f" </dev/tty >/dev/tty 2>/dev/tty
+done
+
+find wallpapers/ -type f | while read f; do
+  cmp -s "$f" ~/"$f" && continue
+
+  echo "vimdiff $f"
+  vimdiff "$f" ~/"$f" </dev/tty >/dev/tty 2>/dev/tty
+done
+
+find .[0-9a-zA-Z]* -type f | grep -v .git/ | while read f; do
+  cmp -s "$f" ~/"$f" && continue
+
+  echo "vimdiff $f"
+  vimdiff "$f" ~/"$f" </dev/tty >/dev/tty 2>/dev/tty
+done
+
+crontab -l | diff -q crontab - || EDITOR="vimdiff `realpath crontab`" crontab -e
+apt-mark showmanual | sort -u > dependencies.`hostname -s`
