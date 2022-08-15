@@ -1,0 +1,17 @@
+127.0.0.1	localhost
+127.0.1.1	orome
+
+192.168.1.30	durin.local durin
+192.168.1.150	orome.local
+192.168.1.173	niniel.local niniel
+192.168.1.178	aule.local aule
+
+10.8.8.6	durin.vpn
+# 10.8.8.0	orome.vpn
+10.8.8.10	niniel.vpn
+# 10.8.8.0	aule.vpn
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters

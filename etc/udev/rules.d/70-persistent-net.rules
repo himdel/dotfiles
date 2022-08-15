@@ -1,2 +1,6 @@
-SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="54:e1:ad:d9:d4:1e", NAME="eth0"
-SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="40:a3:cc:28:68:06", NAME="wlan0"
+# udevadm info -a -p /sys/class/net/wlan0
+# udevadm test /class/net/wlan0
+# SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="c8:58:c0:10:f0:a4", NAME="wlan0"
+SUBSYSTEM=="net", ACTION=="add", KERNEL=="eth*", NAME="eth0"
+SUBSYSTEM=="net", ACTION=="add", KERNEL=="enp*", NAME="eth0"
+SUBSYSTEM=="net", ACTION=="add", KERNEL=="wlan*", NAME="wlan0"
