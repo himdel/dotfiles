@@ -209,6 +209,7 @@ libc6:i386
 libcairomm-1.0-1v5
 libcdr-0.1-1
 libdata-dump-perl
+libdbus-glib-1-2
 libgl1-mesa-dri:i386
 libgl1-mesa-glx:i386
 libglibmm-2.4-1v5
