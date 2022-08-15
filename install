@@ -1,13 +1,24 @@
-## etc/wpa_supplicant/wpa_supplicant.conf, etc/network/interfaces, etc/udev.d/rules/70-persistent-net.rules
+#!/bin/bash
+cd "$( dirname "$0" )"
+
+## su -
+## systemctl disable wpa_supplicant
+## vi /etc/network/interfaces
+## vi /etc/wpa_supplicant/wpa_supplicant.conf
+## vi /etc/udev.d/rules/70-persistent-net.rules
+## ifup -a
+## ip addr ls
 ## apt update
-## apt install ssh sudo vim git
+## apt install aptitude git ssh sudo vim net-tools
+## vim /etc/group
+## grep himdel /etc/sudoers || echo 'himdel ALL=NOPASSWD: ALL' >> /etc/sudoers
+## vim /etc/dhcp/dhclient.conf # supersede dns
+
 ## ssh-keygen, add to github, clone doftiles
 ## sudoers
 
 sudo dpkg --add-architecture i386
 sudo apt update
-
-#TODO first etc stuff?
 
 sudo apt install steam:i386
 
@@ -16,9 +27,7 @@ sudo ln -s /usr/share/lua/5.1/xmlrpc /usr/share/lua/5.2/xmlrpc
 mkdir -p ~/.config/mpv/scripts
 git clone https://github.com/rumkex/osdb-mpv.git ~/.config/mpv/scripts
 
-echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
-sudo apt install `cat dependencies`
+grep max_user_watches || echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - # TODO tee /etc/apt/trusted.gpg.d/yarn.asc
 wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -29,4 +38,6 @@ rm -vf google-chrome-beta_current_amd64.deb
 
 [ -e ~/bin ] || ln -sv ~/dotfiles/bin ~/bin
 
-# TODO diff stuff, bashrc, all?
+# TODO link stuff
+
+./update

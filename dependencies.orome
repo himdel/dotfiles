@@ -34,6 +34,7 @@ bundler
 busybox
 bzip2
 ca-certificates
+calendar
 chromium
 chromium-sandbox
 conmon
@@ -296,6 +297,7 @@ mc
 media-types
 mesa-utils
 mesa-vulkan-drivers:i386
+microcode.ctl
 mime-support
 moreutils
 mount
@@ -448,6 +450,7 @@ xfonts-intl-japanese-big
 xfonts-intl-phonetic
 xfonts-unifont
 xinit
+xinput
 xkcdpass
 xorg
 xsel
@@ -458,5 +461,6 @@ xxd
 xz-utils
 youtube-dl
 yt-dlp
+zip
 zlib1g
 zstd

@@ -24,3 +24,4 @@ done
 
 crontab -l | diff -q crontab - || EDITOR="vimdiff `realpath crontab`" crontab -e
 apt-mark showmanual | sort -u > dependencies.`hostname -s`
+sudo apt install `cat dependencies`
