@@ -6,7 +6,7 @@ export NAME="Martin Hradil"
 export EMAIL="himdel@gmail.com"
 export TZ=UTC
 
-export BROWSER=chromium
+export BROWSER=google-chrome-beta
 export EDITOR=vim
 export MAILER=claws-mail
 

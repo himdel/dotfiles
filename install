@@ -27,11 +27,9 @@ sudo ln -s /usr/share/lua/5.1/xmlrpc /usr/share/lua/5.2/xmlrpc
 mkdir -p ~/.config/mpv/scripts
 git clone https://github.com/rumkex/osdb-mpv.git ~/.config/mpv/scripts
 
-grep max_user_watches || echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+grep max_user_watches /etc/sysctl.conf || ( echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p )
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - # TODO tee /etc/apt/trusted.gpg.d/yarn.asc
 wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-
 wget https://dl.google.com/linux/direct/google-chrome-beta_current_amd64.deb
 sudo dpkg -i google-chrome-beta_current_amd64.deb
 rm -vf google-chrome-beta_current_amd64.deb

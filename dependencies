@@ -19,7 +19,7 @@ dctrl-tools
 debianutils
 debootstrap
 dmsetup
-dunst
+dunst/bullseye
 ed
 elinks
 equivs
@@ -34,6 +34,7 @@ gcc
 gdb
 gimp
 git
+gnupg
 grep
 gzip
 hardlink-
@@ -64,9 +65,11 @@ pavucontrol
 perlbrew
 pinentry-curses-
 pinentry-tty
+pkg-config
 pmount
 powertop
 pqiv
+psmisc
 pulseaudio
 pv
 qiv
@@ -75,7 +78,7 @@ rbenv
 ripgrep
 rofi
 rsync
-rxvt-unicode
+rxvt-unicode/bullseye
 rzip
 screen
 sed
@@ -94,6 +97,8 @@ units
 unrar
 unzip
 uswsusp-
+util-linux
+util-linux-extra
 valgrind
 vim
 wget
