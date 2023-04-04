@@ -1,0 +1,2 @@
+#!/bin/sh
+exec hubget pulp/api/v3/"$@"

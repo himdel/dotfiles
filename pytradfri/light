@@ -96,7 +96,7 @@ def run(config, mode):
           api(command)
 
         val = xy(mode, i) # (0-65535, 0-65535) or hex
-        if val != None and light.light_control.can_set_color:
+        if val != None:
           if isinstance(val, str):
             command = light.light_control.set_hex_color(val)
           else:

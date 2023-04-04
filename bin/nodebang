@@ -1,0 +1,37 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Getopt::Long;
+
+my ($n, $p, $e, $i, $script);
+
+GetOptions('n' => \$n,
+           'p' => \$p,
+           'e=s' => \$e,
+           'i:s' => \$i);
+
+if ($e) {
+    $script = "-e '$e'";
+} elsif ($i) {
+    # TODO almost .. and not excludsive
+    $script = "-e 'require(\"fs\").writeFileSync(\"$i\", require(\"fs\").readFileSync(\"$i\").toString().split(\"\\n\").map(function(line) {return line}).join(\"\n\"))'";
+} else {
+	# TODO cut off shebang
+    $script = `cat < /dev/stdin`;
+}
+
+my $cmd = "node $script";
+
+if ($n) {
+	# TODO while loop
+    $cmd .= " -n";
+}
+
+if ($p) {
+	#TODO while loo and print
+    $cmd .= " -p";
+}
+
+print($cmd);
+# system($cmd);

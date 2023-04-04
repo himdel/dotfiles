@@ -1,3 +1,4 @@
 .agignore
 .rgignore
 .*.sw[po]
+node_modules/

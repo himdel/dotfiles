@@ -1,0 +1,28 @@
+#!/bin/bash
+
+UUID=e048b0d0-6a6d-4850-9894-a5a085a36839
+NAME=earendil
+
+function _mount {
+	sudo mkdir -p /media/"$NAME"
+	sudo cryptsetup luksOpen /dev/disk/by-uuid/"$UUID" "$NAME"
+	sleep 0.5
+	sudo vgchange -ay "$NAME"
+	sleep 0.5
+	sudo fsck -fp /dev/"$NAME"/root
+	sudo mount /dev/"$NAME"/root /media/"$NAME"
+}
+
+function _umount {
+	sudo umount /media/"$NAME"
+	sudo vgchange -an "$NAME"
+	sudo cryptsetup luksClose "$NAME"
+	sudo rmdir /media/"$NAME"
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+fi
+
+$FNC

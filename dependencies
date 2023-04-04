@@ -15,6 +15,7 @@ calendar
 cpanminus
 cryptsetup
 curl
+dbus-x11
 dctrl-tools
 debianutils
 debootstrap
@@ -71,6 +72,7 @@ powertop
 pqiv
 psmisc
 pulseaudio
+pulseaudio-module-bluetooth
 pv
 qiv
 rakudo

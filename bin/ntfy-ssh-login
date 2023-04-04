@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# /etc/pam.d/sshd
+# session optional pam_exec.so /home/himdel/bin/ntfy-ssh-login
+
+if [ "$PAM_TYPE" = "close_session" ]; then
+  exit 0
+fi
+
+TEXT="`hostname -s` $PAM_SERVICE $PAM_TYPE $PAM_USER from $PAM_RHOST (`date --iso=s`)"
+echo "$TEXT" >> /tmp/ntfy-ssh-login-`date --iso=d`
+/home/himdel/bin/ntfy-me -d "$TEXT" # curl -d "$TEXT" ntfy.sh/himdel-alerts

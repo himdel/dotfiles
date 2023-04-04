@@ -23,4 +23,6 @@ rsync -aPvux "/home/himdel/" "$TARGET/" \
 	--exclude '/.wine' \
 	--exclude '/.yarn' \
 	--exclude 'node_modules' \
+	--exclude '/fun' \
+	--exclude '/wallpapers' \
 

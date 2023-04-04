@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+set -x
+
+get_token() {
+  HUB_TOKEN=`curl -s -u admin:admin -d '' http://localhost:8002/api/automation-hub/v3/auth/token/ | jq -r .token`
+  [ -n "$HUB_TOKEN" ] && echo "$HUB_TOKEN" > ~/.hub_token
+}
+
+get() {
+  curl -s -H "Authorization: Token $HUB_TOKEN" http://localhost:8002/api/automation-hub/"$1" | tee /dev/stderr
+}
+
+
+# load token, update if missing or obsolete
+HUB_TOKEN=`cat ~/.hub_token || true`
+[ -z "$HUB_TOKEN" ] && get_token
+
+if ! get | jq; then
+  get_token
+  get | jq
+fi
+
+get "$@" | jq
