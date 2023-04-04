@@ -4,6 +4,14 @@ case "$1" in
 "on")
   DEV=`bluetoothctl devices | grep ${2:-'Aeropex\|OpenMove'} | awk '{ print $2 }'`
   bluetoothctl connect "$DEV"
+  # aeropex
+  if [ "$2" = "Aeropex" ]; then
+    pactl set-default-sink bluez_sink.20_74_CF_53_2B_45.a2dp_sink
+  fi
+  # openmove
+  if [ "$2" = "OpenMove" ]; then
+    pactl set-default-sink bluez_sink.20_74_CF_B8_B9_CB.handsfree_head_unit
+  fi
   ;;
 "off")
   bluetoothctl disconnect `bluetoothctl info | grep ^Device | awk '{ print $2 }'`
