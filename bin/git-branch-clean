@@ -1,13 +1,16 @@
 #!/bin/bash
 set -e
 
+remote_branch=master
+git branch -r | awk '{ print $1 }' | grep -q '^upstream/master$' || remote_branch=main
+
 git fetch --all --prune
 
 # Remove local fully merged branches
-git branch --merged upstream/master | sed 's/^[ *]\+//' | grep -v '^master$' | xargs -r -d'\n' git branch -D -v
+git branch --merged upstream/"$remote_branch" | sed 's/^[ *]\+//' | grep -v "^$remote_branch\$" | xargs -r -d'\n' git branch -D -v
 
 # Remove origin/ fully merged branches, except for master
-git branch --remotes --merged upstream/master | sed 's/^[ *]\+//' | grep '^origin/' | grep -v '/master$' | sed 's/^origin\///' | xargs -r -d'\n' git push --delete origin
+git branch --remotes --merged upstream/"$remote_branch" | sed 's/^[ *]\+//' | grep '^origin/' | grep -v "/$remote_branch\$" | sed 's/^origin\///' | xargs -r -d'\n' git push --delete origin
 
 # Remove [gone] branches (were pushed to origin and then removed)
 git branch -v | grep ' \[gone\] ' | awk '{ print $1 }' | xargs -r -d'\n' git branch -D -v
