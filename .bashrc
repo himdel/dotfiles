@@ -3,7 +3,7 @@
 # for examples
 
 . /etc/profile
-export PATH=~/.rbenv/bin:~/bin:$PATH:~/.rakudobrew/bin:~/.gopath/bin:~/.perl6/bin:~/.local/bin:~/.yarn/bin:~/.cargo/bin
+export PATH=~/.rbenv/bin:~/bin:~/.local/bin:$PATH:~/.rakudobrew/bin:~/.gopath/bin:~/.perl6/bin:~/.yarn/bin:~/.cargo/bin
 . ~/.environment
 
 # If not running interactively, don't do anything
@@ -445,14 +445,6 @@ alias vo,='vim'
 export PYTHONDONTWRITEBYTECODE="true"
 alias v=vim
 
-function rt {
-	if [ $# -eq 1 ] && echo "$1" | perl -ne 'exit 1 if /[^\d\s]/; exit 0'; then
-		@ 'rt.matesova.cz/Ticket/Display.html?id='"$1"
-	else
-		/usr/bin/rt "$@"
-	fi
-}
-
 alias imdb='gl imdb'
 
 # alias col1="awk '{ print \$1 }'"
@@ -480,8 +472,6 @@ if [ -d ~/.rbenv ]; then
 	eval "$(rbenv init -)"
 	export GEMS=~/.rbenv/versions/`cat ~/.rbenv/version`/lib/ruby/gems/*/gems/
 fi
-
-shopt -s globstar
 
 # same as python -mSimpleHTTPServer, but serves utf8
 alias httpdir='python -m http.server'
@@ -536,9 +526,21 @@ alias grc='git rebase --continue'
 alias timestamp='date --iso-8601=s | tee /dev/stdout >> ~/.timestamp'
 alias xunrar='unrar x'
 
-function gn {
-	light off
-	ssh 192.168.1.30 DISPLAY=:0 xss &
-	xss &
-	wait;wait
-}
+alias otp='otpclient-cli show -a OATH00000000'
+
+export FZF_DEFAULT_COMMAND='fdfind . --type f --strip-cwd-prefix --hidden --exclude ".git" --exclude "node_modules"'
+export FZF_DEFAULT_OPTS='--border --layout=reverse-list --height=~100% --info=inline'
+alias vf='vim `fzf -m | tee /dev/stderr`'
+alias cdf='cd $(find . -type d | fzf --preview="tree -C {} | head -n 50")'
+
+OCI_ENV_PATH=`cd ~/oci_env; pwd`
+export OCI_ENV_PATH
+
+alias pip-install='pip3 install --break-system-packages --user'
+
+alias gn='headphones off ; sleep 3m; light off; xss; exit'
+
+export JIRA_API_TOKEN=`cat ~/.jira/cli`
+export JIRA_AUTH_TYPE=bearer
+source <(jira completion bash)
+alias jira-me='jira issues list -a $(jira me) -R Unresolved'
