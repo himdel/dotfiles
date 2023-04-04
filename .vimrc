@@ -233,3 +233,5 @@ au BufNewFile,BufReadPost *.rb,*.erb,*.haml,*.js,*.ts,*.html set expandtab tabst
 nnoremap Q <nop>
 let g:typescript_indent_disable = 1
 set rtp+=~/.fzf
+
+map <F5> :w<CR> \| :!npx prettier --write %<CR> \| :e<CR>
