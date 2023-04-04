@@ -140,6 +140,7 @@ URxvt.tintColor: white
 URxvt.inheritPixmap: true
 URxvt.scrollBar: false
 URxvt.saveLines: 65535
+URxvt.transparent: true
 
 ! Font settings
 ! URxvt uses UTF-8, so we dont need encoding-specific settings
@@ -200,4 +201,11 @@ URxvt.color15: rgb:ff/ff/ff
 !QuakeConsoleNeedsUniqueName.font: xft:Monospace:pixelsize=12
 
 Xcursor.size: 16
-#Xft.dpi: 96
+!Xft.dpi: 96
+
+! Urxvt url click, font resize, paste fix
+URxvt.perl-ext-common: default,matcher,font-size,-confirm-paste
+URxvt.url-launcher: /usr/local/bin/xdg-open
+URxvt.matcher.button: 1
+URxvt.iso14755: false
+URxvt.iso14755_52: false

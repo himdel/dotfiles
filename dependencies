@@ -19,7 +19,7 @@ dctrl-tools
 debianutils
 debootstrap
 dmsetup
-dunst/bullseye
+dunst
 ed
 elinks
 equivs
@@ -78,7 +78,7 @@ rbenv
 ripgrep
 rofi
 rsync
-rxvt-unicode/bullseye
+rxvt-unicode
 rzip
 screen
 sed
