@@ -540,7 +540,9 @@ alias pip-install='pip3 install --break-system-packages --user'
 
 alias gn='headphones off ; sleep 3m; light off; xss; exit'
 
-export JIRA_API_TOKEN=`cat ~/.jira/cli`
+export JIRA_API_TOKEN=`cat ~/.jira.cli`
 export JIRA_AUTH_TYPE=bearer
 source <(jira completion bash)
 alias jira-me='jira issues list -a $(jira me) -R Unresolved'
+
+alias cal='ncal -b'

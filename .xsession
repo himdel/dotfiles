@@ -80,7 +80,7 @@ xmodmap -e 'pointer = 1 2 3 4 5 0 0 0 0 0 0 0 0'
 #[ -x /usr/bin/qasmixer ] && qasmixer --tray &
 
 [ -x /usr/bin/pulseaudio ] && pulseaudio -D &
-[ -x /usr/bin/pasystray ] && pasystray &
+[ -x /usr/bin/pasystray ] && pasystray -S &
 [ -x /usr/bin/pnmixer ] && pnmixer &
 
 [ -x ~/bin/pushbullet-thing ] && ~/bin/pushbullet-thing &
@@ -104,5 +104,11 @@ xsetroot -cursor_name arrow # X_cursor
 xset s noblank
 # xset -dpms
 # xset dpms 0 0 0
+
+dunst &
+
+pactl upload-sample /usr/share/sounds/freedesktop/stereo/dialog-warning.oga bell-window-system
+pactl load-module module-x11-bell display=$DISPLAY
+pactl load-module module-switch-on-connect
 
 exec "$WM"

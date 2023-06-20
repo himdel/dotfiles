@@ -1,0 +1,34 @@
+#!/bin/bash
+
+UUID=7cf720ed-568a-4cf0-8a02-2bf2748611d6
+NAME=treebeard
+DEV=/dev/disk/by-uuid/"$UUID"
+
+## setup
+# sudo fdisk # ... 1 big partition, type linux
+# sudo cryptsetup luksFormat "$DEV"
+# sudo cryptsetup luksOpen "$DEV" "$NAME"
+# sudo mkfs.ext4 -L "$NAME" -j -m0 -v /dev/mapper/"$NAME"
+# sudo mkdir -p /media/"$NAME"
+# sudo mount /dev/mapper/"$NAME" /media/"$NAME"
+# sudo chown himdel:himdel /media/"$NAME"
+
+function _mount {
+	sudo mkdir -p /media/"$NAME"
+	sudo cryptsetup luksOpen "$DEV" "$NAME"
+	sudo fsck -fp /dev/mapper/"$NAME"
+	sudo mount /dev/mapper/"$NAME" /media/"$NAME"
+}
+
+function _umount {
+	sudo umount /media/"$NAME"
+	sudo cryptsetup luksClose "$NAME"
+	sudo rmdir /media/"$NAME"
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+	FNC=_umount
+fi
+
+$FNC

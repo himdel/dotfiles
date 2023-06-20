@@ -1,0 +1,44 @@
+#!/bin/sh
+BRANCH=`git branch-name`
+[ -z "$BRANCH" ] && exit 1
+
+UPSTREAM=origin
+git remote -v | cut -f1 | grep -q '^upstream$' && UPSTREAM=upstream
+
+REMOTE_BRANCH=main
+git branch -r | awk '{ print $1 }' | grep -q '^'"$UPSTREAM"'/master$' && REMOTE_BRANCH=master
+
+master=false
+case $BRANCH in
+  master)
+    remote_branch=master
+    master=true
+    ;;
+  main)
+    remote_branch=main
+    master=true
+    ;;
+  feature/*)
+    remote_branch=$BRANCH
+    master=true
+    ;;
+  stable-*)
+    remote_branch=$BRANCH
+    master=true
+    ;;
+esac
+
+ZSTREAMS="4.2 4.3 4.4 4.5 4.6 4.7"
+for release in $ZSTREAMS; do
+  if pwd | grep -q ansible-hub-ui-$release; then
+    REMOTE_BRANCH=stable-$release
+  fi
+
+  if [ $BRANCH = stable-$release ]; then
+    REMOTE_BRANCH=stable-$release
+  fi
+done
+
+echo "git-up: Fetching from $UPSTREAM/$REMOTE_BRANCH" 1>&2
+git fetch "$UPSTREAM" "$REMOTE_BRANCH"
+git rebase "$@" "$UPSTREAM"/"$REMOTE_BRANCH"

@@ -50,6 +50,11 @@
     "color_temp": [null, null, null, 250, null, null],
     "color_rgb": [null, null, null, null, "255,255,0", "0,255,0"]
   },
+  "afternoon": {
+    "dimmer": [null, null, null, 190, 190, 190],
+    "color_temp": [null, null, null, 300, null, null],
+    "color_rgb": [null, null, null, null, "240,240,127", "127,240,63"]
+  },
   "evening": {
     "dimmer": [null, null, null, 127, 127, 127],
     "color_temp": [null, null, null, 352, null, null],
