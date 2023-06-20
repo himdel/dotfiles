@@ -5,7 +5,7 @@ cd "$( dirname "$0" )"
 ## systemctl disable wpa_supplicant
 ## vi /etc/network/interfaces
 ## vi /etc/wpa_supplicant/wpa_supplicant.conf
-## vi /etc/udev.d/rules/70-persistent-net.rules
+## vi /etc/udev/rules.d/70-persistent-net.rules
 ## ifup -a
 ## ip addr ls
 ## apt update
