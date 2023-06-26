@@ -11,6 +11,7 @@ bsdgames
 bsdgames-nonfree
 bsdmainutils
 bsdutils
+build-essential
 calendar
 cpanminus
 cryptsetup
@@ -24,6 +25,7 @@ dunst
 ed
 elinks
 equivs
+fakeroot
 fbxkb
 fd-find
 ffmpeg
@@ -48,6 +50,7 @@ i3lock
 i3status
 intel-microcode
 jq
+libtool
 lsof
 lvm2
 make
@@ -55,13 +58,10 @@ manpages
 manpages-dev
 mc
 mesa-utils
-microcode.ctl
 moreutils
 mplayer
 mpv
 net-tools
-nodejs
-npm
 pavucontrol
 perlbrew
 pinentry-curses-
@@ -95,6 +95,7 @@ tar
 thunar
 tmux
 tumbler
+tumbler-plugins-extra
 units
 unrar
 unzip
@@ -120,8 +121,9 @@ xinit
 xinput
 xkcdpass
 xorg
+xpdf
 xsel
 xttitle
 xxd
-youtube-dl
+yt-dlp
 zip
