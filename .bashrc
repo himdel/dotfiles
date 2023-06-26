@@ -50,11 +50,6 @@ fi
 # colored GCC warnings and errors
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-alias ls='ls --color=tty -N'
-alias ll='ls -l'
-alias l=ls
-alias L=less
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -75,158 +70,28 @@ if ! shopt -oq posix; then
   fi
 fi
 
+ulimit -c unlimited
+
+alias ls='ls --color=tty -N'
+alias ll='ls -l'
+alias l=ls
+alias ltr='ls -ltr'
+alias L=less
+
 alias apt='sudo apt'
 alias apt-get='sudo apt-get'
 alias aptitude='sudo aptitude'
 
-alias sshim='ssh -X yavanna.himdel.eu'
-#alias aisa='ssh xhrad1@aisa.fi.muni.cz'
-alias durin='ssh -X 10.8.8.6'
-alias niniel='ssh -X 10.8.8.10'
-alias thror='ssh -X 10.8.8.14'
-
 SSHFS="sudo sshfs -o reconnect,allow_other,fsname=sshfs,transform_symlinks,IdentityFile=/home/himdel/.ssh/id_dsa"
 #alias mntpenny="$SSHFS him@penny:/ /media/penny"
-#alias mntluthien="$SSHFS himdel@luthien:/ /media/luthien -o nonempty"
-#alias mnthim="$SSHFS him@himdel.mine.nu:/ /media/penny"
-#alias mntaisa="$SSHFS xhrad1@aisa.fi.muni.cz: /media/aisa"
-#alias mntpb071="$SSHFS xhrad1@aisa.fi.muni.cz:/export/e1/pb071 /media/pb071"
-#alias mntpin="$SSHFS himdel@192.168.1.103:/ /media/pindrusenka"
-
-#function susp {
-#	echo Suspend in 4 sec...
-#	STATUS=`purple-remote getstatus`
-#	purple-remote 'setstatus?status=offline'
-#	killall sonata
-#	sleep 1
-#	killall -9 sonata
-#	sudo umount /media/tmp
-##	sudo ifdown wlan0
-##	sudo umount /media/luthien
-#	sleep 2
-#	mpc pause
-#	sync
-#	sudo s2ram -f
-#	sleep 0.5
-##	sudo ifup wlan0
-#	echo purple-remote \"setstatus?status=$STATUS\"
-##	twitter post 'just started the notebook'
-#	mode.rb detect
-#	(sonata & exit)
-#}
-#
-function wifi_school {
-#	sudo ifdown eth0
-#	sudo ifdown eth2
-#	sudo killall wpa_supplicant #should really just send a cmd or sth
-#	sudo iwconfig eth2 essid wlan_fi
-#	sudo iwconfig eth2 txpower auto
-#	sudo ifup eth2
-	firefox https://fadmin.fi.muni.cz/auth/sit/wireless/login.mpl &
-}
-
-function wifi_modules {
-	sudo rmmod b43 b44 ssb
-	sudo modprobe ndiswrapper
-}
-
-function wifi_supp {
-	sudo ifdown eth0
-	sudo ifdown eth2
-	ps -A | grep wpa_supplicant || sudo wpa_supplicant -Dwext -ieth2 -C/var/run/wpa_supplicant &
-	#ps -A | grep wpa_supplicant || sudo wpa_supplicant -Dwext -ieth2 -c/etc/wpa_supplicant/wpa_supplicant.conf &
-	sudo wpa_gui -p/var/run/wpa_supplicant
-	sudo ifup eth2
-}
-
-#function popice {
-#	sudo ifdown eth0
-#	sudo ifdown eth2
-#	sudo ip link set eth0 up
-#	sudo ip addr add 192.168.114.199 dev eth0
-#	sudo ip route add 192.168.114.254/32 dev eth0
-#	sudo ip route add default via 192.168.114.254
-#	sudo sh -c 'echo "nameserver 62.168.35.129" > /etc/resolv.conf'
-#}
-
-#function eth {
-#	sudo ifup eth0
-#}
 
 alias xs='sleep 4 ; xset dpms force off'
-alias ct1='mplayer http://cdn4.nacevi.cz/CT1-High'
-alias ct2='mplayer http://cdn4.nacevi.cz/CT2-High'
 alias wcat='wget -qO-'
-
-function status {
-	if [ "$#" -eq 0 ]; then	
-		msg='getstatus'
-	else
-		msg='setstatus'
-	fi
-	if [ "$#" -ge 1 ]; then
-		msg="$msg?status=$1"
-	fi
-	msg="$msg&message="
-	if [ "$#" -ge 2 ]; then
-		msg="$msg$2"
-	fi
-	purple-remote "$msg"
-}
-
-alias q3a=quake3
-
-function umri_pak_sys {
-	echo umri_pak_sys
-	cd /sys/class/power_supply/C1BC
-	while [ $(cat charge_now) -gt 320000 ]; do
-		sleep 1m
-	done
-	cd -
-}
-
-function umri_pak_proc {
-	echo umri_pak_proc
-	cd /proc/acpi/battery/C1BC
-	while [ $(grep ^rema state | awk '{ print $3 }') -gt 320 ]; do
-		sleep 1m
-	done
-	cd -
-}
-
-function pak_umri {
-	if [ -d /proc/acpi/battery/C1BC ]; then
-		umri_pak_proc
-	else
-		umri_pak_sys
-	fi
-	susp
-}
-
-alias scrim='sshim -t screen'
-alias scrims='sshim -t /home/him/bin/screens'
-#alias xss='for foo in {1..8}; do sleep=$((2 ** $foo)); echo "foo=$foo; sleep=$sleep"; sleep $sleep; xs; done'
 
 alias Au='apt update'
 alias Ap='apt policy'
-alias As='apt search'
 alias Ai='apt install'
-alias Ar='apt remove'
-alias As='apt source'
-alias Ab='apt build-dep'
-alias radior='mplayer -cache 8192 http://quark3.video.muni.cz:8000/FSS_ogg-q8.ogg'
-alias bax='firefox https://is.muni.cz/auth/el/1421/podzim2009/BAX403/um/'
 
-ulimit -c unlimited
-
-alias dyna='dosbox ~/dyna/dyna.exe'
-alias dm2='dosbox ~/dosgames/games/dm2/dm2.bat'
-alias mm='dosbox ~/dosgames/games/mm/micro.exe'
-alias moo2='dosbox ~/moo2/moo2.bat'
-alias atomic='cd /media/luthien/mnt/xp/AtomicBomberman/; wine BM95.EXE; cd -'
-#alias game=<<EOG
-#ruby -e 'class Array; def pick; x = sort_by{ rand }.first; yield x; end; end; [:dyna, :mm].pick {|i| puts i; p `grep "alias #{i.to_s}" ~/.bashrc | cut -d \\'\'' -f 2 | sh` }'
-#EOG
 alias UNZIP='set -e; for foo in *.zip; do D=$(echo $foo | sed '\''s/\.zip$//'\''); mkdir -v "$D"; cd "$D"; unzip ../"$foo"; cd .. ; rm -v "$foo"; done; set +e'
 alias UNRAR='set -e; for foo in *.rar; do D=$(echo $foo | sed '\''s/\.rar$//'\''); mkdir -v "$D"; cd "$D"; unrar x ../"$foo"; cd .. ; rm -v "$foo"; done; set +e'
 
@@ -248,51 +113,11 @@ function _apt-drop {
 		sudo sh -c 'echo >> "'"$F"\"
 	fi
 }
+
 alias ifconfig='sudo ifconfig'
-alias rs='wget -c --load-cookies ~/.cookies/rapidshare'
-alias picasa="wine ~/.wine/drive_c/Program\ Files/Google/Picasa3/Picasa3.exe"
-
-alias proper_czech='iconv -f utf8 -t cp852//TRANSLIT | iconv -f cp437 -t utf8'
-alias cdr='cd "`find -maxdepth 1 -type d | perl -e '\''srand; @_ = sort { rand() <=> rand() } <>; print $_[0];'\''`"'
-
-alias bumprace='bumprace -w -s -n -t -o'
-#alias bzr='bzrgit bzr'
-#alias git='bzrgit git'
-#alias svn='bzrgit svn'
-#alias hg='bzrgit hg'
-
-#function hawking {
-#	(
-#	while [ $# -gt 0 ]; do
-#		echo "($1)"
-#		shift
-#	done
-#	perl -nE 'BEGIN { $| = 1 } chomp; s/"/\\"/g; s/’/'\''/g; say "(SayText \"$_\")"'
-#	) | festival
-#}
 
 export PERLBREW_ROOT="/home/himdel/.perlbrew"
 [ -d "$PERLBREW_ROOT" ] && source "$PERLBREW_ROOT"/etc/bashrc
-
-#export LANG=en_US.UTF-8
-#export LC_COLLATE=C
-
-MOTD=~/.motd
-if [ -e "$MOTD" ]; then
-	cat "$MOTD"
-	echo -en '\e[37m'
-	echo vim "$MOTD"
-	echo -en '\e[0m'
-fi
-#if [ -d ~/.notes.d ]; then
-#	echo
-#	notes
-#	echo
-#fi
-#if which jrnl 2>&1 >/dev/null; then
-#	echo jrnl:
-#	jrnl -n5 -short
-#fi
 
 function Unpack {
 	f=~/IN/`ls -tr ~/IN | tail -n1`
@@ -318,7 +143,6 @@ function Unpack {
 	fi
 }
 
-#alias @="$BROWSER"
 function @ {
 	"$BROWSER" "$@" &
 }
@@ -337,27 +161,6 @@ function wo {
 function yt {
 	@ "http://www.youtube.com/results?search_query=$*"
 }
-alias fb="@ https://www.facebook.com"
-alias rea="@ https://theoldreader.com/posts/all"
-alias grd=rea
-alias ismuni="@ https://is.muni.cz/auth"
-alias is="@ https://is.mendelu.cz/auth/student/moje_studium.pl?lang=cz"
-
-alias wb="@ http://www.wolframalpha.com/input?i=brno+weather"
-alias lfm="@ http://www.last.fm/user/himdel"
-alias em="@ https://email.seznam.cz"
-alias mai="@ https://mail.google.com"
-
-function red {
-	if [ $# -eq 0 ]; then
-		@ https://www.reddit.com
-	else
-		while [ $# -ge 1 ]; do
-			@ https://www.reddit.com/r/$1
-			shift
-		done
-	fi
-}
 
 function brno {
 	@ idos.cz/brno/spojeni/\?f="$1"\&t="$2"\&submit=true
@@ -367,7 +170,6 @@ function vlak {
 	@ idos.cz/vlaky/spojeni/\?f="$1"\&t="$2"\&submit=true
 }
 
-alias ltr='ls -ltr'
 
 #alias vimdate="vim `date +%F`"
 function vimdate {
@@ -401,14 +203,11 @@ function vimdate {
 alias vim=vim-wrapper.pl
 alias vimdiff=vimdiff-wrapper.sh
 
-alias trek='mpl -R -fs /l/series/{tos,tas,tng,ds9,voy,ent}'
 alias ifre='sudo ifdown wlan0 ; sleep 0.5 ; sudo ifup wlan0'
 
 alias ':q'=exit
 alias ':e'="$EDITOR"
 complete -cf :e
-
-#alias ack='ack-grep'
 
 host="\h"
 window_title=""
@@ -435,17 +234,12 @@ colorat='\[`[[ $? -gt 0 ]] && printf "\033[01;31m" || printf "\033[01;32m"`\]@'`
 export PS1="${window_title}${debian_chroot:+($debian_chroot)}\\u${colorat}${host}:\\w\\$ "
 unset host window_title
 
-alias mysql='mysql --user=root --default-character-set=utf8'
-alias mysqldump='mysqldump --user=root'
-alias l=ls
-
 alias service='sudo service'
 alias vo,='vim'
+alias v=vim
+alias imdb='gl imdb'
 
 export PYTHONDONTWRITEBYTECODE="true"
-alias v=vim
-
-alias imdb='gl imdb'
 
 # alias col1="awk '{ print \$1 }'"
 for c in {1..16}; do alias col$c="awk '{ print \$$c }'"; done
@@ -464,7 +258,6 @@ function vimx {
 	vim "$@"
 }
 
-alias gdrive='gdocs.sh'
 alias docker='sudo docker'
 alias minecraft='(cd ~/.minecraft ; minecraft-launcher)'
 
@@ -480,27 +273,10 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-function bj {
-	url=${1:-7642919332}
-	if ! expr "$url" : '^[0-9]\+' >/dev/null ; then
-		url=`grep ^"$url" ~/bj | awk '{ print $2 }'`
-	fi
-	if ! expr "$url" : ^http >/dev/null ; then
-		url="https://redhat.bluejeans.com/$url"
-	fi
-
-	#chromium --no-sandbox --app="$url"
-	firefox "$url"
-}
-
 export CHROMIUM_FLAGS='--enable-remote-extensions'
 alias netflix='google-chrome-beta https://www.netflix.com/'
 
 alias dmesg='sudo dmesg'
-alias mcedit='(cd ~/mcedit; . ENV/bin/activate ; ./mcedit.py )'
-
-# ruby2.5 - disable inverted stacktrace
-# alias ruby="rc -c 'ruby $* |[2] cat'"
 
 alias altchromium='chromium --user-data-dir=$HOME/.config/altchromium'
 
@@ -510,9 +286,6 @@ alias pg_restore='pg_restore -j8'
 function movrename {
 	rename 's/^(.*?)(\d{4}).*(\....)$/$2-$1/; my $ext = $3; s/[\. ](.)/\u$1/g; s/[\.\(\[\]]$//; s/[^-a-zA-Z0-9]/_/g; s/_$//; s/$/$ext/' -n "$@"
 }
-
-# plug <on|off>
-alias plug='wemo switch "WeMo Insight"'
 
 # strips BOMs off utf-8 files
 alias debom='perl -i -npe s/\\xef\\xbb\\xbf//'
@@ -540,7 +313,7 @@ alias pip-install='pip3 install --break-system-packages --user'
 
 alias gn='headphones off ; sleep 3m; light off; xss; exit'
 
-export JIRA_API_TOKEN=`cat ~/.jira.cli`
+export JIRA_API_TOKEN=`cat ~/.jira.cli 2>/dev/null`
 export JIRA_AUTH_TYPE=bearer
 source <(jira completion bash)
 alias jira-me='jira issues list -a $(jira me) -R Unresolved'

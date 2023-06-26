@@ -8,8 +8,6 @@ export TZ=UTC
 
 export BROWSER=google-chrome-beta
 export EDITOR=vim
-export MAILER=claws-mail
 
-#export ALSA_CARD=PCH
 export GOPATH=/home/himdel/.gopath
 export TERMINAL=rxvt-unicode
