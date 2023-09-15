@@ -16,6 +16,7 @@ cd "$( dirname "$0" )"
 
 ## ssh-keygen, add to github, clone doftiles
 ## sudoers
+##   also Defaults !admin_flag
 
 sudo dpkg --add-architecture i386
 sudo apt update
@@ -36,6 +37,10 @@ rm -vf google-chrome-beta_current_amd64.deb
 
 [ -e ~/bin ] || ln -sv ~/dotfiles/bin ~/bin
 
-# TODO link stuff
+cd /usr/local/bin/
+sudo ln -sv ~/bin/rename.perl rename
+sudo ln -sv ~/bin/xdg-open .
+
+# TODO link home stuff
 
 ./update

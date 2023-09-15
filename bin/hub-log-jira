@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+# run as `git log 4.7.0..4.7.2 | hub-log-jira`
+# outputs list of issues and mentioned issues
+
+require 'set'
+
+issues = Set.new
+mentions = Set.new
+
+ARGF.each_line do |s|
+  if s.match(/AA[HP]-\d+/) then
+    target = s.match?(/Issue: /) ? issues : mentions
+    target.add($&)
+  end
+end
+
+def sorted(set)
+  set.sort_by do |item|
+    project, number = *item.split('-')
+    [project, number.to_i]
+  end
+end
+
+# puts(JSON.pretty_generate({ fixed: sorted(issues).to_a, mentioned: sorted(mentions - issues).to_a }))
+puts "{\n  \"fixed\": #{sorted(issues).inspect.chomp},"
+puts "  \"mentioned\": #{sorted(mentions - issues).inspect.chomp}\n}\n"
+
+# backported to 4.7.0: git log `git merge-base upstream/master upstream/stable-4.7`..4.7.0  | hub-log-jira
+# backported to 4.7.x: git log 4.7.1..4.7.2 | hub-log-jira
+# merged during 4.8=master: git log `git merge-base upstream/master upstream/stable-4.7`..`git merge-base upstream/master upstream/stable-4.8` | hub-log-jira

@@ -1,2 +1,2 @@
 #!/bin/sh
-xdotool search --classname scratchpad_urxvt || exec urxvt -name 'scratchpad_urxvt' &
+xdotool search --classname scratchpad_urxvt || exec urxvt -name 'scratchpad_urxvt' -geometry 273x34+0+0

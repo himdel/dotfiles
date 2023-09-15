@@ -10,13 +10,16 @@ sudo apt install python3 \
                  libtool
 
 # python dependencies
-#pip3 install 'aiocoap==0.4a1' \
-#             'DTLSSocket==0.1.7' \
-#             'typing>=3,<4' 
-pip3 install pytradfri \
-             colormath
+# https://raw.githubusercontent.com/home-assistant-libs/pytradfri/master/requirements.txt
+pip-install aiocoap==0.4.7 \
+            DTLSSocket==0.1.16 \
+            pydantic==1.10.9
+pip-install pytradfri \
+            colormath
 
 # /usr/lobcal/bin/coap-client
+apt-get install -f autoconf automake libtool
+
 git clone --depth 1 --recursive -b dtls https://github.com/home-assistant/libcoap.git
 cd libcoap
 ./autogen.sh

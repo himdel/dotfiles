@@ -38,6 +38,7 @@ gdb
 gimp
 git
 gnupg
+golang
 grep
 gzip
 hardlink-
@@ -93,6 +94,7 @@ suckless-tools
 sudo
 tar
 thunar
+time
 tmux
 tumbler
 tumbler-plugins-extra

@@ -1,0 +1,12 @@
+#!/bin/bash
+# gcmuc: git checkout master, up & clean
+
+set -e
+
+git st
+git checkout master || git checkout main
+git up
+git pr-clean
+git branch-clean
+git b
+if [ -f package.json ]; then npm install; else true; fi
