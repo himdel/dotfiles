@@ -1,15 +1,16 @@
 #!/usr/bin/env ruby
 
 BUNDLES=%w(
+  https://github.com/preservim/nerdtree
+  https://github.com/Xuyuanp/nerdtree-git-plugin
+  https://github.com/junegunn/fzf
   https://github.com/junegunn/fzf.vim
-  https://github.com/leafgarland/typescript-vim.git
   https://github.com/mbbill/undotree
-  https://github.com/mileszs/ack.vim
-  https://github.com/scrooloose/nerdtree
 )
 
 Dir.chdir(File.dirname(__FILE__))
 
+failed = []
 BUNDLES.each do |b|
   dirname = b
     .sub(/^.*\//, '')
@@ -20,6 +21,9 @@ BUNDLES.each do |b|
       system('git', 'up')
     end
   else
-    system('git', 'clone', b) # FIXME die on fail
+    system('git', 'clone', b)
+    failed << b unless $?.success?
   end
 end
+
+exit(failed.length)

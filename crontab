@@ -2,4 +2,5 @@
 
 14 17 * * * [ -d ~/bbccomedy ] && podget -s
 22 */4 * * * [ `find .fvwm/preferences/LastChoosenWallpaper -mmin +180 | wc -l` = 1 ] && PATH=~/bin:/usr/local/bin:$PATH DISPLAY=:0 ~/wallpapers/.random.sh >/dev/null
-11 21 * * */3 for i in ~/.vim/bundle/*; do git -C $i pull; done
+11 21 * * */3 ~/.vim/bundle/do.rb
+12 21 * * */2 for d in ~/*.wiki/; do git -C $d up; done

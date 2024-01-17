@@ -1,31 +1,26 @@
 set nocompatible
 syntax on
-set mouse=a
-set list
-set listchars=tab:__,trail:'
-set hlsearch
-set incsearch
-set ruler
-set ignorecase
 set autoindent
 set bg=dark
 set display=lastline
-set showmatch
+set expandtab
+set hlsearch
+set ignorecase
+set incsearch
+set list
+set listchars=tab:__,trail:~
+set mouse=a
+set ruler
 set shiftround
 set shiftwidth=2
+set showmatch
 set ts=2
-set expandtab
-
-" :X encrypts current file
-set cm=blowfish
+set wildmode=longest,list:longest,list:full
 
 " jump to last position when reopening
 if v:progname !~ "vimdiff"
-	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"z." | endif
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"z." | endif
 endif
-
-" sane filename completion
-set wildmode=longest,list:longest,list:full
 
 " make X clipboard the default; needs vim-gtk, not basic
 set clipboard=unnamed,unnamedplus
@@ -34,16 +29,16 @@ set clipboard+=autoselectplus
 " plugins
 execute pathogen#infect()
 
+let g:NERDTreeQuitOnOpen = 1
+map <F2> :NERDTreeFind<CR>
+map <F3> :NERDTreeClose<CR>
+
 map <C-T> :Files<CR>
 map <C-C> :Commits<CR>
 map <C-G> :Tags<CR>
-"let g:ackprg = 'ag --nogroup --nocolor --column'
-"map <C-A> :Ack
-"nnoremap <F8> :UndotreeToggle<CR>
-"map <F2> :NERDTreeToggle<CR>
+nnoremap <F7> :Rg 
 
-" testing { from..
-" http://www.reddit.com/r/vim/comments/19u4u0/what_normal_mode_mappings_do_you_have_in_your/
+nnoremap <F8> :UndotreeToggle<CR>
 
 let mapleader=','
 
@@ -79,3 +74,6 @@ au BufNewFile,BufReadPost Makefile set noexpandtab tabstop=4 shiftwidth=4 softta
 nnoremap Q <nop>
 
 map <F5> :w<CR> \| :!npx prettier --write %<CR> \| :e<CR>
+
+set suffixesadd+=.js,.jsx,.ts,.tsx,.mjs,.cjs
+set path+=$PWD/node_modules
