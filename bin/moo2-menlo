@@ -1,0 +1,3 @@
+#!/bin/bash
+set -e
+xdotool key --window `xwinid` alt+{m,e,n,l,o}

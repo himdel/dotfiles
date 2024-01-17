@@ -1,0 +1,12 @@
+#!/bin/sh
+out="$1"
+[ $# -ne 1 ] && out=`date +%Y%m%d%H%M%S`.mp4
+
+x=0
+y=0
+w=1920
+h=1080
+slop -f '%x %y %w %h' | (
+  read x y w h
+  ffmpeg -video_size "$w"x"$h" -framerate 25 -f x11grab -i :0.0+"$x","$y" -f alsa -ac 2 -i pulse -acodec aac "$out"
+)

@@ -9,4 +9,4 @@ git up
 git pr-clean
 git branch-clean
 git b
-if [ -f package.json ]; then npm install; else true; fi
+if [ -f package.json ]; then ni; else true; fi

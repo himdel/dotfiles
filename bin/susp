@@ -44,8 +44,8 @@ fi
 echo Suspend in 4 sec... "($PRG)"
 echo susp = $DO_SUSP, lock = $DO_LOCK
 
-STATUS=`purple-send PurpleSavedstatusGetCurrent | sed -e 1d -e 's/ \+//' -e 's/ /:/'`
-purple-remote 'setstatus?status=offline'
+#STATUS=`purple-send PurpleSavedstatusGetCurrent | sed -e 1d -e 's/ \+//' -e 's/ /:/'`
+#purple-remote 'setstatus?status=offline'
 #killall sonata
 #sleep 1
 #killall -9 sonata
@@ -72,29 +72,29 @@ xset dpms force on
 
 # to reconnect accounts, use PurpleAccountsGetAll & purple-send 'PurpleAccountConnect' int32:9930 (for each)
 #purple-remote "setstatus?status=$STATUS"
-purple-send-async 'PurpleSavedstatusActivate' "$STATUS"
+#purple-send-async 'PurpleSavedstatusActivate' "$STATUS"
 
 ( echo -n 'wake ' ; date '+%FT%TZ' ) >> ~/.susp.log
 
 udevadm settle
 
 # ETH0_IN = yes | no
-ETH0_IN=`sudo ethtool eth0 | grep 'Link detected' | sed 's/^.*:\s*//'`
+#ETH0_IN=`sudo ethtool eth0 | grep 'Link detected' | sed 's/^.*:\s*//'`
 
 # ETH0_ON = 1 | 0
-ETH0_ON=`sudo ifconfig | grep ^eth0 | wc -l`
+#ETH0_ON=`sudo ifconfig | grep ^eth0 | wc -l`
 
 # WLAN_ON = 1 | 0
-WLAN_ON=`ps -A | grep wpa_supplicant | wc -l`
+#WLAN_ON=`ps -A | grep wpa_supplicant | wc -l`
 
 # link detected fails but monitor connected might not
 #[ "$ETH0_IN" = no ] && xrandr-output-connected 'DP2-2' && ETH0_IN=yes
 
-[ "$ETH0_IN" = yes -a "$WLAN_ON" = 1 ] && sudo ifdown wlan0
-[ "$ETH0_IN" = yes -a "$ETH0_ON" = 0 ] && sudo ifup eth0
+#[ "$ETH0_IN" = yes -a "$WLAN_ON" = 1 ] && sudo ifdown wlan0
+#[ "$ETH0_IN" = yes -a "$ETH0_ON" = 0 ] && sudo ifup eth0
 
-[ "$ETH0_IN" = no -a "$ETH0_ON" = 1 ] && sudo ifdown eth0
-[ "$ETH0_IN" = no -a "$WLAN_ON" = 0 ] && sudo ifup wlan0
+#[ "$ETH0_IN" = no -a "$ETH0_ON" = 1 ] && sudo ifdown eth0
+#[ "$ETH0_IN" = no -a "$WLAN_ON" = 0 ] && sudo ifup wlan0
 
 xrandr --auto
 [ -x ~/.screenlayout/detect.sh ] && ~/.screenlayout/detect.sh

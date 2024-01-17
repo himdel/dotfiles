@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+# https://pystray.readthedocs.io/en/latest/reference.html
+
+import pystray
+from PIL import Image, ImageDraw
+
+def generate_image(width, height, color1, color2):
+  image = Image.new('RGB', (width, height), color1)
+  dc = ImageDraw.Draw(image)
+  dc.rectangle((width // 2, 0, width, height // 2), fill=color2)
+  dc.rectangle((0, height // 2, width // 2, height), fill=color2)
+  return image
+
+def setup(icon):
+  icon.visible = True
+
+tray_icon = pystray.Icon('traydo', title='foobar')
+tray_icon.icon = generate_image(128, 128, 'red', 'green')
+
+def click_foo():
+  tray_icon.notify('foz', 'baz')
+
+def click_bar():
+  ...
+
+tray_icon.menu = pystray.Menu(
+  pystray.MenuItem('foo', click_foo),
+  pystray.MenuItem('bar', click_bar),
+)
+
+## TODO
+# support running shell commands, configfile
+# update icon to indicate running,success,fail and reset on timer
+# vpn, resolv, httpdir
+# also support showing multiple icons for long-running commands (vpn while active)
+
+tray_icon.run(setup)

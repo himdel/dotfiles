@@ -28,7 +28,7 @@ case $BRANCH in
     ;;
 esac
 
-ZSTREAMS="4.2 4.3 4.4 4.5 4.6 4.7 4.8"
+ZSTREAMS="4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9"
 for release in $ZSTREAMS; do
   if pwd | grep -q ansible-hub-ui-$release; then
     remote_branch=stable-$release

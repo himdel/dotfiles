@@ -18,6 +18,9 @@ cd "$( dirname "$0" )"
 ## sudoers
 ##   also Defaults !admin_flag
 
+sudo ln -svf /usr/share/zoneinfo/Etc/UTC /etc/localtime
+sudo sh -c 'echo Etc/UTC > /etc/timezone'
+
 sudo dpkg --add-architecture i386
 sudo apt update
 
@@ -44,3 +47,6 @@ sudo ln -sv ~/bin/xdg-open .
 # TODO link home stuff
 
 ./update
+
+# rm -f /usr/lib/python3*/EXTERNALLY-MANAGED
+# TODO install fbkxb (no longer in deb)

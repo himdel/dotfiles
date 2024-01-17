@@ -21,12 +21,12 @@ dctrl-tools
 debianutils
 debootstrap
 dmsetup
+dpkg-repack
 dunst
 ed
 elinks
 equivs
 fakeroot
-fbxkb
 fd-find
 ffmpeg
 firmware-linux
@@ -96,6 +96,7 @@ tar
 thunar
 time
 tmux
+tree
 tumbler
 tumbler-plugins-extra
 units
