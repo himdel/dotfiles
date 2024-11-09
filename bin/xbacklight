@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# FIXME: maybe try blight too?
 # try to use actual xbacklight if installed and working
 [ -x /usr/bin/xbacklight ] && /usr/bin/xbacklight "$@" && exit 0
 

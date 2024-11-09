@@ -1,0 +1,75 @@
+#!/bin/sh
+set -ex
+cd ~/ag-data.d/
+# also ./dev-aap-data
+
+API_BASE=/api/galaxy/
+API_HOST=localhost
+API_PORT=5001
+API_PROTOCOL=http
+#UI_PORT=8002
+USER=admin
+PASS=admin
+
+SERVER=${API_PROTOCOL}://${API_HOST}:${API_PORT}${API_BASE}
+echo SERVER=$SERVER
+
+gk() {
+  galaxykit -c -u "$USER" -p "$PASS" -s "$SERVER" "$@"
+}
+
+cl() {
+  curl -s -k -u "$USER":"$PASS" "$@" | jq
+}
+
+# create namespaces
+ls *.tar.gz | sed 's/-.*//' | sort -u | while read namespace; do
+  echo create namespace "$namespace"
+  gk namespace create "$namespace"
+done
+
+# upload collections
+for file in *.tar.gz; do
+  echo "$file" | sed 's/^\([^-]*\)-\([^-]*\)-\([.0-9]*\)\.tar\.gz$/\1 \2 \3/' | while read namespace collection version; do
+    echo upload collection "$namespace"."$collection" v"$version"
+  done
+  cl -X POST -F file=@"$file" "$SERVER"v3/plugin/ansible/content/staging/collections/artifacts/
+done
+
+# wait for imports
+echo wait for imports
+gk task wait all
+
+# approve collections
+ls *.tar.gz | sed 's/^\([^-]*\)-\([^-]*\)-\([.0-9]*\)\.tar\.gz$/\1 \2 \3/' | while read namespace collection version; do
+  if [ "$namespace" = "ansible" -a "$collection" = "netcommon" ]; then
+    echo keep "$namespace"."$collection" v"$version" in staging
+  elif [ "$namespace" = "ansible" -a "$collection" = "network" ]; then
+    echo reject "$namespace"."$collection" v"$version"
+    gk collection move "$namespace" "$collection" "$version" staging rejected
+  else
+    echo approve "$namespace"."$collection" v"$version"
+    gk collection approve "$namespace" "$collection" "$version"
+  fi
+done
+
+# add RR
+echo add remote registry docker
+cl -X POST -H 'Content-Type: application/json' -d '{ "name": "docker", "tls_validation": true, "url": "https://registry.hub.docker.com/" }' "$SERVER"_ui/v1/execution-environments/registries/
+
+# add EEs
+echo add remote EE alpine
+registry_uuid=`cl "$SERVER"_ui/v1/execution-environments/registries/?name=docker | jq -r '.data[0].id'`
+cl -X POST -H 'Content-Type: application/json' -d '{ "exclude_tags": [], "include_tags": [ "latest" ], "name": "alpine", "upstream_name": "library/alpine", "registry": "'"$registry_uuid"'" }' "$SERVER"_ui/v1/execution-environments/remotes/
+
+echo add local EE local/container
+DOCKER=`echo "$SERVER" | cut -d/ -f3`
+podman login --tls-verify=false "$DOCKER" --username "$USER" --password "$PASS"
+podman pull hello-world
+podman tag hello-world "$DOCKER"/local/container:latest
+podman push "$DOCKER"/local/container:latest --tls-verify=false
+
+# TODO: role sync, role import
+curl -u admin:admin -X POST -H 'Content-Type: application/json' -d '{"github_user": "geerlingguy", "role_name": "docker"}' ${SERVER}v1/sync/
+curl -u admin:admin -X POST -H 'Content-Type: application/json' -d '{"github_user": "geerlingguy", "role_name": "java"}' ${SERVER}v1/sync/
+curl -u admin:admin -X POST -H 'Content-Type: application/json' -d '{"github_user": "0x0i", "role_name": "systemd"}' ${SERVER}v1/sync/

@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+
+cd ~/oci_env
+git up || echo ERROR updating oci_env 1>&2
+
+cd ~/galaxy_ng
+git up || echo ERROR updating galaxy_ng 1>&2
+# last proper standalone:
+#git checkout f3c93fc1ee27523436425598951e643132510d1e || true
+#echo WARN galaxy_ng hardcoded version
+
+if [ -d ~/pulpcore ]; then
+  cd ~/pulpcore
+  git up || echo ERROR updating pulpcore 1>&2
+  cd -
+fi
+
+if [ -d ~/django-ansible-base ]; then
+  cd ~/django-ansible-base
+  git pull --ff-only || echo ERROR updating django-ansible-base 1>&2
+  cd -
+fi
+
+if grep -q podman.sock <<< "$DOCKER_HOST" ; then
+  unset DOCKER_HOST
+  export DOCKER_HOST
+fi
+
+# oci/standalone oci/insights oci/keycloak oci/ldap oci/community oci/dab
+make oci/${1:-dab}

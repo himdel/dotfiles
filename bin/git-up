@@ -7,6 +7,7 @@ git remote -v | cut -f1 | grep -q \^"$UPSTREAM"\$ || UPSTREAM=origin
 
 remote_branch=master
 git branch -r | awk '{ print $1 }' | grep -q '^'"$UPSTREAM"'/master$' || remote_branch=main
+git branch -r | awk '{ print $1 }' | grep -q '^'"$UPSTREAM"'/devel$' && remote_branch=devel
 
 master=false
 case $BRANCH in
@@ -16,6 +17,10 @@ case $BRANCH in
     ;;
   main)
     remote_branch=main
+    master=true
+  ;;
+  devel)
+    remote_branch=devel
     master=true
     ;;
   feature/*)
@@ -28,7 +33,7 @@ case $BRANCH in
     ;;
 esac
 
-ZSTREAMS="4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9"
+ZSTREAMS="4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 4.10"
 for release in $ZSTREAMS; do
   if pwd | grep -q ansible-hub-ui-$release; then
     remote_branch=stable-$release
@@ -47,6 +52,7 @@ else
 
   branch="master"
   git branch | awk '{ print $1 }' | grep -q '^master$' || branch=main
+  git branch | awk '{ print $1 }' | grep -q '^devel$' && branch=devel
   echo "git-up: Updating $branch, not $BRANCH" 1>&2
 
   while ! [ -d .git ]; do

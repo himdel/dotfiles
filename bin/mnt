@@ -1,0 +1,63 @@
+#!/bin/bash
+set -e
+
+declare -A uuids=(
+  ["gray4t"]="7df7dfc3-aa21-48ff-8a19-821ca6933938"
+  ["ofbak5t"]="027a279f-a40f-45ea-b309-d0958ca2560d"
+  ["shap5t"]="2d9ca393-5cf8-4958-90a0-20963cc993c3"
+  ["ssd4t"]="2c5e952a-be06-40dd-9870-108ff580b0ff"
+  ["treebeard"]="7cf720ed-568a-4cf0-8a02-2bf2748611d6"
+  ["wd12t"]="d15297a9-2fab-4d41-9698-26824267eef7"
+  ["wd5tB"]="10e35b91-e79a-4091-baa0-fbc173e8faab"
+  ["xyzzy"]="29e2ba8b-fcde-4f17-b9a2-20b6a41a9deb"
+)
+
+BASENAME=`basename "$0"`
+NAME=${BASENAME#mnt.}
+UUID=${uuids[$NAME]:?"No UUID found for \"$NAME\": ${!uuids[@]}"}
+
+echo NAME="$NAME" 1>&2
+echo UUID="$UUID" 1>&2
+
+# TODO
+# lvm: earendil e048b0d0-6a6d-4850-9894-a5a085a36a839
+# lvm: wd10t 2402c8a8-fcc7-42f6-a49a-9fcdcbc9cb6e
+# zfs: wd2t
+# lvm: wd3t
+# lvm: wd4t
+# zfs: wd5t
+# zfs: wd5tAB 10e35b91-e79a-4091-baa0-fbc173e8faab 3221bba3-014e-4922-994b-bbeda97da919
+# zfs: wd5tC 0797aada-1c24-4e0e-90b6-3b5e8653c366
+
+## setup
+# sudo fdisk # ... 1 big partition, type linux
+# sudo cryptsetup luksFormat /dev/sdX1 # no UUID yet
+# ls -l /dev/disk/by-uuid/ # find the UUID
+# sudo cryptsetup luksOpen /dev/disk/by-uuid/"$UUID" "$NAME"
+# sudo mkfs.ext4 -L "$NAME" -j -m0 -v /dev/mapper/"$NAME"
+# sudo mkdir -p /media/"$NAME"
+# sudo mount /dev/mapper/"$NAME" /media/"$NAME"
+# sudo chown himdel:himdel /media/"$NAME"
+# echo "  [\"$NAME\"]=\"$UUID\""
+
+function _mount {
+  set -x
+  sudo mkdir -p /media/"$NAME"
+  sudo cryptsetup luksOpen /dev/disk/by-uuid/"$UUID" "$NAME"
+  time sudo fsck -fp /dev/mapper/"$NAME"
+  sudo mount /dev/mapper/"$NAME" /media/"$NAME"
+}
+
+function _umount {
+  set -x
+  sudo umount /media/"$NAME"
+  sudo cryptsetup luksClose "$NAME"
+  sudo rmdir /media/"$NAME"
+}
+
+FNC=_mount
+if [ "$1" = '-u' ]; then
+  FNC=_umount
+fi
+
+$FNC

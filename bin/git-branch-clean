@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 remote_branch=master
 git branch -r | awk '{ print $1 }' | grep -q '^upstream/master$' || remote_branch=main

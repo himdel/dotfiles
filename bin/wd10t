@@ -9,7 +9,7 @@ function _mount {
 	sleep 0.5
 	sudo vgchange -ay "$NAME"
 	sleep 0.5
-	sudo fsck -fp /dev/"$NAME"/data
+	time sudo fsck -fp /dev/"$NAME"/data
 	sudo mount /dev/"$NAME"/data /media/"$NAME"
 }
 

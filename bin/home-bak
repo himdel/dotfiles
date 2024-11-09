@@ -25,4 +25,6 @@ rsync -aPvux "/home/himdel/" "$TARGET/" \
 	--exclude 'node_modules' \
 	--exclude '/fun' \
 	--exclude '/wallpapers' \
+	--exclude '/keep' \
+	--exclude '/.ollama' \
 

@@ -50,3 +50,11 @@ sudo ln -sv ~/bin/xdg-open .
 
 # rm -f /usr/lib/python3*/EXTERNALLY-MANAGED
 # TODO install fbkxb (no longer in deb)
+
+gio mime x-scheme-handler/http google-chrome-beta.desktop
+gio mime x-scheme-handler/https google-chrome-beta.desktop
+xdg-mime default google-chrome-beta.desktop x-scheme-handler/http
+xdg-mime default google-chrome-beta.desktop x-scheme-handler/https
+
+# no longer in util-linux
+sudo ln -s /usr/bin/busybox /usr/local/bin/last

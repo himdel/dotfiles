@@ -65,6 +65,7 @@ rejary = (%w[
 	jpeg
 	jpg
 	js
+	json
 	o
 	pdf
 	php

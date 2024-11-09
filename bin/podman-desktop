@@ -1,0 +1,3 @@
+#!/bin/sh
+
+nohup flatpak run io.podman_desktop.PodmanDesktop > /dev/null &
