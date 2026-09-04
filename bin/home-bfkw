@@ -1,0 +1,10 @@
+#!/bin/bash
+TARGET=${1:?missing target}
+shift
+
+for dir in bbccomedy fun keep wallpapers ; do
+  rsync -aPvux "/home/himdel/$dir/" "$TARGET/$dir/"
+  if ! [ "$dir" = "bbccomedy" ]; then
+    rsync -aPvux "$TARGET/$dir/" "/home/himdel/$dir/"
+  fi
+done
