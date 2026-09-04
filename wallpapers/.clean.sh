@@ -19,4 +19,25 @@ done
 chmod -R 'a-x,go-w,a+rX' *
 
 rename 's/(.\.)([A-Za-z0-9]+)$/"$1" . lc($2)/e' -v *
+
 rename 's/(.\.)jpeg$/$1jpg/' -v *
+for f in *.jpeg; do
+  g="${f/%jpeg/jpg}"
+  if cmp -s "$f" "$g"; then
+    rm -v "$f"
+  else
+    [ -e "$g" ] && echo DIFFERENT "$f" "$g"
+  fi
+done
+
+if [ -d '.qiv-trash' ]; then
+  cd '.qiv-trash'
+  for f in *; do
+    if cmp -s "$f" ../"$f"; then
+      rm -v ../"$f"
+    else
+      [ -e ../"$f" ] && echo DIFFERENT "$f" ../"$f"
+    fi
+  done
+  cd ..
+fi
