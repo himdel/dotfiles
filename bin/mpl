@@ -85,27 +85,7 @@ rejary = (%w[
 ] + exclude).flatten.map { |x| "." + x.downcase }
 
 
-# volume controls: mpc version, obsolete, used if amixer version fails
-
-# save volume and play/paused state, pause if playing
-def snd_save_mpc
-	@play_state = `mpc | sed -n 2p`.chomp.sub(/^\s*\[(.*)\].*$/, '\1')
-	`mpc toggle` if @play_state == "playing"
-
-	@volume = `mpc | grep volume`.chomp.sub(/^.*volume:\s*([0-9]*).*$/, '\1').to_i
-	`mpc volume #{$setvolume}` if $setvolume
-
-	p [:snd_save_mpc, @play_state, @volume]
-end
-
-# restore volume and play/paused state
-def snd_restore_mpc
-	`mpc volume #{@volume}`
-	p [:snd_restore_mpc, @volume]
-	`mpc toggle` if @play_state == "playing"
-end
-
-# alsa version
+# volume controls
 
 def snd_save_amixer
 	@play_state = 'unknown'
@@ -136,17 +116,12 @@ end
 def snd_save
 	return if find_backend =~ /mpv/
 	snd_save_amixer rescue $stderr.puts "snd_save_amixer failed"
-	snd_save_mpc rescue $stderr.puts "snd_save_mpc failed"
 end
 
 def snd_restore
 	return unless @volume
 
-	if Array === @volume
-		snd_restore_amixer
-	else
-		snd_restore_mpc
-	end
+	snd_restore_amixer
 end
 
 
