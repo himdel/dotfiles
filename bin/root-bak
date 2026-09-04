@@ -1,0 +1,17 @@
+#!/bin/bash
+# the system side of home-bak, was part of the old wd3t-bak
+TARGET=${1:?missing target}
+shift
+
+# -x stops at mount points, so /proc /sys /dev /run cost us nothing,
+# but /boot and /boot/efi each need their own pass to fill in
+sudo rsync -aPvux "/" "$TARGET/" \
+  --exclude '/home' \
+  --exclude '/tmp' \
+  --exclude '/var/cache/apt/archives' \
+  --exclude '/var/lib/containers' \
+  --exclude '/var/tmp' \
+  "$@"
+
+sudo rsync -aPvux "/boot/" "$TARGET/boot/" "$@"
+sudo rsync -aPvux "/boot/efi/" "$TARGET/boot/efi/" "$@"
