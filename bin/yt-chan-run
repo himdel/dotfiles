@@ -1,0 +1,31 @@
+#!/bin/bash
+# Cron entry point for the yt-chan downloader (see ~/controlpanel/docs/INVENTORY.md).
+#
+# Runs the downloader on gray4t, tees its output to a log on the *system* disk,
+# then snapshots the backlog counts while the drive is still awake. The control
+# panel reads only what lands under ~/.local/share/controlpanel, so drawing the
+# widget never spins gray4t up.
+#
+# stdout still passes through tee, so cron mail is unchanged.
+set -u -o pipefail
+
+DIR=/media/gray4t/yt-chan
+LOGS=$HOME/.local/share/controlpanel/ytchan-logs
+KEEP=30
+
+[ -x "$DIR/download" ] || exit 0
+mkdir -p "$LOGS"
+
+start=$(date +%s)
+log=$LOGS/$(date -d "@$start" +%Y-%m-%d-%H%M).log
+# args pass through to the downloader (`yt-chan-run -u` = refresh lists only)
+"$DIR/download" "$@" 2>&1 | tee "$log"
+code=${PIPESTATUS[0]}
+end=$(date +%s)
+
+"$DIR/report" --run "$start" "$end" "$code" "$log"
+
+# keep the last KEEP logs; they are a few hundred KB each at most
+ls -1t "$LOGS"/*.log 2>/dev/null | tail -n +$((KEEP + 1)) | xargs -r rm --
+
+exit "$code"
