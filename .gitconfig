@@ -33,21 +33,28 @@
 	excludesfile = /home/himdel/.gitignore
 [push]
 	default = simple
+	autoSetupRemote = true
 [pull]
 	rebase = true
 [protocol]
 	version = 2
 [commit]
 	gpgSign = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [init]
 	defaultBranch = main
 [branch]
 	sort = -committerdate
+	autoSetupMerge = false
 [tag]
 	sort = version:refname
 [diff]
 	algorithm = histogram
 [fetch]
 	prune = true
-	pruneTags = true
+#	pruneTags = true
 	all = true
