@@ -1,0 +1,8 @@
+# TEMPer USB temperature sensor (413d:2107)
+#
+# $ udevadm control --reload-rules
+# $ udevadm trigger /dev/hidraw11 # the hiddev one, not the input one
+#
+# Interface 01 is the sensor; interface 00 is a fake keyboard
+# ENV vars come from 60-persistent-hidraw.rules (avoids cross-parent ATTRS issue)
+SUBSYSTEM=="hidraw", ENV{ID_USB_VENDOR_ID}=="413d", ENV{ID_USB_MODEL_ID}=="2107", ENV{ID_USB_INTERFACE_NUM}=="01", GROUP="plugdev", MODE="0660", SYMLINK+="temper"

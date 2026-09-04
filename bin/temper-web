@@ -1,0 +1,39 @@
+#!/bin/bash
+DIR=~/.local/share/temper
+RRD=$DIR/temp.rrd
+# no arg = random free port (8043 went to contexts-personal; the browser opens
+# on the right port anyway, and the controlpanel finds it by process cwd)
+PORT=${1:-$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1", 0)); print(s.getsockname()[1])')}
+
+for range in 6h 24h 7d 30d 365d; do
+  rrdtool graph "$DIR/temp-$range.png" \
+    --start "now-$range" \
+    --title "Temperature ($range)" \
+    --vertical-label "°C" \
+    --width 800 --height 200 \
+    --lower-limit 15 --upper-limit 35 --rigid \
+    DEF:temp=$RRD:temp:AVERAGE \
+    DEF:min=$RRD:temp:MIN \
+    DEF:max=$RRD:temp:MAX \
+    AREA:max#ffcccc \
+    AREA:min#ffffff \
+    LINE1:temp#cc0000:"temp" \
+    > /dev/null
+done
+
+cat > "$DIR/index.html" << 'EOF'
+<!DOCTYPE html>
+<html><head>
+<title>temper</title>
+<style>body { background: #1a1a1a; color: #ccc; font-family: monospace; text-align: center; } img { display: block; margin: 1em auto; }</style>
+</head><body>
+<h2>temper</h2>
+<img src="temp-6h.png"><img src="temp-24h.png"><img src="temp-7d.png"><img src="temp-30d.png"><img src="temp-365d.png">
+</body></html>
+EOF
+
+echo "http://localhost:$PORT"
+( sleep 0.6 ; "$BROWSER" "http://localhost:$PORT" ) &
+
+cd "$DIR"
+exec python3 -m http.server "$PORT"

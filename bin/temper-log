@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+DIR=~/.local/share/temper
+CTEMP=$(~/bin/temper "$@") || exit 0
+
+NOW=$(date +%s)
+ISO=$(date -u -d @$NOW +%Y-%m-%dT%H:%M:%SZ)
+echo -e "$ISO\t$CTEMP" >> "$DIR/temp.tsv"
+rrdtool update "$DIR/temp.rrd" "$NOW:$CTEMP"

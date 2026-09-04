@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+exec 5<> ${1:-/dev/temper}
+echo -e '\x00\x01\x80\x33\x01\x00\x00\x00\x00\c' >&5
+OUT=$(dd count=1 bs=8 <&5 2>/dev/null | xxd -p)
+HEX4=${OUT:4:4}
+DVAL=$((16#$HEX4))
+if [[ $DVAL -gt 32767 ]]; then
+  DVAL=$(($DVAL - 65536))
+fi
+CTEMP=$(bc <<< "scale=2; $DVAL/100")
+echo $CTEMP
