@@ -1,8 +1,14 @@
 #!/bin/sh
 set -e
 
-smbnetfs /media/smbnetfs -o allow_other
+if [ -d /etc/boot.d ]; then
+  run-parts /etc/boot.d
+fi
 
-( cd ~himdel/`hostname`.vpn/ ; openvpn --config `hostname`.conf --daemon )
+# smbnetfs /media/smbnetfs -o allow_other
+
+[ -e /etc/sysctl.conf ] && sysctl -p /etc/sysctl.conf
+
+# ( cd ~himdel/`hostname`.vpn/ ; openvpn --config `hostname`.conf --daemon )
 
 exit 0
