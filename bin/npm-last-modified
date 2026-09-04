@@ -1,0 +1,5 @@
+#!/bin/bash
+for dep in $(npm ls --json | jq -r '.dependencies | .[].resolved'); do
+  when="$(curl -sI $dep | grep -i last-modified: | sed 's/[^:]*..//' | tr -d '\r')";
+  echo "$(date --date="$when" -I): $dep"
+done
