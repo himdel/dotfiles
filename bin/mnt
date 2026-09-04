@@ -10,6 +10,9 @@ declare -A uuids=(
   ["wd12t"]="d15297a9-2fab-4d41-9698-26824267eef7"
   ["wd5tB"]="10e35b91-e79a-4091-baa0-fbc173e8faab"
   ["xyzzy"]="29e2ba8b-fcde-4f17-b9a2-20b6a41a9deb"
+  ["sagittarius"]="8f708610-8ec1-4671-80fa-f3113238bd6d"
+  ["seven"]="59c03457-a2ae-4b07-9877-a7ebac5719da"
+  ["tini"]="4c038943-d185-46d5-8ebb-b2a1501494d0"
 )
 
 BASENAME=`basename "$0"`
@@ -39,6 +42,7 @@ echo UUID="$UUID" 1>&2
 # sudo mount /dev/mapper/"$NAME" /media/"$NAME"
 # sudo chown himdel:himdel /media/"$NAME"
 # echo "  [\"$NAME\"]=\"$UUID\""
+# cd ~/bin; ln -sv mnt mnt.$NAME
 
 function _mount {
   set -x
