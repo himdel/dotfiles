@@ -2,24 +2,24 @@
 
 if [ "$1" = "size" ]; then
 	pg-databases | while read db; do
-		psql -U root postgres -c 'select pg_size_pretty( pg_database_size('\'"$db"\'') );' | grep -B1 '1 row' | grep -v -- '--' | grep -v '1 row' | sed 's/$/\t'"$db"'/' | sed 's/^ \+//' | sed 's/ //'
+		psql -h $PG_HOST -U $PG_USERNAME $PG_DATABASE -c 'select pg_size_pretty( pg_database_size('\'"$db"\'') );' | grep -B1 '1 row' | grep -v -- '--' | grep -v '1 row' | sed 's/$/\t'"$db"'/' | sed 's/^ \+//' | sed 's/ //'
 	done | sort -h
 	exit
 fi
 
 if [ "$#" -eq 2 -a "$1" = "drop" ]; then
-	psql -U root postgres -c 'drop database "'"$2"'";'
+	psql -h $PG_HOST -U $PG_USERNAME $PG_DATABASE -c 'drop database "'"$2"'";'
 	exit
 fi
 
 if [ "$#" -eq 2 -a "$1" = "create" ]; then
-	psql -U root postgres -c 'create database "'"$2"'";'
+	psql -h $PG_HOST -U $PG_USERNAME $PG_DATABASE -c 'create database "'"$2"'";'
 	exit
 fi
 
 if [ "$#" -eq 2 -a "$1" = "dump" ]; then
-	pg_dump -U root -d "$2" -Fc > "$2".dump
+	pg_dump -h $PG_HOST -U $PG_USERNAME -d "$2" -Fc > "$2".dump
 	exit
 fi
 
-psql -U root postgres -c \\l | sed -e '1,3d' | head -n -2 | awk '{ print $1 }' | grep -v '^|'
+psql -h $PG_HOST -U $PG_USERNAME $PG_DATABASE -c \\l | sed -e '1,3d' | head -n -2 | awk '{ print $1 }' | grep -v '^|'
