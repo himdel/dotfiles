@@ -67,6 +67,7 @@ rejary = (%w[
 	js
 	json
 	o
+	opml
 	pdf
 	php
 	png
