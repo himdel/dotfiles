@@ -37,7 +37,6 @@ fbxkb &
 #if [ "yggdrasil" = "$HOSTNAME" ]; then
 #	WM=awesome
 #fi
-#rxvt-unicode -name DesktopTerm -geometry "$GEOM_NCMPC" -internalBorder 10 -e ncmpc &
 #rxvt-unicode -name DesktopTerm -geometry "$GEOM_ALSA" -internalBorder 10 -e alsamixer -g &
 #rxvt-unicode -name DesktopTerm -geometry "$GEOM_TODO" -internalBorder 10 -e vim TODO."$HOSTNAME" &
 #rxvt-unicode -name DesktopTerm -geometry "$GEOM_AUTOSAVE" -internalBorder 10 -e autosave &

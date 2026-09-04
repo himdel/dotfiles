@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 $verbose = ARGV.select { |opt| opt =~ /^-v$/ }.count > 0
-DIRS = %w( .bash_logout .bash_profile .bashrc .environment .ncmpc/config .gitconfig .ssh/config .vimrc .ackrc  userjs patches .irbrc .xbindkeysrc .inputrc .vim .menu .journal .jrnl_config .podget .xsession .filezilla/recentservers.xml .fvwm/userconfig docker wallpapers faktura fun )
+DIRS = %w( .bash_logout .bash_profile .bashrc .environment .gitconfig .ssh/config .vimrc .ackrc  userjs patches .irbrc .xbindkeysrc .inputrc .vim .menu .journal .jrnl_config .podget .xsession .filezilla/recentservers.xml .fvwm/userconfig docker wallpapers faktura fun )
 # bin
 HOSTS = %w( 192.168.1.132 )
 LOGFILE = '.cron-rsync'
