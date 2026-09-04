@@ -1,48 +1,27 @@
 # Default Server List for podget
-# 
-# FORMAT:    <url> <category> <name>
-# 
-# NOTES:
-#    1. URL Rules:
-#      A. Any spaces in the URL needs to be converted to %20 
-#    2. Category Rules:
-#      A.  Must be one word without spaces. 
-#      B.  You may use underscores and dashes.
-#      C.  You can insert date substitions.
-#          %YY%  ==  Year
-#          %MM%  ==  Month
-#          %DD%  ==  Day
-#    3. Name Rules:
-#      A.  If you are creating ASX playlists, make sure the feed name does not
-#          have any spaces in it and the filename cannot be blank.
-#      B.  You can leave the feed name blank, and files will be saved in the 
-#          category directory.
-#    4. Disable the downloading of any feed by commenting it out with a #.
-# 
-# Find more servers at: http://www.ipodder.org/directory/4/podcasts
-#
-# Examples: 
-# http://www.lugradio.org/episodes.rss Linux LUG Radio
-#
-# Example with date substitution in the category and a blank feed name:
-# http://downloads.bbc.co.uk/rmhttp/downloadtrial/worldservice/summary/rss.xml News-%YY%-%MM%-%DD%
-#
+# FORMAT:  <url> <category> <name>
 
-http://downloads.bbc.co.uk/podcasts/northernireland/blame/rss.xml	bbccomedy/blame
-http://downloads.bbc.co.uk/podcasts/radio4/comedy/rss.xml	bbccomedy/comedy
-http://downloads.bbc.co.uk/podcasts/radio4/fricomedy/rss.xml	bbccomedy/fricomedy
-http://downloads.bbc.co.uk/podcasts/radio4extra/newsjack/rss.xml	bbccomedy/newsjack
-http://downloads.bbc.co.uk/podcasts/scotland/sfb/rss.xml	bbccomedy/sfb
-http://feeds.soundcloud.com/playlists/soundcloud:playlists:432476748/sounds.rss	bbccomedy/ensigns
-https://audioboom.com/channels/2399216.rss	bbccomedy/todo1
-https://audioboom.com/channels/5097784.rss	bbccomedy/todo2
-https://feeds.acast.com/public/shows/5e7b777ba085cbe7192b0607	bbccomedy/todo3
-https://feeds.simplecast.com/2pvdZXa_	bbccomedy/todo4
-https://podcasts.files.bbci.co.uk/b007j8wn.rss	bbccomedy/todo5
-https://podcasts.files.bbci.co.uk/b00kvs8r.rss	bbccomedy/todo6
-https://podcasts.files.bbci.co.uk/b010m2mj.rss	bbccomedy/todo7
-https://podcasts.files.bbci.co.uk/b066zypj.rss	bbccomedy/todo8
-https://podcasts.files.bbci.co.uk/p02pc9pj.rss	bbccomedy/todo9
-https://podcasts.files.bbci.co.uk/p02pc9x6.rss	bbccomedy/todo0
-https://syfysistas.libsyn.com/rss	bbccomedy/syfysistas
-https://www.patreon.com/rss/SciShowTangents?auth=XXX	bbccomedy/SciShowTangents
+https://audioboom.com/channels/2399216.rss	bbccomedy/no_such_thing_as_a_fish
+https://audioboom.com/channels/5097784.rss	bbccomedy/lateral
+https://feeds.acast.com/public/shows/5e7b777ba085cbe7192b0607	bbccomedy/bugle
+https://feeds.acast.com/public/shows/61deed94f2acc80013aab8aa	bbccomedy/detail
+https://feeds.bbcsoundsrss.media/TheUnbelievableTruth.rss	bbccomedy/unbalievabletruth
+https://feeds.megaphone.fm/BVLLC2163264914	bbccomedy/stewart
+https://feeds.megaphone.fm/WMHY5503481559	bbccomedy/hignfyus
+https://feeds.megaphone.fm/colbert	bbccomedy/colbert
+https://feeds.megaphone.fm/itsstorytime	bbccomedy/itsstorytime
+https://feeds.megaphone.fm/lateralcast	bbccomedy/lateralcast
+https://feeds.npr.org/344098539/podcast.xml	bbccomedy/wwdtm
+https://feeds.simplecast.com/2pvdZXa_	bbccomedy/lets_learn_everything
+https://feeds.simplecast.com/4T39_jAj	bbccomedy/startalk
+https://feeds.soundcloud.com/users/soundcloud:users:237055046/sounds.rss	bbccomedy/lingthusiasm
+https://feeds.transistor.fm/past-pokroku	bbccomedy/past
+https://podcasts.files.bbci.co.uk/b007j8wn.rss	bbccomedy/blame
+https://podcasts.files.bbci.co.uk/b066zypj.rss	bbccomedy/breaking_the_news
+https://podcasts.files.bbci.co.uk/p02pc9pj.rss	bbccomedy/fricomedy
+https://podcasts.files.bbci.co.uk/p02pc9x6.rss	bbccomedy/comedy
+https://podcasts.watchnebula.com/thelayover/a7b9e0aaf461480b9d1071398356c575	bbccomedy/layover
+https://rss.art19.com/late-night-with-seth-meyers-podcast	bbccomedy/seth
+https://rss.libsyn.com/shows/324119/destinations/2634533.xml	bbccomedy/syfysistas2
+https://www.escapethispodcast.com/feed.xml	bbccomedy/escapethispodcast
+https://www.omnycontent.com/d/playlist/67682ce6-d1e9-437d-bd7e-b12201270fe1/10b1ec49-5ce4-4763-a468-b2e900dedcf2/091d6e2c-c568-4eb1-b801-b2e900dedd0c/podcast.rss	bbccomedy/piatocek
