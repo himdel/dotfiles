@@ -1,0 +1,6 @@
+#!/bin/bash
+# pipe in playlist urls, assumes anything after last slash is playlist name
+while read url; do
+  playlist=`basename $url`.txt
+  yt-dlp --flat-playlist -i --print-to-file url "$playlist" "$url"
+done
