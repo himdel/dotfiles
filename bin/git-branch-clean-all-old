@@ -1,0 +1,24 @@
+#!/bin/bash
+set -e
+#set -x
+
+echo this removes all stale branches from a remote 1>&2
+REMOTE=${1:?A remote name is required}
+
+CUTOFF=`date --date='3 months ago' '+%s'`
+
+git fetch "$REMOTE" --prune
+
+git branch --remotes | grep -v ' -> ' | sed 's/^[ *]\+//' | grep ^"$REMOTE"/ | sed 's/^'"$REMOTE"'\///' | while read branch; do
+  [ "$branch" = HEAD ] && continue
+  [ "$branch" = main ] && continue
+  [ "$branch" = "release_2.4" ] && continue
+  [ "$branch" = "release/2.5" ] && continue
+  [ "$branch" = "upstream-sync" ] && continue
+
+  [ `git log -1 "$REMOTE"/"$branch" --format=%at` -gt "$CUTOFF" ] && continue
+  [ `git log -1 "$REMOTE"/"$branch" --format=%ct` -gt "$CUTOFF" ] && continue
+
+  echo "$branch": `git log -1 "$REMOTE"/"$branch" --format=%H`
+  git push --delete "$REMOTE" "$branch"
+done
