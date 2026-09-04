@@ -13,11 +13,10 @@ DRIVE=${1:-/home/himdel/.crypto_p}
 DIR=${2:-/home/himdel/P}
 DM=${3:-crypto_p}
 
-# TODO param
 function _resize {
 	mkdir -p "$DIR"
-	sudo cryptsetup luksOpen "$DRIVE" "$DM"
 	sudo truncate -s +2G "$DRIVE"
+	sudo cryptsetup luksOpen "$DRIVE" "$DM"
 	sudo fsck -f /dev/mapper/"$DM"
 	sudo resize2fs /dev/mapper/"$DM"
 	sudo fsck -f /dev/mapper/"$DM"
