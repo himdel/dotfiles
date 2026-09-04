@@ -17,7 +17,6 @@ fbxkb &
 #pidgin &
 #xbattbar -c &
 #x11vnc -forever &
-#temptray.py &
 
 #if [ "yavanna" = "$HOSTNAME" ]; then
 #	GEOM_NCMPC="102x52+3+30"
@@ -61,7 +60,6 @@ fbxkb &
 
 [ "$CLAWS_MACHINE" = "$HOSTNAME" ] && claws-mail &
 #[ "$BTSYNC_MACHINE" = "$HOSTNAME" ] && btsync
-#[ "yavanna" = "$HOSTNAME" ] && trayer --edge top --align right --margin 220 --widthtype request --transparent true --tint black &
 #[ "yavanna" = "$HOSTNAME" ] && sh -c 'echo 1024x768 > .res'
 
 #[ -x /usr/bin/dropbox ] && dropbox start
