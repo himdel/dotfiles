@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Work profile: the default ~/.claude config dir and the ambient bashrc env
+# (ANTHROPIC_*/Vertex creds) left untouched -- this only adds the tmux wrap.
+CMD=(env -u CLAUDE_CONFIG_DIR
+    GIT_AUTHOR_EMAIL=mhradil@redhat.com
+    GIT_COMMITTER_EMAIL=mhradil@redhat.com
+    claude --verbose "$@")
+
+# Imperial red.
+CLAUDE_TINT='#ff9999'
+
+source "$HOME/bin/claude-tmux.sh"

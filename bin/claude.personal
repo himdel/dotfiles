@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Personal profile: separate config dir, stripped of work/cloud credentials.
+CMD=(env
+    -u ANTHROPIC_API_KEY
+    -u ANTHROPIC_BASE_URL
+    -u ANTHROPIC_MODEL
+    -u ANTHROPIC_VERTEX_PROJECT_ID
+    -u ANTHROPIC_VERTEX_REGION
+    -u CLAUDE_CODE_USE_VERTEX
+    -u CLAUDE_EFFORT
+    -u CLAUDE_MODEL
+    -u CLAUDE_SMALL_FAST_MODEL
+    -u GOOGLE_APPLICATION_CREDENTIALS
+    -u GOOGLE_CLOUD_PROJECT
+    CLAUDE_CONFIG_DIR="$HOME/.claude-personal"
+    GIT_AUTHOR_EMAIL=himdel@gmail.com
+    GIT_COMMITTER_EMAIL=himdel@gmail.com
+    claude --verbose "$@")
+
+# Federation blue -- leans cyan so it carries the same visual weight as the red.
+CLAUDE_TINT='#87d2ff'
+
+source "$HOME/bin/claude-tmux.sh"
