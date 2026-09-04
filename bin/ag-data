@@ -4,6 +4,7 @@ cd ~/ag-data.d/
 # also ./dev-aap-data
 
 API_BASE=/api/galaxy/
+#API_BASE=/api/
 API_HOST=localhost
 API_PORT=5001
 API_PROTOCOL=http
