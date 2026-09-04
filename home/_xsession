@@ -89,8 +89,6 @@ xrandr --auto
 
 [ -x /usr/bin/redshift ] && redshift -l 49.19522:16.60796 &
 
-#i3-traycmds &
-
 [ -x /usr/bin/blueman-applet ] && blueman-applet &
 
 xsetroot -cursor_name arrow # X_cursor
