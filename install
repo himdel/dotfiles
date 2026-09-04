@@ -31,7 +31,13 @@ sudo ln -s /usr/share/lua/5.1/xmlrpc /usr/share/lua/5.2/xmlrpc
 mkdir -p ~/.config/mpv/scripts
 git clone https://github.com/rumkex/osdb-mpv.git ~/.config/mpv/scripts
 
-grep max_user_watches /etc/sysctl.conf || ( echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p )
+for val in \
+  fs.inotify.max_user_watches=749973 \
+  fs.inotify.max_user_instances=512 \
+  kernel.keys.maxkeys=2000 \
+; do
+  grep "$val" /etc/sysctl.conf || ( echo "$val" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p )
+done
 
 wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 wget https://dl.google.com/linux/direct/google-chrome-beta_current_amd64.deb
