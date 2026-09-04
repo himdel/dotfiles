@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# pulse/pipewire via pactl; the alsa (amixer) version is gone with alsa-utils
+
+SINK=@DEFAULT_SINK@
+
 notify() {
   notify-send -t 800 "$@"
 }
@@ -7,32 +11,32 @@ notify() {
 case "$1" in
 "")
   # volume - get volume
-  amixer sget Master | grep % | head -n1 | sed 's/^.*[^0-9]\([0-9]\+\)%.*/\1/'
+  pactl get-sink-volume "$SINK" | grep -m1 -oE '[0-9]+%' | head -n1 | tr -d '%'
   ;;
 "muted")
   # volume muted - get muted status
-  awk '/dB/ { print }' <(amixer sget Master) | sed -e 's/^.*\[on\].*$/unmuted/' -e 's/^.*\[off\].*$/muted/'
+  pactl get-sink-mute "$SINK" | sed -e 's/^Mute: yes$/muted/' -e 's/^Mute: no$/unmuted/'
   ;;
 
 "toggle")
   # volume toggle - toggle mute
-  amixer sset Master toggle
+  pactl set-sink-mute "$SINK" toggle
   notify 'mute toggled to '$(volume muted)
   ;;
 "up")
   # volume up - increase volume by 5%
-  amixer sset Master 5%+
+  pactl set-sink-volume "$SINK" +5%
   notify 'volume up to '$(volume)'%'
   ;;
 "down")
   # volume down - decrease volume by 5%
-  amixer sset Master 5%-
+  pactl set-sink-volume "$SINK" -5%
   notify 'volume down to '$(volume)'%'
   ;;
 
 [0-9]*)
   # volume 50 - set volume to 50%
-  amixer sset Master "$1"%
+  pactl set-sink-volume "$SINK" "$1"%
   notify 'volume set to '$(volume)'%'
   ;;
 
