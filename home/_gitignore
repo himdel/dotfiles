@@ -1,0 +1,6 @@
+.agignore
+.rgignore
+.*.sw[po]
+
+CLAUDE.local.md
+.claude/
