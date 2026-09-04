@@ -267,7 +267,7 @@ def find_input_conf(path)
 	].map do |path|
 		File.expand_path path
 	end.find do |path|
-		File.exists? path
+		File.file? path
 	end
 end
 
@@ -294,16 +294,17 @@ if files.empty? then
 end
 
 files.map! do |fn|
-	if File.exists? fn then		# existing files
-		# "recurse" one dir
-		if File.directory? fn then
-			Dir[fn + "/*"].sort
-		else
-			fn
-		end
-	elsif fn.match(/^[a-z]+:\/+[a-zA-Z]+/)		# remote adresses
+	if File.file? fn then
+		# existing files
 		fn
-	else		# not found, find in given or current dir or locate if not found
+	elsif File.directory? fn then
+		# "recurse" one dir
+		Dir[fn + "/*"].sort
+	elsif fn.match(/^[a-z]+:\/+[a-zA-Z]+/)
+		# remote adresses
+		fn
+	else
+		# not found, find in given or current dir or locate if not found
 		dn = File.dirname fn
 		bn = File.basename fn
 		pt = "#{dn}/*#{bn}*"
