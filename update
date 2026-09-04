@@ -15,11 +15,16 @@ find wallpapers/ -type f | while read f; do
   vimdiff "$f" ~/"$f" </dev/tty >/dev/tty 2>/dev/tty
 done
 
-find .[0-9a-zA-Z]* -type f | grep -v .git/ | while read f; do
-  cmp -s "$f" ~/"$f" && continue
+# home/_foo is ~/.foo - only the leading underscore is a dot
+#
+# NB: a few files are committed with placeholder values, so vimdiff shows the
+# same diff every run. Read before taking the local side.
+find home/ -type f | while read f; do
+  h=`echo "$f" | sed 's|^home/_|.|'`
+  cmp -s "$f" ~/"$h" && continue
 
   echo "vimdiff $f"
-  vimdiff "$f" ~/"$f" </dev/tty >/dev/tty 2>/dev/tty
+  vimdiff "$f" ~/"$h" </dev/tty >/dev/tty 2>/dev/tty
 done
 
 crontab -l | diff -q crontab - || EDITOR="vimdiff `realpath crontab`" crontab -e

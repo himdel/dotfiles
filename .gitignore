@@ -8,4 +8,4 @@ package-lock.json
 pytradfri/devices.json
 
 # rewritten by cron every 3h
-.fvwm/preferences/LastChoosenWallpaper
+home/_fvwm/preferences/LastChoosenWallpaper
