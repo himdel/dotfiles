@@ -1,5 +1,8 @@
 set nocompatible
 syntax on
+" needed for omnifunc (c-x c-o), commentstring, matchit % jumps, per-ft gf
+" must come before the FileType autocmds below, so ours run after the ftplugins
+filetype plugin on
 set autoindent
 set bg=dark
 set display=lastline
@@ -30,13 +33,13 @@ set clipboard+=autoselectplus
 execute pathogen#infect()
 
 let g:NERDTreeQuitOnOpen = 1
-map <F2> :NERDTreeFind<CR>
-map <F3> :NERDTreeClose<CR>
+noremap <F2> :NERDTreeFind<CR>
+noremap <F3> :NERDTreeClose<CR>
 
-map <C-T> :Files<CR>
-map <C-C> :Commits<CR>
-map <C-G> :Tags<CR>
-nnoremap <F7> :Rg 
+noremap <C-T> :Files<CR>
+noremap <C-C> :Commits<CR>
+noremap <C-G> :Tags<CR>
+nnoremap <F9> :Rg 
 
 nnoremap <F8> :UndotreeToggle<CR>
 
@@ -67,13 +70,35 @@ nmap \t :set noexpandtab tabstop=4 softtabstop=4 shiftwidth=4<CR>
 
 nmap \w :setlocal wrap!<CR>:setlocal wrap?<CR>
 
-au BufNewFile,BufReadPost Makefile set noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
+" setlocal, not set - a global set here leaked tabstops into every later buffer
+" (open a Makefile, then a .js, and the .js got noexpandtab ts=4)
+au FileType make setlocal noexpandtab tabstop=4 shiftwidth=4 softtabstop=4
+au FileType python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 
 " set digraph
 
 nnoremap Q <nop>
 
-map <F5> :w<CR> \| :!npx prettier --write %<CR> \| :e<CR>
+" the old '\|' put a literal | in the rhs, so these were bouncing the cursor to
+" column 1 between each step. harmless, but it was never doing anything
+noremap <F5> :w<CR>:!npx prettier --write %<CR>:e<CR>
+noremap <F6> :w<CR>:!uvx ruff format %<CR>:e<CR>
+noremap <F7> :w<CR>:!uvx ruff check --fix %<CR>:e<CR>
 
-set suffixesadd+=.js,.jsx,.ts,.tsx,.mjs,.cjs
-set path+=$PWD/node_modules
+"set suffixesadd+=.js,.jsx,.ts,.tsx,.mjs,.cjs
+"set path+=$PWD/node_modules
+
+" never let a filetype plugin auto-wrap.
+" 'set tw=0' alone does not do it: ftplugins set textwidth *buffer-locally* and later,
+" so they win - gitcommit.vim does 'setlocal formatoptions+=tl textwidth=72', which is
+" what was forcing newlines into git commit messages.
+" this runs after the ftplugin, so it wins. narrow the * to gitcommit if you ever want
+" the 72-column wrap back for mail and friends.
+set tw=0
+au FileType * setlocal textwidth=0
+
+" C-x C-f autocomplete relative paths without js suffix
+inoremap <expr> <c-x><c-f> fzf#vim#complete("fdfind --print0 <Bar> xargs --null realpath --relative-to " . expand("%:h") . " <Bar> sed -e 's/\\.[jt]sx\\?$//' -e 's/^[^.]/.\\/&/'")
+
+" make C-w C-w work
+set backspace=indent,eol,start
