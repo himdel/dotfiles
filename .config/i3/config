@@ -11,7 +11,7 @@ bindsym $alt+Return exec rxvt-unicode
 bindsym $alt+Shift+grave exec rxvt-unicode -name 'floating_urxvt'
 for_window [instance="floating_urxvt"] floating enable, move position mouse
 
-for_window [instance="scratchpad_urxvt"] move to scratchpad, border 1pixel, move position 0px 0px, scratchpad show, exec xdotool search --classname scratchpad_urxvt windowsize 1920px 480px
+for_window [instance="scratchpad_urxvt"] move to scratchpad, border 1pixel, scratchpad show, exec xdotool search --classname scratchpad_urxvt windowsize 1920px 480px, move position 0px 0px
 bindsym $alt+grave exec --no-startup-id /home/himdel/bin/i3-scratchpad , [instance="scratchpad_urxvt"] scratchpad show
 
 for_window [class="Chromium" window_role="browser"] border none
