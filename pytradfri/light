@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import sys
 
 from pytradfri import Gateway
@@ -16,8 +17,13 @@ MODES_FILE = sys.path[0] + '/modes.json'
 host = open(IP_FILE).read().strip()
 conf = load_json(KEYS_FILE)
 
-mode_name = sys.argv[1] if len(sys.argv) > 1 else "on"
-modes = load_json(MODES_FILE)
+# light --spec '{"dimmer": [null,null,null,200,200,200]}' - ad-hoc mode-shaped spec.
+# NB: values cycle by index % len, always pass full-length arrays to target bulbs.
+if len(sys.argv) > 2 and sys.argv[1] == '--spec':
+  spec = json.loads(sys.argv[2])
+else:
+  mode_name = sys.argv[1] if len(sys.argv) > 1 else "on"
+  spec = load_json(MODES_FILE)[mode_name]
 
 def foo(ary, idx):
   if not isinstance(ary, list):
@@ -73,6 +79,7 @@ def run(config, mode):
       try:
         print({
           'name': light.name,
+          'reachable': light.reachable,
           'state': light.light_control.lights[0].state,
           'dimmer': light.light_control.lights[0].dimmer,
           'color_temp': light.light_control.lights[0].color_temp,
@@ -109,4 +116,4 @@ def run(config, mode):
 
       i += 1
 
-run(conf, modes[mode_name])
+run(conf, spec)
