@@ -93,9 +93,6 @@ xrandr --auto
 
 xsetroot -cursor_name arrow # X_cursor
 
-[ -f ~/.barrier.conf ] && barriers --name `hostname` --enable-crypto -c ~/.barrier.conf --address :24800 &
-[ -f ~/.barrier.ip ] && barrierc --name `hostname` --enable-crypto `cat ~/.barrier.ip` &
-
 # disable screen blanking
 xset s noblank
 # xset -dpms
