@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+[ -e ollama-linux-amd64.tar.zst ] || curl -L https://ollama.com/download/ollama-linux-amd64.tar.zst -o ollama-linux-amd64.tar.zst
+
+where=`pwd`
+cd /usr/local/
+sudo tar xvf "$where"/ollama-linux-amd64.tar.zst
+
+rm -iv "$where"/ollama-linux-amd64.tar.zst
