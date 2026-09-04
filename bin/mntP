@@ -32,6 +32,7 @@ function _mount {
 
 function _umount {
 	sudo umount "$DIR"
+	sleep 0.5
 	sudo cryptsetup luksClose "$DM"
 	rmdir "$DIR"
 }
