@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'csv'
+require 'json'
+
+ARGV.each do |file|
+  data = CSV.parse(File.read(file), col_sep: ',', headers: :first_row)
+  rows = data.entries.map(&:to_h)
+  puts JSON.pretty_generate(rows)
+end
