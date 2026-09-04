@@ -39,6 +39,13 @@ for val in \
   grep "$val" /etc/sysctl.conf || ( echo "$val" | sudo tee -a /etc/sysctl.conf && sudo sysctl -p )
 done
 
+# stock files we only tweak, so no point keeping a copy in etc/
+grep -q 'GRUB_CMDLINE_LINUX="apparmor=0"' /etc/default/grub || (
+  sudo sed -i 's/^GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="apparmor=0"/' /etc/default/grub && sudo update-grub
+)
+# shortnames.conf ships pointing at docker.io, and we ban that in /etc/hosts
+sudo sed -i 's|= "docker\.io/|= "mirror.gcr.io/|' /etc/containers/registries.conf.d/shortnames.conf
+
 wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 wget https://dl.google.com/linux/direct/google-chrome-beta_current_amd64.deb
 sudo dpkg -i google-chrome-beta_current_amd64.deb
