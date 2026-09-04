@@ -1,8 +1,0 @@
-#!/bin/sh
-
-echo TODO figure out from now+day, not hardcode
-sleep 15h
-
-[ $# -gt 0 ] && sleep "$@"
-
-date
