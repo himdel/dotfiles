@@ -1,17 +1,22 @@
 127.0.0.1	localhost
-127.0.1.1	orome
+127.0.1.1	lorien
 
-192.168.1.30	durin.local durin
-192.168.1.150	orome.local
-192.168.1.173	niniel.local niniel
-192.168.1.178	aule.local aule
+192.168.1.96	lorien.local
+192.168.1.150	orome.local orome
 
-10.8.8.6	durin.vpn
-# 10.8.8.0	orome.vpn
-10.8.8.10	niniel.vpn
-# 10.8.8.0	aule.vpn
+# aap-dev
+127.0.2.1 ci.foo.redhat.com
+127.0.2.1 prod.foo.redhat.com
+127.0.2.1 qa.foo.redhat.com
+127.0.2.1 stage.foo.redhat.com
+
+# dockerhub ban
+127.0.3.1   docker.io auth.docker.io registry-1.docker.io index.docker.io dseasb33srnrn.cloudfront.net production.cloudflare.docker.com hub.docker.io elb-default.us-east-1.aws.dckr.io
 
 # The following lines are desirable for IPv6 capable hosts
 ::1     localhost ip6-localhost ip6-loopback
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
+
+192.168.1.116	varda.local varda
+192.168.1.95	varda.local varda
