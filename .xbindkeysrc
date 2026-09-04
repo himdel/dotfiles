@@ -31,3 +31,20 @@
 
 "volume up"
   XF86AudioRaiseVolume
+
+"playerctl play-pause"
+  XF86AudioPlay
+
+"playerctl play-pause"
+  Mod2 + XF86AudioPlay
+
+### modifiers
+#
+# shift       Shift_L,  Shift_R
+# lock        Caps_Lock
+# control     Control_L,  Control_R
+# mod1        Alt_L,  Alt_R,  Alt_L,  Meta_L
+# mod2        Num_Lock
+# mod3        ISO_Level5_Shift
+# mod4        Super_L,  Super_R,  Super_L
+# mod5        ISO_Level3_Shift
