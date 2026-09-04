@@ -11,7 +11,8 @@
 	box = "! f() { git fetch upstream pull/$1/head && git checkout FETCH_HEAD && GIT_EDITOR=\"sed -i '2,\\$s/pick/squash/'\" git rebase -i master && git commit --amend -m \"[WIP] PR-in-a-box #$1\" ; }; f"
 	br = "branch -av"
 	branch-name = "symbolic-ref -q --short HEAD"
-	cp = cherry-pick -x
+	cp = "cherry-pick -x"
+	cpc = "cherry-pick --continue"
 	current-remote = "! git config branch.$(git branch-name).remote"
 	exec = ! exec
 	fap = fetch --all -p
@@ -20,8 +21,6 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	log = log --date=iso
 	log-me = "! git log --author $(git config user.email)"
-	pdiff = diff --patience
-	pmerge = merge -X patience
 	pr = "! git branch -D pr$1 ; ( git fetch upstream pull/$1/head || git fetch origin pull/$1/head ) && git checkout FETCH_HEAD && git checkout -b pr$1 -- && echo"
 	rbi = "! git rebase -i @{u}"
 	rebase-wtf = show REBASE_HEAD
@@ -40,3 +39,15 @@
 	version = 2
 [commit]
 	gpgSign = true
+[init]
+	defaultBranch = main
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[diff]
+	algorithm = histogram
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
