@@ -1,0 +1,3 @@
+# /etc/modules - modules to load at boot (sysvinit kmod reads this)
+# i2c-dev: DDC/CI external monitor brightness (ddcutil, used by ~/controlpanel)
+i2c-dev
