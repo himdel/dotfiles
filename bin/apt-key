@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# only supports `| apt-key add -`
+
+# curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+# or should it be /etc/apt/trusted.gpg.d/...
+
+target="/usr/share/keyrings/`date --iso=s`.gpg"
+echo "unpacking to $target" 1>&2
+sudo gpg --dearmor -o "$target"
