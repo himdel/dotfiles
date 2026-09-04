@@ -14,7 +14,6 @@ setxkbmap -option grp:switch,grp:alts_toggle,grp_led:scroll,compose:lwin us,cz
 #sonata &
 #gdeskcal --first-day=7 &
 fbxkb &
-#pidgin &
 #xbattbar -c &
 #x11vnc -forever &
 
