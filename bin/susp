@@ -44,12 +44,8 @@ fi
 echo Suspend in 4 sec... "($PRG)"
 echo susp = $DO_SUSP, lock = $DO_LOCK
 
-#killall sonata
-#sleep 1
-#killall -9 sonata
 #sudo umount /media/tmp
 #sleep 2
-#mpc pause
 
 ( echo -n 'susp ' ; date '+%FT%TZ' ) >> ~/.susp.log
 
@@ -62,7 +58,6 @@ sync
 # actual suspend
 [ "$DO_SUSP" = true ] && sudo "$PRG"
 
-#nohup sonata >/dev/null 2>/dev/null &
 sleep 2	# musi aby nohup stihl se znohupovat
 xset dpms force on
 #xscreensaver-command -deactivate

@@ -11,7 +11,6 @@ xset r rate 180 80
 #setxkbmap -option grp:switch,grp:alts_toggle,grp_led:scroll,grp:alt_shift_toggle,compose:lwin us,cz
 setxkbmap -option grp:switch,grp:alts_toggle,grp_led:scroll,compose:lwin us,cz
 
-#sonata &
 #gdeskcal --first-day=7 &
 fbxkb &
 #xbattbar -c &
