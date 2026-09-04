@@ -18,7 +18,7 @@ case $BRANCH in
   main)
     remote_branch=main
     master=true
-  ;;
+    ;;
   devel)
     remote_branch=devel
     master=true
@@ -56,6 +56,7 @@ else
   echo "git-up: Updating $branch, not $BRANCH" 1>&2
 
   while ! [ -d .git ]; do
+    cd "`/bin/pwd`" # realpath
     cd ..
   done
 
