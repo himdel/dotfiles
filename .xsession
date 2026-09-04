@@ -1,6 +1,6 @@
 . ~/.environment
 HOSTNAME=`hostname`
-#CLAWS_MACHINE="niniel"
+CLAWS_MACHINE="lorien"
 #BTSYNC_MACHINE=yavanna
 #WM=fvwm-crystal
 WM=i3
@@ -60,7 +60,7 @@ fbxkb &
 [ -f ~/.xmodmaprc ] && xmodmap ~/.xmodmaprc &
 [ -f ~/.xbindkeysrc ] && xbindkeys &
 
-#[ "$CLAWS_MACHINE" = "$HOSTNAME" ] && claws-mail &
+[ "$CLAWS_MACHINE" = "$HOSTNAME" ] && claws-mail &
 #[ "$BTSYNC_MACHINE" = "$HOSTNAME" ] && btsync
 #[ "yavanna" = "$HOSTNAME" ] && trayer --edge top --align right --margin 220 --widthtype request --transparent true --tint black &
 #[ "yavanna" = "$HOSTNAME" ] && sh -c 'echo 1024x768 > .res'
@@ -110,5 +110,13 @@ dunst &
 pactl upload-sample /usr/share/sounds/freedesktop/stereo/dialog-warning.oga bell-window-system
 pactl load-module module-x11-bell display=$DISPLAY
 pactl load-module module-switch-on-connect
+
+nm-applet &
+
+# xsetroot -cursor_name left_ptr
+
+[ -x /usr/bin/playerctld ] && playerctld daemon
+
+# [ -x /usr/bin/netbird-ui ] && netbird-ui &
 
 exec "$WM"
