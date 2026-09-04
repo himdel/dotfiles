@@ -16,6 +16,7 @@ rsync -aPvux "/home/himdel/" "$TARGET/" \
   --exclude '/.ievms' \
   --exclude '/.kube/.cache' \
   --exclude '/.local/lib/python*' \
+  --exclude '/.local/share/claude-vm' \
   --exclude '/.local/share/containers' \
   --exclude '/.local/share/uv' \
   --exclude '/.minecraft' \
