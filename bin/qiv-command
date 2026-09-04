@@ -17,6 +17,9 @@ case $1 in
 	3)
 		($BROWSER "$2" & exit)
 		;;
+	4)
+		(thunar "$(dirname "$2")" & exit)
+		;;
 	*)
 		echo 'gah!'
 esac
