@@ -78,8 +78,6 @@ xmodmap -e 'pointer = 1 2 3 4 5 0 0 0 0 0 0 0 0'
 [ -x /usr/bin/pasystray ] && pasystray -S &
 [ -x /usr/bin/pnmixer ] && pnmixer &
 
-[ -x ~/bin/pushbullet-thing ] && ~/bin/pushbullet-thing &
-
 xrandr --auto
 ~/wallpapers/.random.sh
 
