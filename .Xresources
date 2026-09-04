@@ -209,3 +209,6 @@ URxvt.url-launcher: /usr/local/bin/xdg-open
 URxvt.matcher.button: 1
 URxvt.iso14755: false
 URxvt.iso14755_52: false
+
+! Shift+Enter keybinding for multiline input (e.g., Claude Code)
+URxvt.keysym.Shift-Return: \033[13;2u
