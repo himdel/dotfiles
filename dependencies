@@ -2,14 +2,12 @@ acl
 amd64-microcode
 aptitude
 arandr
-barrier
 bash
 bfs
 blueman
 bsdextrautils
 bsdgames
 bsdgames-nonfree
-bsdmainutils
 bsdutils
 build-essential
 calendar
@@ -34,7 +32,6 @@ firmware-linux-nonfree
 firmware-misc-nonfree
 fzf
 gcc
-gdb
 gimp
 git
 gnupg
@@ -44,7 +41,6 @@ gzip
 hardlink-
 hsetroot
 htop
-httpie
 i3
 i3-wm
 i3lock
@@ -60,14 +56,12 @@ manpages-dev
 mc
 mesa-utils
 moreutils
-mplayer
 mpv
 net-tools
 pavucontrol
 perlbrew
 pinentry-curses-
 pinentry-tty
-pkg-config
 pmount
 powertop
 pqiv
@@ -75,7 +69,6 @@ psmisc
 pulseaudio
 pulseaudio-module-bluetooth
 pv
-qiv
 rakudo
 rbenv
 ripgrep
@@ -83,10 +76,8 @@ rofi
 rsync
 rxvt-unicode
 rzip
-screen
 sed
 slop
-smbnetfs
 ssh
 sshfs
 strace
