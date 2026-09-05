@@ -2,7 +2,7 @@
 
 # only supports `| apt-key add -`
 
-# curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+# curl https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/githubcli-archive-keyring.gpg
 # or should it be /etc/apt/trusted.gpg.d/...
 
 target="/usr/share/keyrings/`date --iso=s`.gpg"

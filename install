@@ -66,10 +66,6 @@ fetchkey() {
 }
 fetchkey https://cli.github.com/packages/githubcli-archive-keyring.gpg \
   /etc/apt/keyrings/githubcli-archive-keyring.gpg
-fetchkey https://packages.cloud.google.com/apt/doc/apt-key.gpg \
-  /usr/share/keyrings/cloud.google.gpg
-fetchkey https://pkgs.netbird.io/debian/public.key \
-  /usr/share/keyrings/netbird-archive-keyring.gpg
 
 [ -e ~/bin ] || ln -sv ~/dotfiles/bin ~/bin
 
