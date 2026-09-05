@@ -10,7 +10,6 @@ cd "$( dirname "$0" )"
 ## ip addr ls
 ## apt update
 ## apt install aptitude git ssh sudo vim net-tools
-## vim /etc/group
 ## grep himdel /etc/sudoers || echo 'himdel ALL=NOPASSWD: ALL' >> /etc/sudoers
 ## vim /etc/dhcp/dhclient.conf # supersede dns
 
@@ -56,6 +55,16 @@ rm -vf google-chrome-beta_current_amd64.deb
 cd /usr/local/bin/
 sudo ln -sv ~/bin/rename.perl rename
 sudo ln -sv ~/bin/xdg-open .
+
+# groups, union of what lorien and orome have. some only exist once the matching
+# package is in, so this is worth a second run after ./update
+for g in \
+  audio bluetooth cdrom dip docker floppy input kvm motion netdev ollama \
+  pipewire plugdev pulse pulse-access render sudo users video \
+; do
+  getent group "$g" > /dev/null || continue
+  id -nG | tr ' ' '\n' | grep -qx "$g" || sudo adduser "$USER" "$g"
+done
 
 # TODO link home stuff
 
