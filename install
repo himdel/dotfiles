@@ -1,6 +1,11 @@
 #!/bin/bash
 cd "$( dirname "$0" )"
 
+confirm() {
+  read -p "$1 [y/N] " a
+  [ "$a" = y ] || [ "$a" = Y ]
+}
+
 ## su -
 ## systemctl disable wpa_supplicant
 ## vi /etc/network/interfaces
@@ -106,3 +111,24 @@ xdg-mime default google-chrome-beta.desktop x-scheme-handler/https
 
 # no longer in util-linux
 sudo ln -s /usr/bin/busybox /usr/local/bin/last
+
+# rbenv, perlbrew and cpanminus come from dependencies. nvm and uv do not ship in
+# debian, and _bashrc sources both, so they need their upstream installers.
+if [ ! -s ~/.nvm/nvm.sh ] && confirm "curl | bash the nvm installer?"; then
+  # bump the tag, nvm wants a pinned one
+  curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.7/install.sh | bash
+  . ~/.nvm/nvm.sh && nvm install --lts
+fi
+
+if ! command -v uv > /dev/null && confirm "curl | sh the uv installer?"; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
+
+# no deb and no crate worth the build time, so take the release binary
+if ! command -v ast-grep > /dev/null; then
+  mkdir -p ~/.local/bin
+  curl -fsSL -o /tmp/ast-grep.zip \
+    https://github.com/ast-grep/ast-grep/releases/latest/download/app-x86_64-unknown-linux-gnu.zip
+  unzip -o /tmp/ast-grep.zip -d ~/.local/bin ast-grep sg
+  rm -f /tmp/ast-grep.zip
+fi
