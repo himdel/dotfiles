@@ -70,6 +70,13 @@ fetchkey https://pkgs.netbird.io/debian/public.key \
 sudo ln -sv ~/bin/rename.perl /usr/local/bin/rename
 sudo ln -sv ~/bin/xdg-open /usr/local/bin/
 
+# podman provides `docker compose`, but half the world still calls the hyphenated one
+sudo tee /usr/local/bin/docker-compose > /dev/null <<'EOF'
+#!/bin/sh
+docker compose "$@"
+EOF
+sudo chmod +x /usr/local/bin/docker-compose
+
 # groups, union of what lorien and orome have. some only exist once the matching
 # package is in, so this is worth a second run after ./update
 for g in \
