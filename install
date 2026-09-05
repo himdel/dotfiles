@@ -132,3 +132,7 @@ if ! command -v ast-grep > /dev/null; then
   unzip -o /tmp/ast-grep.zip -d ~/.local/bin ast-grep sg
   rm -f /tmp/ast-grep.zip
 fi
+
+# git-lfs is in dependencies, but the filter config is opt-in. run this by hand if you
+# want lfs repos to work without a per-clone setup:
+#   git lfs install --system   # writes /etc/gitconfig
