@@ -46,7 +46,6 @@ fbxkb &
 # wicd-client &
 # xcompmgr -n &
 # fatrat
-# ffkill &
 # smart-notifier &
 # habak -ms -hi /home/himdel/wallpapers/ -mS -hi ~/pic.RAND/braille.png
 # gdesklets start --translucent --no-tray-icon
