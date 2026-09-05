@@ -62,7 +62,7 @@ sudo ln -sv ~/bin/xdg-open .
 ./update
 
 # rm -f /usr/lib/python3*/EXTERNALLY-MANAGED
-# TODO install fbkxb (no longer in deb)
+# TODO install fbxkb (no longer in deb, see patches/fbxkb.patch)
 
 gio mime x-scheme-handler/http google-chrome-beta.desktop
 gio mime x-scheme-handler/https google-chrome-beta.desktop
