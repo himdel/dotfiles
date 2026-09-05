@@ -37,3 +37,9 @@ rsync -aPvux "/home/himdel/" "$TARGET/" \
   --exclude '.venv' \
   --exclude 'node_modules' \
   "$@"
+
+# the crontab lives outside $HOME, so rsync never sees it
+# (skipped on --dry-run, where rsync has not made $TARGET)
+if [ -d "$TARGET" ]; then
+  crontab -l > "$TARGET/crontab-himdel"
+fi
