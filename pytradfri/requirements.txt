@@ -1,2 +1,0 @@
-pytradfri==9.0.1
-colormath
