@@ -67,9 +67,8 @@ fetchkey https://pkgs.netbird.io/debian/public.key \
 
 [ -e ~/bin ] || ln -sv ~/dotfiles/bin ~/bin
 
-cd /usr/local/bin/
-sudo ln -sv ~/bin/rename.perl rename
-sudo ln -sv ~/bin/xdg-open .
+sudo ln -sv ~/bin/rename.perl /usr/local/bin/rename
+sudo ln -sv ~/bin/xdg-open /usr/local/bin/
 
 # groups, union of what lorien and orome have. some only exist once the matching
 # package is in, so this is worth a second run after ./update
