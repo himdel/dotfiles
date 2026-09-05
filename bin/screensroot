@@ -1,2 +1,0 @@
-#!/bin/sh
-xwd -root | convert xwd:- root`date +%Y%m%d%H%M%S`.png
