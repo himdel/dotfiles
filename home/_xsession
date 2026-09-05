@@ -103,6 +103,4 @@ nm-applet &
 
 [ -x /usr/bin/playerctld ] && playerctld daemon
 
-# [ -x /usr/bin/netbird-ui ] && netbird-ui &
-
 exec "$WM"
