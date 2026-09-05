@@ -7,9 +7,6 @@ echo `date +%F` "$0" "$@" >> /tmp/xdg-open
 shopt -s nocasematch
 
 case "$@" in
-*.docx|*.doc|*.xlsx|*.xls|*.pptx|*.ppt)
-	exec /home/himdel/bin/gdocs.sh "$@"
-	;;
 *jpg|*gif|*jpeg|*png|*bmp|*webp)
 	exec pqiv "$@"
 	;;
