@@ -1,2 +1,0 @@
-#!/bin/sh
-exec /usr/bin/chromium --auth-server-whitelist=".redhat.com" --auth-negotiate-delegate-whitelist=".redhat.com" "$@"
