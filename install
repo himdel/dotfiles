@@ -7,7 +7,6 @@ confirm() {
 }
 
 ## su -
-## systemctl disable wpa_supplicant
 ## vi /etc/network/interfaces
 ## vi /etc/wpa_supplicant/wpa_supplicant.conf
 ## vi /etc/udev/rules.d/70-persistent-net.rules
@@ -21,6 +20,8 @@ confirm() {
 ## ssh-keygen, add to github, clone doftiles
 ## sudoers
 ##   also Defaults !admin_flag
+
+## init is a separate decision, see sysvinit.md and systemd.md
 
 sudo ln -svf /usr/share/zoneinfo/Etc/UTC /etc/localtime
 sudo sh -c 'echo Etc/UTC > /etc/timezone'
