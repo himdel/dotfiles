@@ -49,6 +49,21 @@ wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key ad
 wget https://dl.google.com/linux/direct/google-chrome-beta_current_amd64.deb
 sudo dpkg -i google-chrome-beta_current_amd64.deb
 rm -vf google-chrome-beta_current_amd64.deb
+# chrome writes its own sources.list.d entry, so that one is not tracked in etc/
+
+# keys for the sources.list.d files etc/ does track. the keyrings themselves stay out
+# of the repo, always fetch the current one. paths have to match the signed-by= in
+# etc/apt/sources.list.d/*.list
+sudo mkdir -p /etc/apt/keyrings
+fetchkey() {
+  curl -fsSL "$1" | gpg --dearmor | sudo tee "$2" > /dev/null
+}
+fetchkey https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+  /etc/apt/keyrings/githubcli-archive-keyring.gpg
+fetchkey https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+  /usr/share/keyrings/cloud.google.gpg
+fetchkey https://pkgs.netbird.io/debian/public.key \
+  /usr/share/keyrings/netbird-archive-keyring.gpg
 
 [ -e ~/bin ] || ln -sv ~/dotfiles/bin ~/bin
 
@@ -69,6 +84,11 @@ done
 # TODO link home stuff
 
 ./update
+
+# ./update put the tracked sources.list.d files in place, so now the repos they point
+# at are usable
+sudo apt update
+sudo apt install `cat dependencies`
 
 # rm -f /usr/lib/python3*/EXTERNALLY-MANAGED
 # TODO install fbxkb (no longer in deb, see patches/fbxkb.patch)
