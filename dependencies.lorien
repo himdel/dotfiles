@@ -164,7 +164,6 @@ init-system-helpers
 initramfs-tools
 intel-media-va-driver
 intel-microcode
-intel-opencl-icd
 iotop
 iproute2
 iptables
