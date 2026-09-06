@@ -8,4 +8,4 @@
 37 6 * * 1 mkdir -p ~/IN/out/ ; cd ~ ; zip -r ~/IN/out/claude-$(date +\%Y\%W).zip .claude*
 * * * * * ~/bin/temper-log
 44 5 * * * cd ~/notes 2>/dev/null && git add . && git commit -m $(date -d yesterday -Id)
-47 8 * * * [ -x ~/metrics/annotate-backports-cron.sh ] && ~/metrics/annotate-backports-cron.sh
+#47 8 * * * [ -x ~/metrics/annotate-backports-cron.sh ] && ~/metrics/annotate-backports-cron.sh
