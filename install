@@ -79,16 +79,6 @@ docker compose "$@"
 EOF
 sudo chmod +x /usr/local/bin/docker-compose
 
-# groups, union of what lorien and orome have. some only exist once the matching
-# package is in, so this is worth a second run after ./update
-for g in \
-  audio bluetooth cdrom dip docker floppy input kvm motion netdev ollama \
-  pipewire plugdev pulse pulse-access render sudo users video \
-; do
-  getent group "$g" > /dev/null || continue
-  id -nG | tr ' ' '\n' | grep -qx "$g" || sudo adduser "$USER" "$g"
-done
-
 # TODO link home stuff
 
 ./update

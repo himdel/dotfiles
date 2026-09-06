@@ -54,4 +54,13 @@ crontab -l | diff -q "$CRONTAB" - || EDITOR="vimdiff `realpath "$CRONTAB"`" cron
 apt-mark showmanual | sort -u > dependencies."$HOST"
 sudo apt install `cat dependencies`
 
+# groups only exist once the package that creates them is in, hence after the install
+for g in \
+  audio bluetooth cdrom dip docker floppy input kvm motion netdev ollama \
+  pipewire plugdev pulse pulse-access render sudo users video \
+; do
+  getent group "$g" > /dev/null || continue
+  id -nG | tr ' ' '\n' | grep -qx "$g" || sudo adduser "$USER" "$g"
+done
+
 [ ${#MISSING[@]} -eq 0 ] || printf 'not on %s, ignored: %s\n' "$HOST" "${MISSING[*]}"
