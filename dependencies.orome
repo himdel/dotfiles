@@ -13,7 +13,6 @@ arping
 at
 autoconf
 automake
-barrier
 base-files
 base-passwd
 bash
