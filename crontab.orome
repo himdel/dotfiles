@@ -1,0 +1,9 @@
+# m h  dom mon dow   command
+
+14 17 * * * [ -d ~/bbccomedy ] && podget -s
+22 */4 * * * [ `find .fvwm/preferences/LastChoosenWallpaper -mmin +180 | wc -l` = 1 ] && PATH=~/bin:/usr/local/bin:$PATH DISPLAY=:0 ~/wallpapers/.random.sh >/dev/null
+#11 21 * * */3 PATH=~/bin:$PATH ~/.vim/bundle/do.rb
+11 11 * * 1,5 ~/bin/yt-chan-run
+37 6 * * 1 mkdir -p ~/IN/out/ ; cd ~ ; zip -r ~/IN/out/claude-$(date +\%Y\%W).zip .claude*
+* * * * * ~/bin/temper-log
+44 5 * * * cd ~/notes 2>/dev/null && git add . && git commit -m $(date -d yesterday -Id)

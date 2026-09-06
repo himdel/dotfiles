@@ -1,32 +1,57 @@
 #!/bin/bash
 cd "$( dirname "$0" )"
 
-find etc/ -type f | while read f; do
-  cmp -s "$f" /"$f" && continue
+HOST=`hostname -s`
+MISSING=()
 
-  echo "vimdiff $f"
-  vimdiff "$f" /"$f" </dev/tty >/dev/tty 2>/dev/tty
-done
+# Deliberately different on every box, so never reconciled. Each host keeps its own:
+#   hosts                     - own 127.0.1.1, own hvpn managed blocks
+#   wpa_supplicant.conf       - repo is the bare template, each box has its own networks
+#   70-persistent-net.rules   - orome appends an iw power_save rule lorien does not want
+per_host() {
+  case "$1" in
+    etc/hosts) return 0 ;;
+    etc/wpa_supplicant/wpa_supplicant.conf) return 0 ;;
+    etc/udev/rules.d/70-persistent-net.rules) return 0 ;;
+  esac
+  return 1
+}
 
-find wallpapers/ -type f | while read f; do
-  cmp -s "$f" ~/"$f" && continue
+# $1 repo copy, $2 the live file it maps to
+review() {
+  per_host "$1" && return
 
-  echo "vimdiff $f"
-  vimdiff "$f" ~/"$f" </dev/tty >/dev/tty 2>/dev/tty
-done
+  # absent here is usually "belongs to another box", not "needs installing", so just
+  # collect it. cp by hand if this host really wants it.
+  [ -e "$2" ] || { MISSING+=("$1"); return; }
 
-# home/_foo is ~/.foo - only the leading underscore is a dot
+  cmp -s "$1" "$2" && return
+
+  echo "vimdiff $1"
+  vimdiff "$1" "$2" </dev/tty >/dev/tty 2>/dev/tty
+}
+
+while read f; do review "$f" "/$f"; done < <(find etc/ -type f)
+
+while read f; do review "$f" ~/"$f"; done < <(find wallpapers/ -type f)
+
+# home/_foo is ~/.foo - only the leading underscore is a dot. Some of these are
+# symlinks back into the repo, which cmp resolves, so they simply never differ.
 #
 # NB: a few files are committed with placeholder values, so vimdiff shows the
 # same diff every run. Read before taking the local side.
-find home/ -type f | while read f; do
-  h=`echo "$f" | sed 's|^home/_|.|'`
-  cmp -s "$f" ~/"$h" && continue
+while read f; do
+  review "$f" ~/"`echo "$f" | sed 's|^home/_|.|'`"
+done < <(find home/ -type f)
 
-  echo "vimdiff $f"
-  vimdiff "$f" ~/"$h" </dev/tty >/dev/tty 2>/dev/tty
-done
+# one shared crontab, every entry self-guarding, so it is safe anywhere. A host that
+# needs a different set (orome takes the personal half, not the work half) gets a
+# crontab.<host> beside it.
+CRONTAB=crontab
+[ -e "crontab.$HOST" ] && CRONTAB="crontab.$HOST"
+crontab -l | diff -q "$CRONTAB" - || EDITOR="vimdiff `realpath "$CRONTAB"`" crontab -e
 
-crontab -l | diff -q crontab - || EDITOR="vimdiff `realpath crontab`" crontab -e
-apt-mark showmanual | sort -u > dependencies.`hostname -s`
+apt-mark showmanual | sort -u > dependencies."$HOST"
 sudo apt install `cat dependencies`
+
+[ ${#MISSING[@]} -eq 0 ] || printf 'not on %s, ignored: %s\n' "$HOST" "${MISSING[*]}"
